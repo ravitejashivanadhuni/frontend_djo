@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 
 const IT_JOB_TITLES = [
   "Software Engineer", "Frontend Developer", "Backend Developer", "Full Stack Developer",
@@ -141,14 +142,28 @@ export default function JobPostForm() {
     return e;
   };
 
-  const handlePost = () => {
-    const e = validate();
-    setErrors(e);
-    if (Object.keys(e).length === 0) {
+  const handlePost = async () => {
+  const e = validate();
+  setErrors(e);
+
+  if (Object.keys(e).length === 0) {
+    try {
+
+      const response = await axios.post(
+        "http://localhost:5000/api/jobs",
+        jobData
+      );
+
+      console.log(response.data);
+
       setPosted(true);
       setJobLink("");
+
+    } catch (error) {
+      console.error("Error posting job:", error);
     }
-  };
+  }
+};
 
   const handleGenerateLink = () => {
     const slug = `${companyName.replace(/\s+/g, "-").toLowerCase()}-${jobTitle.replace(/\s+/g, "-").toLowerCase()}`;
