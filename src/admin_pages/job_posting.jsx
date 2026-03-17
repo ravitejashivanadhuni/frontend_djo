@@ -517,23 +517,23 @@ const SALARY_RANGES = [
 const postJobToAPI = async (payload) => {
   // TODO: swap the block below with your real fetch call
   // ─────────────────────────────────────────────────────
-  // const res = await fetch("https://your-api.com/api/jobs", {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify(payload),
-  // });
-  // if (!res.ok) throw new Error("API error " + res.status);
-  // return await res.json();
+  const res = await fetch("http://localhost:5000/api/jobs", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error("API error " + res.status);
+  return await res.json();
   // ─────────────────────────────────────────────────────
 
   // Dummy: simulates an 800ms network round-trip
-  return new Promise((resolve) =>
-    setTimeout(() => resolve({
-      success: true,
-      jobId: "JOB-" + Math.random().toString(36).substring(2, 8).toUpperCase(),
-      message: "Job posted successfully",
-    }), 800)
-  );
+  // return new Promise((resolve) =>
+  //   setTimeout(() => resolve({
+  //     success: true,
+  //     jobId: "JOB-" + Math.random().toString(36).substring(2, 8).toUpperCase(),
+  //     message: "Job posted successfully",
+  //   }), 800)
+  // );
 };
 
 // ─── Small shared components ──────────────────────────────────────────────────
@@ -683,7 +683,7 @@ export default function JobPostForm() {
         // Auto-generate link if field is still blank
         if (!jobLink) {
           const slug = `${companyName.replace(/\s+/g, "-").toLowerCase()}-${jobTitle.replace(/\s+/g, "-").toLowerCase()}`;
-          setJobLink(`https://jobs.yourdomain.com/${slug}-${res.jobId.toLowerCase()}`);
+          setJobLink(`http://localhost:5000/job/${slug}-${res.jobId.toLowerCase()}`);
         }
       }
     } catch {
@@ -696,7 +696,7 @@ export default function JobPostForm() {
   const handleGenerateLink = () => {
     const slug = `${companyName.replace(/\s+/g, "-").toLowerCase()}-${jobTitle.replace(/\s+/g, "-").toLowerCase()}`;
     const uid  = Math.random().toString(36).substring(2, 8);
-    setJobLink(`https://jobs.yourdomain.com/${slug}-${uid}`);
+    setJobLink(`http://localhost:5000/job/${slug}-${uid}`);
   };
 
   const handleCopy = () => {

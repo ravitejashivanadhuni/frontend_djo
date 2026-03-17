@@ -1,18 +1,26 @@
 import { useState, useEffect } from "react";
+import TopTicker from "../components/topticker";
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
+import AlertBar from "../components/alertbar";
 
-/* ── THEME ─────────────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────
+   THEME
+───────────────────────────────────────────── */
 const C = {
   primary: "#0f4c81",
-  accent: "#e8472a",
-  gold: "#f5a623",
-  light: "#f4f7fb",
-  green: "#16a34a",
-  text: "#1a1a2e",
-  muted: "#6b7280",
-  border: "#e2e8f0",
+  accent:  "#e8472a",
+  gold:    "#f5a623",
+  light:   "#f4f7fb",
+  green:   "#16a34a",
+  text:    "#1a1a2e",
+  muted:   "#6b7280",
+  border:  "#e2e8f0",
 };
 
-/* ── SAMPLE JOB DATA ────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────
+   JOB DATA
+───────────────────────────────────────────── */
 const JOB = {
   id: 1,
   title: "Associate Software Engineer",
@@ -68,35 +76,57 @@ const JOB = {
 };
 
 const SIMILAR_JOBS = [
-  { logo: "I", logoBg: "#fff0f0", logoColor: "#e8472a", title: "Systems Engineer", company: "Infosys", salary: "₹3.6–5.0 LPA" },
-  { logo: "W", logoBg: "#ede9fe", logoColor: "#7c3aed", title: "NLTH Elite Engineer", company: "Wipro", salary: "₹3.5 LPA" },
-  { logo: "G", logoBg: "#fef9c3", logoColor: "#a16207", title: "STEP Intern 2026", company: "Google", salary: "₹80K/month" },
+  { logo: "I", logoBg: "#fff0f0", logoColor: "#e8472a", title: "Systems Engineer",    company: "Infosys", salary: "₹3.6–5.0 LPA" },
+  { logo: "W", logoBg: "#ede9fe", logoColor: "#7c3aed", title: "NLTH Elite Engineer", company: "Wipro",   salary: "₹3.5 LPA" },
+  { logo: "G", logoBg: "#fef9c3", logoColor: "#a16207", title: "STEP Intern 2026",    company: "Google",  salary: "₹80K/month" },
 ];
 
 const NAV_LINKS = ["Home", "Freshers Jobs", "Work From Home", "Internships", "Interview Tips", "By Location"];
 
 const BADGE_STYLE = {
-  featured: { bg: "#fff8e1", color: "#b45309" },
-  hot: { bg: "#fee2e2", color: "#b91c1c" },
-  new: { bg: "#dcfce7", color: "#15803d" },
-  remote: { bg: "#ede9fe", color: "#6d28d9" },
+  featured: { background: "#fff8e1", color: "#b45309" },
+  hot:      { background: "#fee2e2", color: "#b91c1c" },
+  new:      { background: "#dcfce7", color: "#15803d" },
+  remote:   { background: "#ede9fe", color: "#6d28d9" },
 };
 
-/* ── HOOK ───────────────────────────────────────────────────────── */
-function useWidth() {
-  const [w, setW] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
+/* ─────────────────────────────────────────────
+   BREAKPOINT HOOK
+   xs  <480      small phones
+   sm  480-639   large phones
+   md  640-767   small tablets / landscape phones
+   lg  768-1023  tablets
+   xl  1024-1279 laptops
+   2xl 1280+     desktops
+───────────────────────────────────────────── */
+function useBreakpoint() {
+  const [w, setW] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 1280
+  );
   useEffect(() => {
     const h = () => setW(window.innerWidth);
     window.addEventListener("resize", h);
     return () => window.removeEventListener("resize", h);
   }, []);
-  return w;
+  return {
+    w,
+    isMobile:    w < 640,
+    isTablet:    w >= 640 && w < 1024,
+    isDesktop:   w >= 1024,
+    showSidebar: w >= 1024,
+  };
 }
 
-/* ── SMALL COMPONENTS ───────────────────────────────────────────── */
+/* ─────────────────────────────────────────────
+   PRIMITIVES
+───────────────────────────────────────────── */
 function Tag({ children }) {
   return (
-    <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11.5, color: C.muted, background: C.light, padding: "4px 10px", borderRadius: 6, whiteSpace: "nowrap" }}>
+    <span style={{
+      display: "inline-flex", alignItems: "center", gap: 5,
+      fontSize: 11.5, color: C.muted, background: C.light,
+      padding: "4px 10px", borderRadius: 6, whiteSpace: "nowrap",
+    }}>
       {children}
     </span>
   );
@@ -104,7 +134,10 @@ function Tag({ children }) {
 
 function SkillTag({ label }) {
   return (
-    <span style={{ background: "#e8f4fd", color: C.primary, fontSize: 12, padding: "4px 10px", borderRadius: 5, fontWeight: 500, whiteSpace: "nowrap" }}>
+    <span style={{
+      background: "#e8f4fd", color: C.primary, fontSize: 12,
+      padding: "4px 10px", borderRadius: 5, fontWeight: 500, whiteSpace: "nowrap",
+    }}>
       {label}
     </span>
   );
@@ -112,7 +145,10 @@ function SkillTag({ label }) {
 
 function SectionTitle({ text }) {
   return (
-    <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, display: "flex", alignItems: "center", gap: 8, margin: "0 0 18px" }}>
+    <h2 style={{
+      fontFamily: "'Syne',sans-serif", fontSize: 16, fontWeight: 700,
+      display: "flex", alignItems: "center", gap: 8, margin: "0 0 18px",
+    }}>
       <span style={{ width: 4, height: 20, background: C.accent, borderRadius: 3, display: "inline-block", flexShrink: 0 }} />
       {text}
     </h2>
@@ -121,7 +157,10 @@ function SectionTitle({ text }) {
 
 function Card({ children, style = {} }) {
   return (
-    <div style={{ background: "#fff", borderRadius: 14, border: `1px solid ${C.border}`, padding: 24, ...style }}>
+    <div style={{
+      background: "#fff", borderRadius: 14,
+      border: `1px solid ${C.border}`, padding: 20, ...style,
+    }}>
       {children}
     </div>
   );
@@ -133,86 +172,167 @@ function Divider() {
 
 function SectionLabel({ children }) {
   return (
-    <div style={{ fontSize: 11, fontWeight: 600, color: C.muted, textTransform: "uppercase", letterSpacing: "0.6px", marginBottom: 6 }}>
+    <div style={{
+      fontSize: 10.5, fontWeight: 700, color: C.muted,
+      textTransform: "uppercase", letterSpacing: "0.7px", marginBottom: 5,
+    }}>
       {children}
     </div>
   );
 }
 
-/* ── MOBILE DRAWER ──────────────────────────────────────────────── */
+function Pill({ children, bg, color }) {
+  return (
+    <span style={{
+      background: bg, color, padding: "4px 11px",
+      borderRadius: 20, fontSize: 12, fontWeight: 500,
+    }}>
+      {children}
+    </span>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   HAMBURGER BUTTON
+───────────────────────────────────────────── */
+function HamburgerBtn({ onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label="Open menu"
+      style={{
+        background: "none", border: `1.5px solid ${C.border}`,
+        borderRadius: 9, width: 40, height: 40, cursor: "pointer",
+        display: "flex", flexDirection: "column", alignItems: "center",
+        justifyContent: "center", gap: 5, padding: 0, flexShrink: 0,
+      }}
+    >
+      {[0, 1, 2].map((i) => (
+        <span key={i} style={{ width: 20, height: 2, background: C.text, borderRadius: 2, display: "block" }} />
+      ))}
+    </button>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   MOBILE / TABLET DRAWER
+───────────────────────────────────────────── */
 function MobileDrawer({ open, onClose }) {
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
   if (!open) return null;
   return (
     <>
-      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.45)", zIndex: 300 }} />
-      <div style={{ position: "fixed", top: 0, left: 0, bottom: 0, width: 280, background: "#fff", zIndex: 400, overflowY: "auto", boxShadow: "4px 0 24px rgba(0,0,0,.15)" }}>
-        <div style={{ background: C.primary, padding: 16, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 17, color: "#fff" }}>
+      <div
+        onClick={onClose}
+        style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.5)", zIndex: 400 }}
+      />
+      <div style={{
+        position: "fixed", top: 0, left: 0, bottom: 0, width: 300,
+        background: "#fff", zIndex: 500, overflowY: "auto",
+        boxShadow: "6px 0 32px rgba(0,0,0,.18)",
+        display: "flex", flexDirection: "column",
+      }}>
+        {/* Header */}
+        <div style={{
+          background: C.primary, padding: "16px 18px",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+        }}>
+          <span style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 18, color: "#fff" }}>
             Code<span style={{ color: C.gold }}>Techniques</span>
           </span>
-          <button onClick={onClose} style={{ background: "rgba(255,255,255,.15)", border: "none", color: "#fff", borderRadius: 7, width: 30, height: 30, cursor: "pointer", fontSize: 16 }}>✕</button>
+          <button
+            onClick={onClose}
+            style={{
+              background: "rgba(255,255,255,.15)", border: "none", color: "#fff",
+              borderRadius: 8, width: 32, height: 32, cursor: "pointer",
+              fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center",
+            }}
+          >✕</button>
         </div>
-        <div style={{ padding: 12 }}>
+
+        {/* Links */}
+        <div style={{ padding: "12px 14px", flex: 1 }}>
           {NAV_LINKS.map((link) => (
-            <a key={link} href="#" onClick={onClose} style={{ display: "block", padding: "11px 12px", borderRadius: 7, fontSize: 14, fontWeight: 500, color: C.text, marginBottom: 2 }}>{link}</a>
+            <a
+              key={link} href="#" onClick={onClose}
+              style={{
+                display: "block", padding: "12px 14px",
+                borderRadius: 8, fontSize: 14.5, fontWeight: 500, color: C.text,
+                marginBottom: 2, borderBottom: `1px solid ${C.border}`,
+              }}
+            >
+              {link}
+            </a>
           ))}
-          <div style={{ height: 1, background: C.border, margin: "12px 0" }} />
-          <a href="#" style={{ display: "block", background: C.accent, color: "#fff", padding: "11px 12px", borderRadius: 8, fontWeight: 700, fontSize: 14, textAlign: "center" }}>📢 Post a Job</a>
+          <div style={{ margin: "16px 0 8px" }}>
+            <a
+              href="#"
+              style={{
+                display: "block", background: C.accent, color: "#fff",
+                padding: "13px 14px", borderRadius: 10, fontWeight: 700,
+                fontSize: 14, textAlign: "center", fontFamily: "'Syne',sans-serif",
+              }}
+            >
+              📢 Post a Job
+            </a>
+          </div>
+          <div style={{ background: C.light, borderRadius: 10, padding: 14, marginTop: 12 }}>
+            <div style={{ fontSize: 12, color: C.muted, marginBottom: 8, fontWeight: 700 }}>📍 Browse by Location</div>
+            {["Bangalore", "Hyderabad", "Pune", "Mumbai", "Chennai", "Delhi NCR"].map((loc) => (
+              <a
+                key={loc} href="#"
+                style={{ display: "block", fontSize: 13.5, padding: "7px 0", color: C.primary, borderBottom: `1px solid ${C.border}` }}
+              >
+                {loc}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </>
   );
 }
-
-/* ── NAVBAR ─────────────────────────────────────────────────────── */
-function Navbar({ isMobile, isTablet, isDesktop, onMenuOpen }) {
+<Navbar 
+  bp={{ isMobile: false, isTablet: false, isDesktop: true }}
+  onMenuOpen={() => console.log("menu open")}
+/>
+/* ─────────────────────────────────────────────
+   SIDEBAR WIDGET WRAPPER
+───────────────────────────────────────────── */
+function SidebarWidget({ title, children }) {
   return (
-    <nav style={{ background: "#fff", borderBottom: `2px solid ${C.border}`, position: "sticky", top: 0, zIndex: 100, boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: isMobile ? "0 12px" : "0 20px", display: "flex", alignItems: "center", justifyContent: "space-between", height: isMobile ? 56 : 64 }}>
-        {/* Brand */}
-        <a href="#" style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-          <div style={{ width: isMobile ? 34 : 40, height: isMobile ? 34 : 40, borderRadius: 9, background: C.primary, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 15, color: "#fff", fontFamily: "'Syne', sans-serif" }}>CT</div>
-          <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: isMobile ? 17 : 21, color: C.primary, whiteSpace: "nowrap" }}>
-            Code<span style={{ color: C.accent }}>Techniques</span>
-          </span>
-        </a>
-
-        {/* Desktop nav */}
-        {isDesktop && (
-          <div style={{ display: "flex", alignItems: "center", gap: 2 }}>
-            {NAV_LINKS.map((item, i) => (
-              <a key={item} href="#" style={{ fontSize: 13, fontWeight: 500, padding: "7px 11px", borderRadius: 6, color: i === 0 ? C.primary : C.text, background: i === 0 ? C.light : "transparent", whiteSpace: "nowrap" }}>{item}</a>
-            ))}
-            <a href="#" style={{ background: C.accent, color: "#fff", padding: "7px 16px", borderRadius: 7, fontWeight: 600, fontSize: 13, marginLeft: 6, fontFamily: "'Syne', sans-serif", whiteSpace: "nowrap" }}>Post a Job</a>
-          </div>
-        )}
-
-        {/* Tablet */}
-        {isTablet && (
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <a href="#" style={{ background: C.accent, color: "#fff", padding: "7px 14px", borderRadius: 7, fontWeight: 600, fontSize: 12.5 }}>Post a Job</a>
-            <button onClick={onMenuOpen} style={{ background: "none", border: `1.5px solid ${C.border}`, borderRadius: 8, width: 38, height: 38, cursor: "pointer", fontSize: 20 }}>☰</button>
-          </div>
-        )}
-
-        {/* Mobile */}
-        {isMobile && (
-          <button onClick={onMenuOpen} style={{ background: "none", border: `1.5px solid ${C.border}`, borderRadius: 8, width: 36, height: 36, cursor: "pointer", fontSize: 18 }}>☰</button>
-        )}
+    <Card style={{ marginBottom: 14 }}>
+      <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 13, fontWeight: 700, marginBottom: 14, color: C.text }}>
+        {title}
       </div>
-    </nav>
+      {children}
+    </Card>
   );
 }
 
-/* ── SIDEBAR ────────────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────
+   SIDEBAR
+───────────────────────────────────────────── */
 function Sidebar({ job }) {
   return (
-    <div style={{ width: 290, flexShrink: 0 }}>
+    <div style={{ width: "100%" }}>
+
       {/* Company Card */}
-      <Card style={{ marginBottom: 14 }}>
-        <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 700, marginBottom: 14, color: C.text }}>🏢 About the Company</div>
-        <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: 12 }}>
-          <div style={{ width: 48, height: 48, borderRadius: 10, background: job.logoBg, color: job.logoColor, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 18, fontFamily: "'Syne', sans-serif", border: `1px solid ${C.border}`, flexShrink: 0 }}>{job.logo}</div>
+      <SidebarWidget title="🏢 About the Company">
+        <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: 14 }}>
+          <div style={{
+            width: 48, height: 48, borderRadius: 10,
+            background: job.logoBg, color: job.logoColor,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontWeight: 800, fontSize: 20, fontFamily: "'Syne',sans-serif",
+            border: `1px solid ${C.border}`, flexShrink: 0,
+          }}>
+            {job.logo}
+          </div>
           <div>
             <div style={{ fontWeight: 700, fontSize: 14, color: C.text }}>{job.company}</div>
             <div style={{ fontSize: 12, color: C.muted }}>{job.companyParent}</div>
@@ -220,255 +340,377 @@ function Sidebar({ job }) {
         </div>
         {[
           ["Industry", job.companyIndustry],
-          ["Size", job.companySize],
-          ["Founded", job.companyFounded],
-        ].map(([label, val]) => (
-          <div key={label} style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, padding: "4px 0", borderBottom: `1px solid ${C.border}` }}>
-            <span style={{ color: C.muted }}>{label}</span>
+          ["Size",     job.companySize],
+          ["Founded",  job.companyFounded],
+        ].map(([lbl, val]) => (
+          <div key={lbl} style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, padding: "5px 0", borderBottom: `1px solid ${C.border}` }}>
+            <span style={{ color: C.muted }}>{lbl}</span>
             <span style={{ fontWeight: 500 }}>{val}</span>
           </div>
         ))}
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, padding: "4px 0" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, padding: "5px 0" }}>
           <span style={{ color: C.muted }}>Rating</span>
           <span style={{ fontWeight: 600, color: C.gold }}>⭐ {job.companyRating} / 5</span>
         </div>
-        <a href="#" style={{ display: "block", textAlign: "center", marginTop: 12, fontSize: 12.5, color: C.primary, fontWeight: 600, border: `1.5px solid ${C.border}`, borderRadius: 7, padding: 7 }}>
+        <a
+          href="#"
+          style={{
+            display: "block", textAlign: "center", marginTop: 12,
+            fontSize: 12.5, color: C.primary, fontWeight: 600,
+            border: `1.5px solid ${C.border}`, borderRadius: 8, padding: "8px 0",
+          }}
+        >
           View All Jobs at {job.company.split(",")[0]} →
         </a>
-      </Card>
+      </SidebarWidget>
 
       {/* Job Summary */}
-      <Card style={{ marginBottom: 14 }}>
-        <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 700, marginBottom: 14, color: C.text }}>📋 Job Summary</div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <SidebarWidget title="📋 Job Summary">
+        <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
           {[
-            ["📌", "JOB ROLE", job.role],
-            ["💼", "JOB TYPE", job.jobType],
+            ["📌", "JOB ROLE",   job.role],
+            ["💼", "JOB TYPE",   job.jobType],
             ["🎯", "EXPERIENCE", job.experience],
-            ["🏠", "WORK MODE", job.workModeDetail],
-            ["📍", "LOCATION", job.location],
-          ].map(([icon, label, val]) => (
-            <div key={label} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-              <span style={{ fontSize: 15, flexShrink: 0 }}>{icon}</span>
+            ["🏠", "WORK MODE",  job.workModeDetail],
+            ["📍", "LOCATION",   job.location],
+          ].map(([icon, lbl, val]) => (
+            <div key={lbl} style={{ display: "flex", gap: 9, alignItems: "flex-start" }}>
+              <span style={{ fontSize: 15, flexShrink: 0, marginTop: 2 }}>{icon}</span>
               <div>
-                <div style={{ fontSize: 11, color: C.muted, fontWeight: 600 }}>{label}</div>
-                <div style={{ fontSize: 13, fontWeight: 500 }}>{val}</div>
+                <SectionLabel>{lbl}</SectionLabel>
+                <div style={{ fontSize: 13, fontWeight: 500, color: C.text }}>{val}</div>
               </div>
             </div>
           ))}
-          <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-            <span style={{ fontSize: 15, flexShrink: 0 }}>💰</span>
+          <div style={{ display: "flex", gap: 9, alignItems: "flex-start" }}>
+            <span style={{ fontSize: 15, flexShrink: 0, marginTop: 2 }}>💰</span>
             <div>
-              <div style={{ fontSize: 11, color: C.muted, fontWeight: 600 }}>SALARY</div>
+              <SectionLabel>SALARY</SectionLabel>
               <div style={{ fontSize: 13, fontWeight: 700, color: C.green }}>{job.salary}</div>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-            <span style={{ fontSize: 15, flexShrink: 0 }}>⏰</span>
+          <div style={{ display: "flex", gap: 9, alignItems: "flex-start" }}>
+            <span style={{ fontSize: 15, flexShrink: 0, marginTop: 2 }}>⏰</span>
             <div>
-              <div style={{ fontSize: 11, color: C.muted, fontWeight: 600 }}>LAST DATE</div>
+              <SectionLabel>LAST DATE</SectionLabel>
               <div style={{ fontSize: 13, fontWeight: 600, color: C.accent }}>{job.expiryDate}</div>
             </div>
           </div>
         </div>
-      </Card>
+      </SidebarWidget>
 
       {/* Ad */}
-      <div style={{ background: "linear-gradient(135deg,#0f4c81,#1565c0)", color: "#fff", borderRadius: 12, padding: 18, textAlign: "center", marginBottom: 14 }}>
-        <div style={{ fontSize: 9.5, color: "rgba(255,255,255,.4)", marginBottom: 7 }}>Advertisement</div>
-        <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14.5, fontWeight: 800, marginBottom: 6 }}>🚀 Launch Your Tech Career</div>
+      <div style={{
+        background: "linear-gradient(135deg,#0f4c81,#1565c0)",
+        color: "#fff", borderRadius: 12, padding: 18,
+        textAlign: "center", marginBottom: 14,
+      }}>
+        <div style={{ fontSize: 9.5, color: "rgba(255,255,255,.4)", marginBottom: 6 }}>Advertisement</div>
+        <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 14.5, fontWeight: 800, marginBottom: 6 }}>🚀 Launch Your Tech Career</div>
         <p style={{ fontSize: 12, opacity: 0.85, marginBottom: 14 }}>GeeksforGeeks Bootcamp – Job Guarantee for 2026 Batch</p>
-        <a href="#" style={{ background: C.gold, color: "#000", padding: "8px 18px", borderRadius: 7, fontWeight: 700, fontSize: 13, display: "inline-block", fontFamily: "'Syne', sans-serif" }}>Join Now →</a>
+        <a
+          href="#"
+          style={{
+            background: C.gold, color: "#000", padding: "9px 20px",
+            borderRadius: 8, fontWeight: 700, fontSize: 13,
+            display: "inline-block", fontFamily: "'Syne',sans-serif",
+          }}
+        >
+          Join Now →
+        </a>
       </div>
 
       {/* Similar Jobs */}
-      <Card>
-        <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 700, marginBottom: 12, color: C.text }}>🔍 Similar Jobs</div>
+      <SidebarWidget title="🔍 Similar Jobs">
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {SIMILAR_JOBS.map((j) => (
-            <a key={j.title} href="#" style={{ display: "flex", gap: 9, padding: 9, borderRadius: 8, border: `1px solid ${C.border}`, cursor: "pointer", textDecoration: "none" }}>
-              <div style={{ width: 32, height: 32, borderRadius: 7, background: j.logoBg, color: j.logoColor, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: 13, flexShrink: 0 }}>{j.logo}</div>
+            <a
+              key={j.title} href="#"
+              style={{
+                display: "flex", gap: 10, padding: 10,
+                borderRadius: 9, border: `1px solid ${C.border}`,
+                textDecoration: "none",
+              }}
+            >
+              <div style={{
+                width: 34, height: 34, borderRadius: 8,
+                background: j.logoBg, color: j.logoColor,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontWeight: 700, fontSize: 13, flexShrink: 0,
+              }}>
+                {j.logo}
+              </div>
               <div>
-                <strong style={{ fontSize: 12.5, display: "block", color: C.text }}>{j.title}</strong>
+                <strong style={{ fontSize: 13, display: "block", color: C.text }}>{j.title}</strong>
                 <span style={{ fontSize: 11.5, color: C.muted }}>{j.company} · {j.salary}</span>
               </div>
             </a>
           ))}
         </div>
-        <a href="#" style={{ display: "block", textAlign: "center", marginTop: 12, fontSize: 12.5, color: C.primary, fontWeight: 600 }}>View All Software Jobs →</a>
-      </Card>
+        <a href="#" style={{ display: "block", textAlign: "center", marginTop: 12, fontSize: 12.5, color: C.primary, fontWeight: 600 }}>
+          View All Software Jobs →
+        </a>
+      </SidebarWidget>
     </div>
   );
 }
 
-/* ── MAIN APP ───────────────────────────────────────────────────── */
-export default function JobPostingPage() {
-  const w = useWidth();
-  const isMobile = w < 640;
-  const isTablet = w >= 640 && w < 1024;
-  const isDesktop = w >= 1024;
+/* ─────────────────────────────────────────────
+   MAIN APP
+───────────────────────────────────────────── */
+export default function ViewJob() {
+  const bp = useBreakpoint();
+  const { isMobile, isTablet, isDesktop, showSidebar, w } = bp;
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [saved, setSaved] = useState(false);
-
   const job = JOB;
 
+  const gutter = isMobile ? "14px" : isTablet ? "20px" : "24px";
+
   return (
-    <div style={{ fontFamily: "'DM Sans', sans-serif", background: C.light, color: C.text, minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'DM Sans',sans-serif", background: C.light, color: C.text, minHeight: "100vh" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
-        *{box-sizing:border-box;margin:0;padding:0;}
-        a{text-decoration:none;color:inherit;}
-        ul{list-style:disc;padding-left:20px;}
-        li{margin-bottom:6px;font-size:13.5px;line-height:1.75;color:${C.text};}
-        @keyframes ticker{0%{transform:translateX(100%)}100%{transform:translateX(-120%)}}
-        .ticker{display:inline-block;animation:ticker 38s linear infinite;white-space:nowrap;}
-        .apply-btn{background:${C.primary};color:#fff;padding:12px 28px;border-radius:9px;font-weight:700;font-size:14.5px;font-family:'Syne',sans-serif;display:inline-block;cursor:pointer;transition:background .2s;}
-        .apply-btn:hover{background:#0a3a65;}
-        .save-btn{background:#fff;color:${C.primary};border:1.5px solid ${C.primary};padding:11px 22px;border-radius:9px;font-weight:600;font-size:14px;display:inline-block;cursor:pointer;transition:all .2s;}
-        .save-btn:hover{background:${C.light};}
-        .share-btn{font-size:13px;color:${C.muted};padding:11px 14px;border-radius:9px;border:1px solid ${C.border};background:#fff;cursor:pointer;transition:background .2s;}
-        .share-btn:hover{background:${C.light};}
-        .nav-a:hover{background:${C.light};color:${C.primary};}
-        .similar-card:hover{border-color:${C.primary} !important;}
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: disc; padding-left: 20px; }
+        li { margin-bottom: 6px; font-size: 13.5px; line-height: 1.8; color: ${C.text}; }
+        @keyframes ticker {
+          0%   { transform: translateX(100%); }
+          100% { transform: translateX(-120%); }
+        }
+        .ticker-outer { overflow: hidden; flex: 1; min-width: 0; }
+        .ticker-inner { display: inline-block; animation: ticker 40s linear infinite; white-space: nowrap; opacity: .85; }
+
+        /* Buttons */
+        .btn-apply {
+          background: ${C.primary}; color: #fff; border: none;
+          padding: 12px 28px; border-radius: 9px; font-weight: 700;
+          font-size: 14px; font-family: 'Syne',sans-serif;
+          display: inline-block; cursor: pointer; transition: background .2s;
+          white-space: nowrap;
+        }
+        .btn-apply:hover { background: #0a3a65; }
+        .btn-save {
+          background: #fff; color: ${C.primary}; border: 1.5px solid ${C.primary};
+          padding: 11px 22px; border-radius: 9px; font-weight: 600;
+          font-size: 13.5px; cursor: pointer; transition: background .2s;
+          white-space: nowrap;
+        }
+        .btn-save:hover { background: ${C.light}; }
+        .btn-share {
+          font-size: 13px; color: ${C.muted}; padding: 11px 14px;
+          border-radius: 9px; border: 1px solid ${C.border};
+          background: #fff; cursor: pointer; transition: background .2s;
+          white-space: nowrap;
+        }
+        .btn-share:hover { background: ${C.light}; }
+
+        /* Nav hover */
+        .nav-link { transition: all .18s; }
+        @media (hover: hover) {
+          .nav-link:hover { background: ${C.light} !important; color: ${C.primary} !important; }
+          .similar-card:hover { border-color: ${C.primary} !important; }
+        }
+
+        /* Responsive font helpers */
+        @media (max-width: 639px) {
+          .job-title { font-size: 19px !important; }
+          .detail-grid { grid-template-columns: 1fr 1fr !important; }
+          .action-row { flex-direction: column; align-items: stretch !important; }
+          .action-row .btn-apply,
+          .action-row .btn-save,
+          .action-row .btn-share { width: 100%; text-align: center; }
+        }
+        @media (min-width: 640px) and (max-width: 1023px) {
+          .job-title { font-size: 21px !important; }
+          .detail-grid { grid-template-columns: repeat(3, 1fr) !important; }
+        }
+        @media (min-width: 1024px) {
+          .job-title { font-size: 24px !important; }
+          .detail-grid { grid-template-columns: repeat(3, 1fr) !important; }
+        }
       `}</style>
 
-      {/* ALERT BAR */}
-      <div style={{ background: `linear-gradient(90deg,${C.accent},#c0392b)`, color: "#fff", textAlign: "center", padding: isMobile ? "8px 12px" : "9px 16px", fontSize: isMobile ? 12 : 13 }}>
-        🎉 New jobs added today from Amazon, TCS, Infosys &amp; more!&nbsp;
-        <a href="#" style={{ color: "#fff", textDecoration: "underline" }}>View Latest →</a>
-      </div>
+      <AlertBar 
+  isMobile={false}
+  C={{ accent: "#ff4d4f" }}
+/>
 
-      {/* TOP BAR */}
-      {!isMobile && (
-        <div style={{ background: C.primary, color: "#fff", fontSize: 11.5, padding: "5px 0" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, overflow: "hidden", flex: 1 }}>
-              <span style={{ background: C.accent, color: "#fff", borderRadius: 3, padding: "1px 8px", fontWeight: 700, fontSize: 10, whiteSpace: "nowrap" }}>🔥 HOT</span>
-              <div style={{ overflow: "hidden" }}>
-                <span className="ticker" style={{ opacity: 0.85 }}>
-                  TCS BPS Hiring 2026 &nbsp;|&nbsp; Amazon WFH &nbsp;|&nbsp; Wipro NLTH 2026 &nbsp;|&nbsp; Infosys Systems Engineer &nbsp;|&nbsp; Google Internship 2026 &nbsp;|&nbsp; Deloitte Fresher Drive
-                </span>
-              </div>
-            </div>
-            {isDesktop && (
-              <div style={{ display: "flex", gap: 16, flexShrink: 0 }}>
-                {["About", "Contact", "Privacy"].map((l) => <a key={l} href="#" style={{ color: "#c8d8ea" }}>{l}</a>)}
-                <a href="#" style={{ color: C.gold, fontWeight: 600 }}>Advertise With Us</a>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* NAVBAR */}
-      <Navbar isMobile={isMobile} isTablet={isTablet} isDesktop={isDesktop} onMenuOpen={() => setDrawerOpen(true)} />
+      <TopTicker 
+        isMobile={isMobile}
+        isDesktop={isDesktop}
+        C={C}
+        gutter="16px"
+        />
+      {/* ────────────── NAVBAR ────────────── */}
+      <Navbar bp={bp} onMenuOpen={() => setDrawerOpen(true)} />
       <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
 
-      {/* BREADCRUMB */}
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: isMobile ? "12px 12px 0" : "14px 20px 0" }}>
+      {/* ────────────── BREADCRUMB ────────────── */}
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: `12px ${gutter} 0` }}>
         <div style={{ fontSize: 12.5, color: C.muted, display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap" }}>
           <a href="#" style={{ color: C.primary }}>Home</a>
           <span>›</span>
           <a href="#" style={{ color: C.primary }}>Software / IT Jobs</a>
           <span>›</span>
-          <span>{job.title} – {job.company}</span>
+          <span style={{ color: C.text }}>{job.title}</span>
         </div>
       </div>
 
-      {/* MAIN CONTENT */}
-      <div style={{ maxWidth: 1200, margin: "16px auto", padding: isMobile ? "0 12px 40px" : "0 20px 48px", display: "flex", gap: 22, alignItems: "flex-start" }}>
+      {/* ────────────── MAIN CONTENT ────────────── */}
+      <div style={{
+        maxWidth: 1280, margin: "16px auto",
+        padding: `0 ${gutter} 56px`,
+        display: "flex",
+        flexDirection: showSidebar ? "row" : "column",
+        gap: 22,
+        alignItems: "flex-start",
+      }}>
 
-        {/* ── LEFT / FULL ── */}
+        {/* ═════════════════════════════
+            LEFT / FULL COLUMN
+        ═════════════════════════════ */}
         <div style={{ flex: 1, minWidth: 0 }}>
 
-          {/* COMPANY HEADER CARD */}
+          {/* ── HERO JOB CARD ── */}
           <Card style={{ marginBottom: 14, borderLeft: `4px solid ${C.primary}` }}>
+
             <div style={{ display: "flex", gap: 16, alignItems: "flex-start", flexWrap: "wrap" }}>
-              {/* Logo */}
-              <div style={{ width: isMobile ? 56 : 72, height: isMobile ? 56 : 72, borderRadius: 12, background: job.logoBg, color: job.logoColor, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: isMobile ? 22 : 28, fontFamily: "'Syne', sans-serif", border: `1px solid ${C.border}`, flexShrink: 0 }}>
+              {/* Company logo */}
+              <div style={{
+                width: isMobile ? 54 : 72, height: isMobile ? 54 : 72,
+                borderRadius: 12, background: job.logoBg, color: job.logoColor,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontWeight: 800, fontSize: isMobile ? 22 : 30,
+                fontFamily: "'Syne',sans-serif",
+                border: `1px solid ${C.border}`, flexShrink: 0,
+              }}>
                 {job.logo}
               </div>
 
-              <div style={{ flex: 1, minWidth: 180 }}>
-                {/* Badges */}
-                <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: 8 }}>
-                  <span style={{ ...BADGE_STYLE[job.badge], display: "inline-flex", alignItems: "center", fontSize: 11, fontWeight: 600, padding: "3px 9px", borderRadius: 5 }}>{job.badgeLabel}</span>
-                  {job.verified && <span style={{ background: "#dcfce7", color: "#15803d", display: "inline-flex", alignItems: "center", fontSize: 11, fontWeight: 600, padding: "3px 9px", borderRadius: 5 }}>✅ Verified</span>}
-                  <span style={{ background: "#fff7ed", color: "#c2410c", display: "inline-flex", alignItems: "center", fontSize: 11, fontWeight: 600, padding: "3px 9px", borderRadius: 5 }}>{job.category}</span>
+              {/* Title / company / meta */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+                  <span style={{ ...BADGE_STYLE[job.badge], fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 5 }}>
+                    {job.badgeLabel}
+                  </span>
+                  {job.verified && (
+                    <span style={{ background: "#dcfce7", color: "#15803d", fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 5 }}>
+                      ✅ Verified
+                    </span>
+                  )}
+                  <span style={{ background: "#fff7ed", color: "#c2410c", fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 5 }}>
+                    {job.category}
+                  </span>
                 </div>
-                {/* Title */}
-                <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: isMobile ? 18 : 22, fontWeight: 800, color: C.text, lineHeight: 1.25, marginBottom: 5 }}>{job.title}</h1>
-                {/* Company */}
-                <div style={{ fontSize: 15, fontWeight: 600, color: C.primary, marginBottom: 10 }}>{job.company}</div>
-                {/* Meta tags */}
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
-                  <Tag>📍 {isMobile ? "Pune" : job.location}</Tag>
+
+                <h1
+                  className="job-title"
+                  style={{
+                    fontFamily: "'Syne',sans-serif", fontWeight: 800,
+                    color: C.text, lineHeight: 1.2, marginBottom: 5,
+                  }}
+                >
+                  {job.title}
+                </h1>
+
+                <div style={{ fontSize: isMobile ? 13.5 : 15, fontWeight: 600, color: C.primary, marginBottom: 10 }}>
+                  {job.company}
+                </div>
+
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  <Tag>📍 {isMobile ? "Pune, MH" : job.location}</Tag>
                   <Tag>🏠 {job.workMode}</Tag>
-                  <Tag>📅 Posted {job.postedAgo}</Tag>
+                  <Tag>📅 {job.postedAgo}</Tag>
                   {!isMobile && <Tag>👥 {job.applicants}</Tag>}
                 </div>
               </div>
 
-              {/* Salary highlight */}
-              {!isMobile && (
-                <div style={{ background: "linear-gradient(135deg,#f0fff4,#e8f5e9)", border: "1.5px solid #86efac", borderRadius: 10, padding: "14px 18px", textAlign: "center", flexShrink: 0 }}>
-                  <div style={{ fontSize: 11, color: C.muted, marginBottom: 3, fontWeight: 500 }}>SALARY RANGE</div>
-                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, fontWeight: 800, color: C.green }}>{job.salary}</div>
-                  <div style={{ fontSize: 11.5, color: C.muted, marginTop: 2 }}>{job.salaryNote}</div>
+              {/* Salary chip (tablet landscape+) */}
+              {w >= 768 && (
+                <div style={{
+                  background: "linear-gradient(135deg,#f0fff4,#e8f5e9)",
+                  border: "1.5px solid #86efac", borderRadius: 10,
+                  padding: "14px 18px", textAlign: "center", flexShrink: 0,
+                }}>
+                  <div style={{ fontSize: 10.5, color: C.muted, marginBottom: 3, fontWeight: 600 }}>SALARY</div>
+                  <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 20, fontWeight: 800, color: C.green }}>
+                    {job.salary}
+                  </div>
+                  <div style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>{job.salaryNote}</div>
                 </div>
               )}
             </div>
 
-            {/* Mobile salary */}
-            {isMobile && (
-              <div style={{ marginTop: 12, background: "linear-gradient(135deg,#f0fff4,#e8f5e9)", border: "1.5px solid #86efac", borderRadius: 10, padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            {/* Salary strip for xs/sm (< 768) */}
+            {w < 768 && (
+              <div style={{
+                marginTop: 12,
+                background: "linear-gradient(135deg,#f0fff4,#e8f5e9)",
+                border: "1.5px solid #86efac", borderRadius: 10,
+                padding: "11px 14px",
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+              }}>
                 <div>
-                  <div style={{ fontSize: 11, color: C.muted, fontWeight: 500 }}>SALARY RANGE</div>
-                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: C.green }}>{job.salary}</div>
+                  <div style={{ fontSize: 10.5, color: C.muted, fontWeight: 600 }}>SALARY RANGE</div>
+                  <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 18, fontWeight: 800, color: C.green }}>{job.salary}</div>
                 </div>
-                <div style={{ fontSize: 11.5, color: C.muted }}>{job.salaryNote}</div>
+                <div style={{ fontSize: 11, color: C.muted }}>{job.salaryNote}</div>
               </div>
             )}
 
             <Divider />
 
-            {/* Actions */}
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
-              <a href={job.jobLink} target="_blank" rel="noreferrer" className="apply-btn">Apply Now →</a>
-              <button className="save-btn" onClick={() => setSaved(!saved)}>
+            {/* Action buttons */}
+            <div className="action-row" style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+              <a href={job.jobLink} target="_blank" rel="noreferrer" className="btn-apply">
+                Apply Now →
+              </a>
+              <button className="btn-save" onClick={() => setSaved(!saved)}>
                 {saved ? "✅ Saved" : "🔖 Save Job"}
               </button>
-              <button className="share-btn">📤 Share</button>
+              <button className="btn-share">📤 Share</button>
             </div>
 
             {/* Expiry warning */}
-            <div style={{ background: "#fff8e1", border: `1.5px solid ${C.gold}`, borderRadius: 8, padding: "10px 14px", display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#b45309", marginTop: 14 }}>
-              <span>⏰</span>
+            <div style={{
+              background: "#fff8e1", border: `1.5px solid ${C.gold}`,
+              borderRadius: 9, padding: "10px 14px",
+              display: "flex", alignItems: "flex-start",
+              gap: 8, fontSize: 13, color: "#b45309", marginTop: 14,
+              flexWrap: "wrap",
+            }}>
+              <span style={{ flexShrink: 0, marginTop: 1 }}>⏰</span>
               <div>
-                <strong>Application Deadline:</strong> {job.expiryDate} &nbsp;|&nbsp;
-                <span style={{ color: C.accent, fontWeight: 600 }}>{job.expiryDaysLeft} days remaining</span>
+                <strong>Application Deadline:</strong> {job.expiryDate}&nbsp;|&nbsp;
+                <span style={{ color: C.accent, fontWeight: 700 }}>{job.expiryDaysLeft} days remaining</span>
               </div>
             </div>
           </Card>
 
-          {/* JOB DETAILS CARD */}
+          {/* ── JOB DETAILS GRID ── */}
           <Card style={{ marginBottom: 14 }}>
             <SectionTitle text="Job Details" />
-            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr 1fr 1fr", gap: 20 }}>
+
+            <div
+              className="detail-grid"
+              style={{ display: "grid", gap: isMobile ? 16 : 20 }}
+            >
               {[
-                ["Job Type", <span style={{ background: "#e8f4fd", color: C.primary, padding: "4px 11px", borderRadius: 20, fontSize: 12, fontWeight: 500 }}>{job.jobType}</span>],
-                ["Job Category", <span style={{ background: "#fff0f0", color: C.accent, padding: "4px 11px", borderRadius: 20, fontSize: 12, fontWeight: 500 }}>{job.category}</span>],
-                ["Experience Level", <span style={{ background: "#dcfce7", color: "#15803d", padding: "4px 11px", borderRadius: 20, fontSize: 12, fontWeight: 500 }}>{job.experienceLevel}</span>],
-                ["Work Mode", <div style={{ fontSize: 14, fontWeight: 500 }}>🏠 {job.workModeDetail}</div>],
-                ["Location", <div style={{ fontSize: 14, fontWeight: 500 }}>📍 {isMobile ? "Pune, MH" : job.location}</div>],
-                ["Education", <div style={{ fontSize: 14, fontWeight: 500 }}>{job.education}</div>],
-                ["Eligible Batch", <div style={{ fontSize: 14, fontWeight: 500 }}>{job.eligibleBatch}</div>],
-                ["Department", <div style={{ fontSize: 14, fontWeight: 500 }}>{job.department}</div>],
-                ["Openings", <div style={{ fontSize: 14, fontWeight: 500 }}>{job.openings} positions</div>],
-              ].map(([label, val]) => (
-                <div key={label}>
-                  <SectionLabel>{label}</SectionLabel>
+                ["Job Type",         <Pill bg="#e8f4fd"  color={C.primary}>{job.jobType}</Pill>],
+                ["Job Category",     <Pill bg="#fff0f0"  color={C.accent}>{job.category}</Pill>],
+                ["Experience Level", <Pill bg="#dcfce7"  color="#15803d">{job.experienceLevel}</Pill>],
+                ["Work Mode",        <div style={{ fontSize: 13.5, fontWeight: 500 }}>🏠 {job.workModeDetail}</div>],
+                ["Location",         <div style={{ fontSize: 13.5, fontWeight: 500 }}>📍 {isMobile ? "Pune, MH" : job.location}</div>],
+                ["Education",        <div style={{ fontSize: 13.5, fontWeight: 500 }}>{job.education}</div>],
+                ["Eligible Batch",   <div style={{ fontSize: 13.5, fontWeight: 500 }}>{job.eligibleBatch}</div>],
+                ["Department",       <div style={{ fontSize: 13.5, fontWeight: 500 }}>{job.department}</div>],
+                ["Openings",         <div style={{ fontSize: 13.5, fontWeight: 500 }}>{job.openings} positions</div>],
+              ].map(([lbl, val]) => (
+                <div key={lbl}>
+                  <SectionLabel>{lbl}</SectionLabel>
                   {val}
                 </div>
               ))}
@@ -476,140 +718,128 @@ export default function JobPostingPage() {
 
             <Divider />
 
-            <div>
-              <SectionLabel style={{ marginBottom: 10 }}>Required Skills</SectionLabel>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginTop: 8 }}>
-                {job.skills.map((s) => <SkillTag key={s} label={s} />)}
-              </div>
+            <SectionLabel>Required Skills</SectionLabel>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginTop: 8 }}>
+              {job.skills.map((s) => <SkillTag key={s} label={s} />)}
             </div>
           </Card>
 
-          {/* JOB DESCRIPTION CARD */}
+          {/* ── JOB DESCRIPTION ── */}
           <Card style={{ marginBottom: 14 }}>
             <SectionTitle text="Job Description" />
 
-            <p style={{ fontSize: 13.5, color: C.text, lineHeight: 1.75, marginBottom: 20 }}>{job.description}</p>
+            <p style={{ fontSize: 13.5, color: C.text, lineHeight: 1.8, marginBottom: 20 }}>
+              {job.description}
+            </p>
 
             <div style={{ marginBottom: 20 }}>
-              <div style={{ fontSize: 13.5, fontWeight: 600, color: C.text, marginBottom: 10 }}>Key Responsibilities</div>
-              <ul>
-                {job.responsibilities.map((r) => <li key={r}>{r}</li>)}
-              </ul>
+              <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 10 }}>Key Responsibilities</div>
+              <ul>{job.responsibilities.map((r) => <li key={r}>{r}</li>)}</ul>
             </div>
 
             <div style={{ marginBottom: 20 }}>
-              <div style={{ fontSize: 13.5, fontWeight: 600, color: C.text, marginBottom: 10 }}>Qualifications</div>
-              <ul>
-                {job.qualifications.map((q) => <li key={q}>{q}</li>)}
-              </ul>
+              <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 10 }}>Qualifications</div>
+              <ul>{job.qualifications.map((q) => <li key={q}>{q}</li>)}</ul>
             </div>
 
             <div>
-              <div style={{ fontSize: 13.5, fontWeight: 600, color: C.text, marginBottom: 10 }}>Perks &amp; Benefits</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 10 }}>Perks &amp; Benefits</div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {job.perks.map((p) => <Tag key={p}>{p}</Tag>)}
               </div>
             </div>
           </Card>
 
-          {/* HOW TO APPLY CARD */}
+          {/* ── HOW TO APPLY ── */}
           <Card style={{ marginBottom: 14, background: "linear-gradient(135deg,#f0f7ff,#e8f4fd)", borderColor: "#bdd6f0" }}>
             <SectionTitle text="How to Apply" />
             <p style={{ fontSize: 13.5, color: C.muted, marginBottom: 14 }}>
-              Click the button below to visit the official {job.company} careers page and complete your application. Make sure your resume is updated before applying.
+              Click the button below to visit the official {job.company} careers page. Make sure your resume is updated before applying.
             </p>
-            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 9, padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: 11, color: C.muted, marginBottom: 2, fontWeight: 600 }}>OFFICIAL JOB LINK</div>
-                <div style={{ fontSize: 13, color: C.primary, wordBreak: "break-all" }}>{job.jobLink}</div>
+            <div style={{
+              background: "#fff", border: `1.5px solid ${C.border}`,
+              borderRadius: 9, padding: "12px 16px",
+              display: "flex",
+              flexDirection: isMobile ? "column" : "row",
+              alignItems: isMobile ? "flex-start" : "center",
+              justifyContent: "space-between", gap: 12,
+            }}>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <SectionLabel>OFFICIAL JOB LINK</SectionLabel>
+                <div style={{ fontSize: 13, color: C.primary, wordBreak: "break-all", marginTop: 3 }}>
+                  {job.jobLink}
+                </div>
               </div>
-              <a href={job.jobLink} target="_blank" rel="noreferrer" className="apply-btn" style={{ flexShrink: 0 }}>
+              <a
+                href={job.jobLink} target="_blank" rel="noreferrer"
+                className="btn-apply"
+                style={{ flexShrink: 0 }}
+              >
                 Apply on {job.company.split(",")[0]} →
               </a>
             </div>
             <div style={{ marginTop: 12, fontSize: 12, color: C.muted, display: "flex", alignItems: "center", gap: 5 }}>
-              <span>⚠️</span> CodeTechniques does not charge any fee for applying. This is a free listing.
+              ⚠️ CodeTechniques does not charge any fee for applying. This is a free listing.
             </div>
           </Card>
 
-          {/* Mobile sidebar content */}
-          {(isMobile || isTablet) && (
+          {/* Sidebar shown BELOW content on mobile/tablet */}
+          {!showSidebar && (
             <div style={{ marginTop: 8 }}>
               <Sidebar job={job} />
             </div>
           )}
         </div>
 
-        {/* ── SIDEBAR (desktop only) ── */}
-        {isDesktop && <Sidebar job={job} />}
+        {/* ═════════════════════════════
+            RIGHT SIDEBAR (desktop ≥1024)
+        ═════════════════════════════ */}
+        {showSidebar && (
+          <div style={{ width: w >= 1280 ? 300 : 260, flexShrink: 0 }}>
+            <Sidebar job={job} />
+          </div>
+        )}
       </div>
 
-      {/* BOTTOM AD STRIP */}
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: isMobile ? "0 12px 16px" : "0 20px 20px" }}>
-        <div style={{ background: "linear-gradient(90deg,#f0fff4,#e8f5e9)", border: "1.5px dashed #86efac", borderRadius: 10, padding: "11px 14px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10 }}>
+      {/* ────────────── BOTTOM AD STRIP ────────────── */}
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: `0 ${gutter} 20px` }}>
+        <div style={{
+          background: "linear-gradient(90deg,#f0fff4,#e8f5e9)",
+          border: "1.5px dashed #86efac", borderRadius: 10,
+          padding: "12px 16px", display: "flex",
+          flexWrap: "wrap", alignItems: "center", gap: 10,
+        }}>
           <span style={{ fontSize: 9.5, color: "#999", border: "1px solid #ddd", padding: "1px 5px", borderRadius: 3 }}>AD</span>
-          <div style={{ width: 40, height: 40, borderRadius: 8, background: `linear-gradient(135deg,${C.gold},${C.accent})`, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 18, flexShrink: 0 }}>💰</div>
+          <div style={{
+            width: 40, height: 40, borderRadius: 8,
+            background: `linear-gradient(135deg,${C.gold},${C.accent})`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            color: "#fff", fontSize: 18, flexShrink: 0,
+          }}>💰</div>
           <div style={{ flex: 1, minWidth: 120 }}>
-            <strong style={{ fontSize: 13.5, display: "block" }}>Earn While You Learn — Referral Bonus up to ₹5,000</strong>
-            <span style={{ fontSize: 12, color: C.muted }}>Refer a friend to CodeTechniques Premium &amp; earn per referral</span>
+            <strong style={{ fontSize: isMobile ? 12.5 : 13.5, display: "block" }}>
+              Earn While You Learn — Referral Bonus up to ₹5,000
+            </strong>
+            <span style={{ fontSize: isMobile ? 11 : 12, color: C.muted }}>
+              Refer a friend to CodeTechniques Premium &amp; earn per referral
+            </span>
           </div>
-          <a href="#" style={{ background: C.green, color: "#fff", padding: "7px 14px", borderRadius: 7, fontWeight: 600, fontSize: 12.5, marginLeft: "auto" }}>Learn More →</a>
+          <a
+            href="#"
+            style={{
+              background: C.green, color: "#fff", padding: "8px 16px",
+              borderRadius: 7, fontWeight: 600, fontSize: 12.5, whiteSpace: "nowrap",
+            }}
+          >
+            Learn More →
+          </a>
         </div>
       </div>
-
-      {/* FOOTER */}
-      <footer style={{ background: "#0d1b2a", color: "#c8d6e5", padding: isMobile ? "32px 0 20px" : "48px 0 20px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: isMobile ? "0 14px" : "0 20px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : isTablet ? "1fr 1fr" : "2fr 1fr 1fr 1fr", gap: isMobile ? 24 : 28, marginBottom: 28 }}>
-            {/* Brand */}
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 12 }}>
-                <div style={{ width: 34, height: 34, borderRadius: 8, background: C.primary, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 13, color: "#fff", fontFamily: "'Syne', sans-serif" }}>CT</div>
-                <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, color: "#fff" }}>Code<span style={{ color: C.accent }}>Techniques</span></span>
-              </div>
-              <p style={{ fontSize: 12, opacity: 0.7, lineHeight: 1.7, marginBottom: 16 }}>
-                India's most trusted job portal for freshers & recent graduates. 100% verified job postings updated daily.
-              </p>
-              <div style={{ display: "flex", maxWidth: 300 }}>
-                <input type="email" placeholder="Email for job alerts" style={{ flex: 1, background: "#1a2e44", border: "1px solid #2a3f5a", color: "#fff", fontSize: 12, borderRadius: "7px 0 0 7px", padding: "9px 11px", outline: "none" }} />
-                <button style={{ background: C.accent, color: "#fff", border: "none", padding: "9px 13px", borderRadius: "0 7px 7px 0", fontWeight: 600, fontSize: 12, cursor: "pointer" }}>Subscribe</button>
-              </div>
-            </div>
-
-            {!isMobile && (
-              <>
-                <div>
-                  <h6 style={{ fontFamily: "'Syne', sans-serif", fontSize: 12.5, fontWeight: 700, color: "#fff", marginBottom: 12 }}>Fresher Jobs</h6>
-                  {["2026 Batch Jobs", "2025 Batch Jobs", "Software/IT Jobs", "Government Jobs", "MBA/BBA Jobs", "Walk-in Jobs"].map((l) => (
-                    <a key={l} href="#" style={{ display: "block", fontSize: 12, color: "#8a9bb5", marginBottom: 7 }}>{l}</a>
-                  ))}
-                </div>
-                <div>
-                  <h6 style={{ fontFamily: "'Syne', sans-serif", fontSize: 12.5, fontWeight: 700, color: "#fff", marginBottom: 12 }}>Resources</h6>
-                  {["Interview Questions", "Resume Tips", "Off Campus Alerts", "Salary Guide 2026", "Course Reviews"].map((l) => (
-                    <a key={l} href="#" style={{ display: "block", fontSize: 12, color: "#8a9bb5", marginBottom: 7 }}>{l}</a>
-                  ))}
-                </div>
-                <div>
-                  <h6 style={{ fontFamily: "'Syne', sans-serif", fontSize: 12.5, fontWeight: 700, color: "#fff", marginBottom: 12 }}>Company</h6>
-                  {["About Us", "Contact Us", "Advertise With Us", "Privacy Policy", "Disclaimer", "Sitemap"].map((l) => (
-                    <a key={l} href="#" style={{ display: "block", fontSize: 12, color: "#8a9bb5", marginBottom: 7 }}>{l}</a>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-
-          <div style={{ borderTop: "1px solid #1e3047", paddingTop: 14, display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
-            <p style={{ fontSize: 11.5, opacity: 0.5 }}>© 2026 CodeTechniques India. All rights reserved.</p>
-            <div style={{ display: "flex", gap: 14 }}>
-              {["Privacy", "Terms", "Cookies"].map((l) => (
-                <a key={l} href="#" style={{ fontSize: 11.5, color: "#8a9bb5" }}>{l}</a>
-              ))}
-            </div>
-          </div>
+<Footer 
+  bp={{ isMobile: false, isTablet: false, isDesktop: true }}
+  gutter="16px"
+/>
         </div>
-      </footer>
-    </div>
+
   );
 }

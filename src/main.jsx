@@ -6,6 +6,7 @@ import './index.css'
 import App from './App.jsx'
 import JobPostForm from './admin_pages/job_posting.jsx'
 import ViewJob from './user_pages/viewjob.jsx'
+import TopTicker from './components/topticker.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
