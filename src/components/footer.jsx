@@ -17,7 +17,7 @@ function Footer({ bp = {}, gutter = "16px", C = defaultColors }) {
         padding: isMobile ? "32px 0 24px" : "48px 0 24px",
       }}
     >
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: `0 ${gutter}` }}>
+      <div style={{ Width: "100%", margin: "0 auto", padding: `0 ${gutter}` }}>
         
         {/* Top Section */}
         <div

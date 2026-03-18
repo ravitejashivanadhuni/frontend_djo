@@ -179,7 +179,7 @@ function Navbar({ bp = {}, onMenuOpen = () => {} }) {
       >
         <div
           style={{
-            maxWidth: 1280,
+            width: "100%",
             margin: "0 auto",
             padding: isMobile ? "0 14px" : "0 24px",
             display: "flex",
