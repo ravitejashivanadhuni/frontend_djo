@@ -47,17 +47,48 @@ function AlertBar({ C = defaultColors }) {
   );
   const [visible, setVisible] = useState(true);
 
+  // 🔥 NEW STATE FOR API DATA
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const h = () => setWidth(window.innerWidth);
     window.addEventListener("resize", h);
     return () => window.removeEventListener("resize", h);
   }, []);
 
-  const isMobile  = width < 640;
-  const isTablet  = width >= 640 && width < 1024;
+  // 🔥 FETCH LATEST JOBS
+  useEffect(() => {
+    const fetchLatestJobs = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/get-latest-jobs");
+        const data = await res.json();
+
+        if (data.success) {
+          setJobs(data.jobs);
+        }
+        console.log("Fetched latest jobs:", data.jobs);
+      } catch (err) {
+        console.error("Error fetching latest jobs:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLatestJobs();
+  }, []);
+
+  const isMobile = width < 640;
+  const isTablet = width >= 640 && width < 1024;
   const isDesktop = width >= 1024;
 
   if (!visible) return null;
+
+  // 🔥 FORMAT JOB TEXT
+  const jobText =
+    jobs.length > 0
+      ? jobs.map((j) => j.companyName).join(", ")
+      : "Top companies";
 
   return (
     <div
@@ -73,8 +104,7 @@ function AlertBar({ C = defaultColors }) {
       {/* ── Inner layout ── */}
       <div
         style={{
-          maxWidth: 1200,
-          margin: "0 auto",
+          width: "100%", // 🔥 FULL WIDTH FIX
           padding: isMobile ? "8px 36px 8px 12px" : "9px 48px 9px 16px",
           display: "flex",
           alignItems: "center",
@@ -83,12 +113,11 @@ function AlertBar({ C = defaultColors }) {
           flexWrap: "wrap",
         }}
       >
-        {/* Emoji — hidden on very small to save space */}
         {!isMobile && (
-          <span style={{ fontSize: isTablet ? 14 : 15, flexShrink: 0 }}>🎉</span>
+          <span style={{ fontSize: isTablet ? 14 : 15 }}>🎉</span>
         )}
 
-        {/* Message */}
+        {/* 🔥 DYNAMIC MESSAGE */}
         <span
           style={{
             lineHeight: 1.45,
@@ -96,14 +125,16 @@ function AlertBar({ C = defaultColors }) {
             letterSpacing: "0.01em",
           }}
         >
-          {isMobile
-            ? "New jobs from Amazon, TCS & more!"
+          {loading
+            ? "Loading latest jobs..."
+            : isMobile
+            ? `New jobs from ${jobText}!`
             : isTablet
-            ? "🎉 New jobs added today from Amazon, TCS, Infosys & more!"
-            : "New jobs added today from Amazon, TCS, Infosys & more — updated every hour!"}
+            ? `🎉 New jobs added today from ${jobText}!`
+            : `New jobs added today from ${jobText} — updated every hour!`}
         </span>
 
-        {/* CTA link */}
+        {/* CTA */}
         <a
           href="#jobs"
           style={{
@@ -116,17 +147,20 @@ function AlertBar({ C = defaultColors }) {
             borderRadius: 5,
             fontSize: isMobile ? 11 : 12.5,
             whiteSpace: "nowrap",
-            flexShrink: 0,
             transition: "background 0.2s",
           }}
-          onMouseOver={e => (e.currentTarget.style.background = "rgba(255,255,255,0.28)")}
-          onMouseOut={e  => (e.currentTarget.style.background = "rgba(255,255,255,0.18)")}
+          onMouseOver={(e) =>
+            (e.currentTarget.style.background = "rgba(255,255,255,0.28)")
+          }
+          onMouseOut={(e) =>
+            (e.currentTarget.style.background = "rgba(255,255,255,0.18)")
+          }
         >
           View Latest →
         </a>
       </div>
 
-      {/* ── Close button ── */}
+      {/* Close Button */}
       <button
         onClick={() => setVisible(false)}
         aria-label="Dismiss alert"
@@ -143,16 +177,10 @@ function AlertBar({ C = defaultColors }) {
           borderRadius: "50%",
           cursor: "pointer",
           fontSize: isMobile ? 11 : 13,
-          lineHeight: 1,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          flexShrink: 0,
-          padding: 0,
-          transition: "background 0.2s",
         }}
-        onMouseOver={e => (e.currentTarget.style.background = "rgba(255,255,255,0.32)")}
-        onMouseOut={e  => (e.currentTarget.style.background = "rgba(255,255,255,0.18)")}
       >
         ✕
       </button>

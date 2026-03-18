@@ -4,6 +4,8 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import AlertBar from "../components/alertbar";
 import { useParams } from "react-router-dom";
+import SimilarJobs from "../components/viewjob_page_components/similar_jobs";
+
 
 /* ─────────────────────────────────────────────
    THEME
@@ -54,13 +56,8 @@ const iconBtn = (bg) => ({
   textDecoration: "none"
 });
 
-const SIMILAR_JOBS = [
-  { logo: "I", logoBg: "#fff0f0", logoColor: "#e8472a", title: "Systems Engineer",    company: "Infosys", salary: "₹3.6–5.0 LPA" },
-  { logo: "W", logoBg: "#ede9fe", logoColor: "#7c3aed", title: "NLTH Elite Engineer", company: "Wipro",   salary: "₹3.5 LPA" },
-  { logo: "G", logoBg: "#fef9c3", logoColor: "#a16207", title: "STEP Intern 2026",    company: "Google",  salary: "₹80K/month" },
-];
 
-const NAV_LINKS = ["Home", "Freshers Jobs", "Work From Home", "Internships", "Interview Tips", "By Location"];
+// const NAV_LINKS = ["Home", "Freshers Jobs", "Work From Home", "Internships", "Interview Tips", "By Location"];
 
 const BADGE_STYLE = {
   featured: { background: "#fff8e1", color: "#b45309" },
@@ -413,36 +410,7 @@ function Sidebar({ job }) {
       </div>
 
       {/* Similar Jobs */}
-      <SidebarWidget title="🔍 Similar Jobs">
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {SIMILAR_JOBS.map((j) => (
-            <a
-              key={j.title} href="#"
-              style={{
-                display: "flex", gap: 10, padding: 10,
-                borderRadius: 9, border: `1px solid ${C.border}`,
-                textDecoration: "none",
-              }}
-            >
-              <div style={{
-                width: 34, height: 34, borderRadius: 8,
-                background: j.logoBg, color: j.logoColor,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontWeight: 700, fontSize: 13, flexShrink: 0,
-              }}>
-                {j.logo}
-              </div>
-              <div>
-                <strong style={{ fontSize: 13, display: "block", color: C.text }}>{j.title}</strong>
-                <span style={{ fontSize: 11.5, color: C.muted }}>{j.company} · {j.salary}</span>
-              </div>
-            </a>
-          ))}
-        </div>
-        <a href="#" style={{ display: "block", textAlign: "center", marginTop: 12, fontSize: 12.5, color: C.primary, fontWeight: 600 }}>
-          View All Software Jobs →
-        </a>
-      </SidebarWidget>
+        {job?._id && <SimilarJobs jobId={job._id} />}
     </div>
   );
 }
