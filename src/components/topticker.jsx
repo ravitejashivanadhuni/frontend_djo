@@ -7,7 +7,7 @@ function TopTicker({ isMobile, isDesktop, C, gutter }) {
     <div style={{ background: C.primary, color: "#fff", fontSize: 11.5, padding: "5px 0" }}>
       <div
         style={{
-          maxWidth: 1280,
+          Width: "100%",
           margin: "0 auto",
           padding: `0 ${gutter}`,
           display: "flex",
