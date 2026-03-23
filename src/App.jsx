@@ -4,6 +4,9 @@ import Navbar from "./components/navbar";
 import TopTicker from "./components/topticker";
 import Footer from "./components/footer";
 import JobCardList from "./components/home_page_components/Job_card_component";
+import QuickCategories from "./components/home_page_components/quick_categories";
+import TopCompanies from "./components/home_page_components/topcompanies";
+import JobsByLocation from "./components/home_page_components/job_by_location";
 
 
 const C = {
@@ -44,20 +47,6 @@ const CATS = [
   { label: "Bangalore", count: "3.2K" }, { label: "Hyderabad", count: "2.4K" },
   { label: "Pune", count: "1.9K" }, { label: "Mumbai", count: "1.6K" },
   { label: "Chennai", count: "1.1K" }, { label: "Delhi NCR", count: "980" },
-];
-
-const QUICK_CATS = [
-  ["Software IT Jobs", "4,200+"], ["Work From Home", "3,100+"], ["Government Jobs", "1,800+"],
-  ["MBA / BBA Jobs", "890+"], ["Internships", "2,300+"], ["Walk-in Jobs", "340+"],
-  ["Data Analyst Jobs", "670+"], ["Non-Engineering", "1,200+"],
-];
-
-const COMPANIES = [
-  { name: "Amazon", roles: "24 open roles", bg: "#e8f4fd", color: "#0f4c81", letter: "A" },
-  { name: "TCS", roles: "36 open roles", bg: "#f0fff4", color: "#16a34a", letter: "T" },
-  { name: "Infosys", roles: "18 open roles", bg: "#fff0f0", color: "#e8472a", letter: "I" },
-  { name: "Wipro", roles: "22 open roles", bg: "#ede9fe", color: "#7c3aed", letter: "W" },
-  { name: "Deloitte", roles: "11 open roles", bg: "#fff7ed", color: "#c2410c", letter: "D" },
 ];
 
 const LOCATIONS = [
@@ -160,6 +149,27 @@ export default function App() {
     setSearchTriggered(true);
     setTimeout(() => setSearchTriggered(false), 1400);
   };
+  const [stats, setStats] = useState(null);
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/get-stats");
+
+        // convert response to JSON
+        const data = await res.json();
+
+        console.log("Stats response:", data);
+
+        // set state
+        setStats(data.data);
+
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   return (
     /* ── ROOT: must be 100% width, no max-width here ── */
@@ -311,13 +321,39 @@ export default function App() {
               <p style={{ fontSize: 14.5, opacity: .88, marginBottom: 24, maxWidth: 480 }}>
                 100% verified job postings from top IT, government &amp; startup companies. Updated daily for 2025 &amp; 2026 batch graduates.
               </p>
-              <div className="hero-stats">
+              {/* <div className="hero-stats">
                 {[["12,400+", "Active Jobs"], ["850+", "Companies"], ["2.3L+", "Hired"]].map(([n, l]) => (
                   <div key={l} className="stat-box">
                     <strong className="syne" style={{ display: "block", fontSize: "1.3rem", fontWeight: 800 }}>{n}</strong>
                     <small style={{ fontSize: 11.5, opacity: .8 }}>{l}</small>
                   </div>
                 ))}
+              </div> */}
+              <div>
+                {/* 🔥 HERO STATS SECTION */}
+                <div className="hero-stats">
+                  {[
+                    [`${stats?.activeJobs ?? "..."}+`, "Active Jobs"],
+                    [`${stats?.companies ?? "..."}+`, "Companies"],
+                    [`${stats?.newJobs ?? "..."}+`, "New This Week"]
+                  ].map(([n, l]) => (
+                    <div key={l} className="stat-box">
+                      <strong
+                        className="syne"
+                        style={{
+                          display: "block",
+                          fontSize: "1.3rem",
+                          fontWeight: 800
+                        }}
+                      >
+                        {n}
+                      </strong>
+                      <small style={{ fontSize: 11.5, opacity: 0.8 }}>
+                        {l}
+                      </small>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             {/* Search Card */}
@@ -396,7 +432,7 @@ export default function App() {
               <div className="job-grid">
                 <JobCardList page={page} onTotal={setTotal} />
               </div>
-              {console.log("DEBUG →", { totalJobs, totalPages, page })}
+              {/* {console.log("DEBUG →", { totalJobs, totalPages, page })} */}
 
               {/* Pagination */}
               {totalPages > 1 && (
@@ -435,20 +471,12 @@ export default function App() {
                 <a href="#" style={{ background: S.gold, color: "#000", padding: "8px 18px", borderRadius: 7, fontWeight: 700, fontSize: 12.5, display: "inline-block" }}>Join Now →</a>
               </div>
 
-              <SidebarWidget title="⚡ Quick Job Categories">
-                {QUICK_CATS.map(([l, c]) => <QuickLink key={l} label={l} count={c} />)}
-              </SidebarWidget>
+<QuickCategories 
+  SidebarWidget={SidebarWidget} 
+  QuickLink={QuickLink} 
+/>
 
-              <SidebarWidget title="🏢 Top Hiring Companies">
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {COMPANIES.map(c => (
-                    <div key={c.name} style={{ display: "flex", alignItems: "center", gap: 10, padding: 9, borderRadius: 8, border: `1px solid ${S.border}`, cursor: "pointer" }}>
-                      <div style={{ width: 34, height: 34, borderRadius: 7, background: c.bg, color: c.color, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: 13, flexShrink: 0 }}>{c.letter}</div>
-                      <div><strong style={{ fontSize: 13, display: "block" }}>{c.name}</strong><span style={{ fontSize: 12, color: S.muted }}>{c.roles}</span></div>
-                    </div>
-                  ))}
-                </div>
-              </SidebarWidget>
+<TopCompanies SidebarWidget={SidebarWidget} S={S} />
 
               {/* WhatsApp Ad */}
               <div style={{ background: "linear-gradient(160deg,#1a1a2e,#16213e)", color: "#fff", borderRadius: 12, padding: 18, textAlign: "center", marginBottom: 16 }}>
@@ -459,9 +487,10 @@ export default function App() {
                 <a href="#" style={{ background: "linear-gradient(90deg,#e8472a,#f5a623)", color: "#fff", padding: "8px 18px", borderRadius: 7, fontWeight: 700, fontSize: 12.5, display: "inline-block" }}>Join Free Group →</a>
               </div>
 
-              <SidebarWidget title="📍 Jobs by Location">
-                {LOCATIONS.map(([l, c]) => <QuickLink key={l} label={l} count={c} />)}
-              </SidebarWidget>
+<JobsByLocation 
+  SidebarWidget={SidebarWidget} 
+  QuickLink={QuickLink} 
+/>
             </div>
 
           </div>

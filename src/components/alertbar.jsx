@@ -67,7 +67,7 @@ function AlertBar({ C = defaultColors }) {
         if (data.success) {
           setJobs(data.jobs);
         }
-        console.log("Fetched latest jobs:", data.jobs);
+        // console.log("Fetched latest jobs:", data.jobs);
       } catch (err) {
         console.error("Error fetching latest jobs:", err);
       } finally {

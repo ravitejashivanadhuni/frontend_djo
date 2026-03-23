@@ -105,9 +105,9 @@ export default function JobCardList({ page = 1, onTotal }) {
         fetch("http://localhost:5000/api/get-jobs")
             .then(r => r.json())
             .then(d => {
-                console.log("API response:", d);           // 👈 add this
+                // console.log("API response:", d);           // 👈 add this
                 const all = Array.isArray(d) ? d : d.jobs || d.data || [];
-                console.log("Parsed jobs length:", all.length); // 👈 and this
+                // console.log("Parsed jobs length:", all.length); // 👈 and this
                 setJobs(all);
                 if (onTotal) onTotal(all.length);
             })
