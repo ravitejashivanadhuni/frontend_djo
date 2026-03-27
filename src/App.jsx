@@ -154,7 +154,7 @@ export default function App() {
     const fetchStats = async () => {
       try {
         const res = await fetch("http://localhost:5000/api/get-stats");
-
+ 
         // convert response to JSON
         const data = await res.json();
 
