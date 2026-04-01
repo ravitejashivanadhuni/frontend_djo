@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import API_BASE_URL from "../../config/api";
 
 export default function JobsByLocation({ SidebarWidget, QuickLink }) {
   const [locations, setLocations] = useState(null);
@@ -6,7 +7,7 @@ export default function JobsByLocation({ SidebarWidget, QuickLink }) {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/jobs-by-location");
+        const res = await fetch(`${API_BASE_URL}/api/jobs-by-location`);
         const data = await res.json();
 
         setLocations(data.data);

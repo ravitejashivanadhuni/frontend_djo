@@ -9,6 +9,7 @@ import About from './user_pages/about.jsx'
 import Contact from './user_pages/contactus.jsx'
 import Privacy from './user_pages/privacy.jsx'
 import Advertise from './user_pages/advertise_with_us.jsx'
+import ResourcesPage from './user_pages/ResourcesPage.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/contact-us" element={<Contact />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/advertise-with-us" element={<Advertise />} />
+        <Route path="/resources" element={<ResourcesPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
