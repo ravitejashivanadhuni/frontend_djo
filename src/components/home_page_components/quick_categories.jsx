@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import API_BASE_URL from "../../config/api";
 
 export default function QuickCategories({ SidebarWidget, QuickLink }) {
   const [categories, setCategories] = useState(null);
@@ -6,7 +7,7 @@ export default function QuickCategories({ SidebarWidget, QuickLink }) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/quick-job-categories");
+        const res = await fetch(`${API_BASE_URL}/api/quick-job-categories`);
         const data = await res.json();
 
         setCategories(data.data);

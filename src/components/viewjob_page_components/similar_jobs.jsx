@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import API_BASE_URL from "../../config/api";
 
 const C = {
   primary: "#0f4c81",
@@ -57,7 +58,7 @@ function SimilarJobs({ jobId }) {
     const fetchSimilarJobs = async () => {
       try {
         console.log("Received jobId:", jobId);
-        const res = await fetch(`http://localhost:5000/api/similar-jobs/${jobId}`);
+        const res = await fetch(`${API_BASE_URL}/api/similar-jobs/${jobId}`);
         const data = await res.json();
 
         if (data.success) {

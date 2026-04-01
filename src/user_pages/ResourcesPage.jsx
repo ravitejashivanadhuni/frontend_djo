@@ -195,8 +195,71 @@ export default function ResourcesPage() {
   });
 
   return (
-    <div style={{ background: "#f9fafb", minHeight: "100vh", fontFamily: "sans-serif" }}>
+        <div style={{ fontFamily: "'DM Sans',sans-serif", background: C.light, color: C.text, minHeight: "100vh" , width: "100%" , overflowX: "hidden"}}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: disc; padding-left: 20px; }
+        li { margin-bottom: 6px; font-size: 13.5px; line-height: 1.8; color: ${C.text}; }
+        @keyframes ticker {
+          0%   { transform: translateX(100%); }
+          100% { transform: translateX(-120%); }
+        }
+        .ticker-outer { overflow: hidden; flex: 1; min-width: 0; }
+        .ticker-inner { display: inline-block; animation: ticker 40s linear infinite; white-space: nowrap; opacity: .85; }
 
+        /* Buttons */
+        .btn-apply {
+          background: ${C.primary}; color: #fff; border: none;
+          padding: 12px 28px; border-radius: 9px; font-weight: 700;
+          font-size: 14px; font-family: 'Syne',sans-serif;
+          display: inline-block; cursor: pointer; transition: background .2s;
+          white-space: nowrap;
+        }
+        .btn-apply:hover { background: #0a3a65; }
+        .btn-save {
+          background: #fff; color: ${C.primary}; border: 1.5px solid ${C.primary};
+          padding: 11px 22px; border-radius: 9px; font-weight: 600;
+          font-size: 13.5px; cursor: pointer; transition: background .2s;
+          white-space: nowrap;
+        }
+        .btn-save:hover { background: ${C.light}; }
+        .btn-share {
+          font-size: 13px; color: ${C.muted}; padding: 11px 14px;
+          border-radius: 9px; border: 1px solid ${C.border};
+          background: #fff; cursor: pointer; transition: background .2s;
+          white-space: nowrap;
+        }
+        .btn-share:hover { background: ${C.light}; }
+
+        /* Nav hover */
+        .nav-link { transition: all .18s; }
+        @media (hover: hover) {
+          .nav-link:hover { background: ${C.light} !important; color: ${C.primary} !important; }
+          .similar-card:hover { border-color: ${C.primary} !important; }
+        }
+
+        /* Responsive font helpers */
+        @media (max-width: 639px) {
+          .job-title { font-size: 19px !important; }
+          .detail-grid { grid-template-columns: 1fr 1fr !important; }
+          .action-row { flex-direction: column; align-items: stretch !important; }
+          .action-row .btn-apply,
+          .action-row .btn-save,
+          .action-row .btn-share { width: 100%; text-align: center; }
+        }
+        @media (min-width: 640px) and (max-width: 1023px) {
+          .job-title { font-size: 21px !important; }
+          .detail-grid { grid-template-columns: repeat(3, 1fr) !important; }
+        }
+        @media (min-width: 1024px) {
+          .job-title { font-size: 24px !important; }
+          .detail-grid { grid-template-columns: repeat(3, 1fr) !important; }
+        }
+          html, body { width: 100% !important; margin: 0 !important; padding: 0 !important; overflow-x: hidden !important; }
+#root { width: 100% !important; overflow-x: hidden !important; }
+      `}</style>
       {/* ── Hero Banner ── */}
       <div
         style={{
@@ -206,6 +269,7 @@ export default function ResourcesPage() {
           position: "relative",
           overflow: "hidden",
         }}
+        
       >
         {/* Decorative circles */}
         <div style={{ position: "absolute", top: -40, right: -40, width: 200, height: 200, borderRadius: "50%", background: "rgba(255,255,255,.04)" }} />
@@ -242,6 +306,7 @@ export default function ResourcesPage() {
           >
             🔍
           </button>
+          
         </div>
       </div>
 

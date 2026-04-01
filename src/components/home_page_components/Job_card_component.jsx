@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import API_BASE_URL  from "../../config/api";
 
 const S = {
     primary: "#0f4c81", accent: "#e8472a", gold: "#f5a623",
@@ -102,7 +103,7 @@ export default function JobCardList({ page = 1, onTotal }) {
     const [jobs, setJobs] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:5000/api/get-jobs")
+        fetch(`${API_BASE_URL}/api/get-jobs`)
             .then(r => r.json())
             .then(d => {
                 // console.log("API response:", d);           // 👈 add this

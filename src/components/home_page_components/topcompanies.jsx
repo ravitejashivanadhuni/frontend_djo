@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import API_BASE_URL from "../../config/api";
 
 export default function TopCompanies({ SidebarWidget, S }) {
   const [companies, setCompanies] = useState(null);
@@ -6,7 +7,7 @@ export default function TopCompanies({ SidebarWidget, S }) {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/top-hiring-companies");
+        const res = await fetch(`${API_BASE_URL}/api/top-hiring-companies`);
         const data = await res.json();
 
         setCompanies(data.data);

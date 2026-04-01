@@ -5,6 +5,7 @@ import Footer from "../components/footer";
 import AlertBar from "../components/alertbar";
 import { useParams } from "react-router-dom";
 import SimilarJobs from "../components/viewjob_page_components/similar_jobs";
+import API_BASE_URL from "../config/api";
 
 
 /* ─────────────────────────────────────────────
@@ -434,7 +435,7 @@ export default function ViewJob() {
   useEffect(() => {
 const fetchJob = async () => {
   try {
-    const res = await fetch(`http://localhost:5000/api/view-job/${slug}`);
+    const res = await fetch(`${API_BASE_URL}/api/view-job/${slug}`);
     const data = await res.json();
 
     console.log("FULL RESPONSE:", data); // 🔥 MUST DO

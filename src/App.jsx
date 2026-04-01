@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import AlertBar from "./components/alertbar";
 import Navbar from "./components/navbar";
 import TopTicker from "./components/topticker";
@@ -7,6 +8,7 @@ import JobCardList from "./components/home_page_components/Job_card_component";
 import QuickCategories from "./components/home_page_components/quick_categories";
 import TopCompanies from "./components/home_page_components/topcompanies";
 import JobsByLocation from "./components/home_page_components/job_by_location";
+import API_BASE_URL from "./config/api";
 
 
 const C = {
@@ -144,6 +146,8 @@ export default function App() {
   const totalPages = Math.ceil(totalJobs / 15);
   const bp = useBreakpoint();
   const { isMobile, isTablet, isDesktop, showSidebar } = bp;
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSearch = () => {
     setSearchTriggered(true);
@@ -153,7 +157,7 @@ export default function App() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/get-stats");
+        const res = await fetch(`${API_BASE_URL}/api/get-stats`);
  
         // convert response to JSON
         const data = await res.json();
@@ -305,9 +309,12 @@ export default function App() {
       </div>
 
       {/* ── Navbar: full width ── */}
-      <div className="section-full">
-        <Navbar bp={bp} onMenuOpen={() => { }} />
-      </div>
+<Navbar
+  bp={bp}
+  onMenuOpen={() => {}}
+  onNavigate={(page) => navigate(`/${page}`)}
+  activePage={location.pathname.replace("/", "")}
+/>
 
       {/* ── Hero: full width ── */}
       <div className="section-full" style={{ background: "linear-gradient(135deg,#0f4c81 0%,#1565c0 60%,#0d47a1 100%)", color: "#fff", padding: "48px 0 40px" }}>

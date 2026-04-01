@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import API_BASE_URL  from "../../config/api";
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 const CATEGORIES = ["IT", "Non-IT", "Government", "Internship"];
@@ -150,7 +151,7 @@ const handleSubscribe = async () => {
   }
 
   try {
-    const res = await fetch("http://localhost:5000/api/job-alerts/subscribe-to-job-alerts", {
+    const res = await fetch(`${API_BASE_URL}/api/job-alerts/subscribe-to-job-alerts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
