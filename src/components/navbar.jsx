@@ -355,7 +355,7 @@ function Navbar({ onNavigate = () => {}, activePage = "" }) {
               style={{ width: 40, height: 40, borderRadius: 9 }}
             />
             <span style={{ fontWeight: 800, color: C.primary, fontSize: 15 }}>
-              Code<span style={{ color: C.accent }}>Techniques</span>
+              Daily<span style={{ color: C.accent }}>Job Openings</span>
             </span>
           </a>
 
