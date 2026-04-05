@@ -9,6 +9,8 @@ import QuickCategories from "./components/home_page_components/quick_categories"
 import TopCompanies from "./components/home_page_components/topcompanies";
 import JobsByLocation from "./components/home_page_components/job_by_location";
 import API_BASE_URL from "./config/api";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 
 
 const C = {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import AdminNavbar from "../components/adminnavbar";
 import API_BASE_URL from "../../config/api";
+import CreatableSelect from "react-select/creatable";
 
 // ─── Shared Design Tokens (matches App.jsx) ───────────────────────────────────
 const S = {
@@ -40,8 +41,8 @@ const JOB_ROLES = {
 };
 const WORK_MODES = ["Full Time","Part Time","Remote","Work From Home","Hybrid","Contract","Freelance","Internship"];
 const EXPERIENCE = [
-  "Fresher (0–1 yr)","Junior (1–3 yrs)","Mid-Level (3–5 yrs)",
-  "Senior (5–8 yrs)","Lead (8–12 yrs)","Manager (5+ yrs)","Director / VP","C-Level",
+  "0–1 yr","0-2 yrs","1–3 yrs","3–5 yrs",
+  "5–8 yrs","8–12 yrs","5+ yrs","Director / VP","C-Level",
 ];
 const LOCATIONS = [
   "Hyderabad","Bengaluru","Mumbai","Delhi / NCR","Chennai","Pune",
@@ -90,6 +91,47 @@ const TABS = [
   { key:"delete", label:"Delete Job",   icon:"🗑️",  color:"#e8472a", soft:"#fee2e2" },
   { key:"close",  label:"Close a Job",  icon:"🔒",  color:"#f59e0b", soft:"#fff8e1" },
 ];
+const selectStyles = {
+  control: (base) => ({
+    ...base,
+    borderRadius: 8,
+    minHeight: 36,
+    height: 36,
+    fontSize: 13,
+    borderColor: "#e2e8f0"
+  }),
+
+  valueContainer: (base) => ({
+    ...base,
+    padding: "0 10px",
+  }),
+
+  input: (base) => ({
+    ...base,
+    margin: 0,
+    padding: 0,
+    fontSize: 13
+  }),
+
+  indicatorsContainer: (base) => ({
+    ...base,
+    height: 36
+  }),
+
+  option: (base, state) => ({
+    ...base,
+    fontSize: 13,
+    padding: "8px 10px",
+    backgroundColor: state.isFocused ? "#f1f5f9" : "#fff",
+    color: "#1a1a2e",
+  }),
+
+  menu: (base) => ({
+    ...base,
+    fontSize: 13,
+    borderRadius: 8,
+  })
+};
 
 // ─── POST JOB FORM ────────────────────────────────────────────────────────────
 function PostJobForm() {
@@ -106,6 +148,31 @@ function PostJobForm() {
   const [loading, setLoading] = useState(false);
   const [posted, setPosted] = useState(false);
   const [apiError, setApiError] = useState("");
+  const [jobUrl, setJobUrl] = useState("");
+  const [jobData, setJobData] = useState(null);
+  const generateShareMessage = () => {
+  return `🚀 Job Opportunity Alert!
+
+🔹 ${jobData.companyName} is Hiring!
+💼 Role: ${jobData.jobTitle}
+📍 Location: ${jobData.location}
+🎓 Batch: ${jobData.eligibleBatches}
+
+🔗 Apply Now:
+${jobUrl}
+
+📢 Stay Updated with Daily Jobs:
+💬 WhatsApp Channel:
+https://whatsapp.com/channel/0029Vb7fjzJK0IBayWJ7mv0I
+
+📸 Instagram:
+https://www.instagram.com/codetechniques/
+
+🔗 Telegram:
+https://t.me/codetechniques
+
+📣 Share this opportunity with your friends & groups ❤️`;
+};
 
   const set = (k, v) => setF(p => ({ ...p, [k]: v }));
   const toggleWM = (wm) => set("workMode", f.workMode.includes(wm) ? f.workMode.filter(x=>x!==wm) : [...f.workMode, wm]);
@@ -158,7 +225,20 @@ function PostJobForm() {
       });
       // console.log("token", JSON.parse(localStorage.getItem("adminInfo"))?.token);
       const data = await res.json();
-      if (data.success) { setPosted(true); setF(blank); }
+
+if (data.success) { 
+  const job = data.data;
+
+  // ✅ safe check
+  const url = job?.slug
+    ? `${window.location.origin}/view-job/${job.slug}`
+    : "";
+
+  setJobUrl(url);
+  setPosted(true);
+  setJobData(job);
+  setF(blank);
+}
       else setApiError(data.message || "Something went wrong.");
     } catch { setApiError("Network error. Please try again."); }
     finally { setLoading(false); }
@@ -172,14 +252,82 @@ function PostJobForm() {
 
   if (posted) return (
     <div style={{ textAlign:"center", padding:"48px 24px" }}>
-      <div style={{ fontSize:48, marginBottom:16 }}>🎉</div>
-      <h3 style={{ fontFamily:"'Syne',sans-serif", fontSize:20, fontWeight:800, color:S.primary, marginBottom:8 }}>Job Posted Successfully!</h3>
-      <p style={{ color:S.muted, fontSize:14, marginBottom:24 }}>Your job listing is under review and will go live within 24 hours.</p>
-      <button onClick={()=>setPosted(false)} style={{ background:S.primary, color:"#fff", border:"none",
-        padding:"11px 28px", borderRadius:9, fontWeight:700, fontSize:14, cursor:"pointer" }}>
-        Post Another Job →
-      </button>
-    </div>
+    <div style={{ fontSize:48, marginBottom:16 }}>🎉</div>
+
+    <h3 style={{
+      fontFamily:"'Syne',sans-serif",
+      fontSize:20,
+      fontWeight:800,
+      color:S.primary,
+      marginBottom:8
+    }}>
+      Job Posted Successfully!
+    </h3>
+
+    <p style={{ color:S.muted, fontSize:14, marginBottom:16 }}>
+      Your job listing is under review and will go live within 24 hours.
+    </p>
+
+    {/* ✅ SHOW JOB LINK */}
+    {jobUrl && (
+  <div style={{ marginTop: 10 }}>
+
+    <p style={{ fontSize: 13, color: S.muted }}>Share Job:</p>
+
+    {/* WhatsApp Share */}
+    <button
+      onClick={() => {
+        const message = generateShareMessage();
+        const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+        window.open(url, "_blank");
+      }}
+      style={{
+        marginRight: 10,
+        padding: "8px 16px",
+        background: "#25D366",
+        color: "#fff",
+        border: "none",
+        borderRadius: 6,
+        cursor: "pointer"
+      }}
+    >
+      📲 WhatsApp
+    </button>
+
+    {/* Copy Full Message */}
+    <button
+      onClick={() => navigator.clipboard.writeText(generateShareMessage())}
+      style={{
+        padding: "8px 16px",
+        background: S.accent,
+        color: "#fff",
+        border: "none",
+        borderRadius: 6,
+        cursor: "pointer"
+      }}
+    >
+      📋 Copy Message
+        </button>
+      </div>
+      
+    )}
+
+    <button
+      onClick={() => setPosted(false)}
+      style={{
+        background:S.primary,
+        color:"#fff",
+        border:"none",
+        padding:"11px 28px",
+        borderRadius:9,
+        fontWeight:700,
+        fontSize:14,
+        cursor:"pointer"
+      }}
+    >
+      Post Another Job →
+    </button>
+  </div>
   );
 
   return (
@@ -245,39 +393,59 @@ function PostJobForm() {
       )}
       <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))", gap:16 }}>
         <Field label="Job Title" required>
-          <select value={f.jobTitle} onChange={e=>set("jobTitle",e.target.value)} style={selStyle(errors.jobTitle)}
-            disabled={f.jobType==="NON_IT" && !f.jobCategory}>
-            <option value="">Select Job Title...</option>
-            {getTitles().map(t=><option key={t} value={t}>{t}</option>)}
-          </select>
+                  <CreatableSelect
+            styles={selectStyles}      
+            options={getTitles().map(t => ({ label: t, value: t }))}
+            value={f.jobTitle ? { label: f.jobTitle, value: f.jobTitle } : null}
+            onChange={(selected) => set("jobTitle", selected?.value || "")}
+            onCreateOption={(inputValue) => set("jobTitle", inputValue)}
+            placeholder="Select or type Job Title..."
+            isDisabled={f.jobType==="NON_IT" && !f.jobCategory}
+          />
           <ErrMsg msg={errors.jobTitle} />
         </Field>
-        <Field label="Job Role / Department" required>
-          <select value={f.jobRole} onChange={e=>set("jobRole",e.target.value)} style={selStyle(errors.jobRole)}>
-            <option value="">Select Role...</option>
-            {(JOB_ROLES[f.jobType]||[]).map(r=><option key={r} value={r}>{r}</option>)}
-          </select>
+              <Field label="Job Role / Department" required>
+          <CreatableSelect
+             styles={selectStyles}
+            options={(JOB_ROLES[f.jobType] || []).map(r => ({ label: r, value: r }))}
+            value={f.jobRole ? { label: f.jobRole, value: f.jobRole } : null}
+            onChange={(selected) => set("jobRole", selected?.value || "")}
+            onCreateOption={(inputValue) => set("jobRole", inputValue)}
+            placeholder="Select or type Role..."
+          />
           <ErrMsg msg={errors.jobRole} />
         </Field>
         <Field label="Experience Level" required>
-          <select value={f.experienceLevel} onChange={e=>set("experienceLevel",e.target.value)} style={selStyle(errors.experienceLevel)}>
-            <option value="">Select Level...</option>
-            {EXPERIENCE.map(l=><option key={l} value={l}>{l}</option>)}
-          </select>
+          <CreatableSelect
+             styles={selectStyles}
+            options={EXPERIENCE.map(e => ({ label: e, value: e }))}
+            value={f.experienceLevel ? { label: f.experienceLevel, value: f.experienceLevel } : null}
+            onChange={(selected) => set("experienceLevel", selected?.value || "")}
+            onCreateOption={(inputValue) => set("experienceLevel", inputValue)}
+            placeholder="Select or type Experience..."
+          />
           <ErrMsg msg={errors.experienceLevel} />
         </Field>
         <Field label="Eligible Batches" required>
-          <select value={f.eligibleBatches} onChange={e=>set("eligibleBatches",e.target.value)} style={selStyle(errors.eligibleBatches)}>
-            <option value="">Select Batch...</option>
-            {BATCHES.map(b=><option key={b} value={b}>{b}</option>)}
-          </select>
+          <CreatableSelect
+             styles={selectStyles}
+            options={BATCHES.map(b => ({ label: b, value: b }))}
+            value={f.eligibleBatches ? { label: f.eligibleBatches, value: f.eligibleBatches } : null}
+            onChange={(selected) => set("eligibleBatches", selected?.value || "")}
+            onCreateOption={(inputValue) => set("eligibleBatches", inputValue)}
+            placeholder="Select or type Batch..."
+          />
           <ErrMsg msg={errors.eligibleBatches} />
         </Field>
         <Field label="Education">
-          <select value={f.education} onChange={e=>set("education",e.target.value)} style={selStyle(false)}>
-            <option value="">Select Education...</option>
-            {EDUCATION.map(e=><option key={e} value={e}>{e}</option>)}
-          </select>
+          <CreatableSelect
+             styles={selectStyles}
+            options={EDUCATION.map(e => ({ label: e, value: e }))}
+            value={f.education ? { label: f.education, value: f.education } : null}
+            onChange={(selected) => set("education", selected?.value || "")}
+            onCreateOption={(inputValue) => set("education", inputValue)}
+            placeholder="Select or type Education..."
+          />
         </Field>
         <Field label="Department">
           <input value={f.department} onChange={e=>set("department",e.target.value)}
@@ -328,16 +496,24 @@ function PostJobForm() {
       </Field>
       <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:16 }}>
         <Field label="Salary">
-          <select value={f.salary} onChange={e=>set("salary",e.target.value)} style={selStyle(false)}>
-            <option value="">Select Range...</option>
-            {SALARY.map(r=><option key={r} value={r}>{r}</option>)}
-          </select>
+          <CreatableSelect
+              styles={selectStyles}
+              options={SALARY.map(r => ({ label: r, value: r }))}
+              value={f.salary ? { label: f.salary, value: f.salary } : null}
+              onChange={(selected) => set("salary", selected?.value || "")}
+              onCreateOption={(inputValue) => set("salary", inputValue)}
+              placeholder="Select or type Salary..."
+          />
         </Field>
         <Field label="Location" required>
-          <select value={f.location} onChange={e=>set("location",e.target.value)} style={selStyle(errors.location)}>
-            <option value="">Select Location...</option>
-            {LOCATIONS.map(l=><option key={l} value={l}>{l}</option>)}
-          </select>
+          <CreatableSelect
+              styles={selectStyles}
+              options={LOCATIONS.map(l => ({ label: l, value: l }))}
+              value={f.location ? { label: f.location, value: f.location } : null}
+              onChange={(selected) => set("location", selected?.value || "")}
+              onCreateOption={(inputValue) => set("location", inputValue)}
+              placeholder="Select or type Location..."
+          />
           <ErrMsg msg={errors.location} />
         </Field>
         <Field label="Openings">
@@ -347,10 +523,31 @@ function PostJobForm() {
               borderRadius:9, outline:"none", background:"#fafafa", color:S.text, fontFamily:"inherit", boxSizing:"border-box" }} />
         </Field>
         <Field label="Expiry Date">
-          <input type="date" value={f.expiryDate} onChange={e=>set("expiryDate",e.target.value)}
-            style={{ width:"100%", padding:"10px 14px", fontSize:13.5, border:"1.5px solid #e2e8f0",
-              borderRadius:9, outline:"none", background:"#fafafa", color:S.text, fontFamily:"inherit", boxSizing:"border-box" }} />
-        </Field>
+  <input
+    type="date"
+    value={f.expiryDate || ""}
+    onChange={e => set("expiryDate", e.target.value)}
+    style={{
+      width: "100%",
+      padding: "10px 14px",
+      fontSize: 13.5,
+      border: "1.5px solid #e2e8f0",
+      borderRadius: 9,
+      outline: "none",
+      background: "#fafafa",
+      color: S.text,
+      fontFamily: "inherit",
+      boxSizing: "border-box"
+    }}
+  />
+
+  {/* 👇 Show message when empty */}
+  {!f.expiryDate && (
+    <p style={{ fontSize: 12, color: "#9ca3af", marginTop: 4 }}>
+      Expiry date not mentioned
+    </p>
+  )}
+</Field>
       </div>
       <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))", gap:16 }}>
         <Field label="Skills" hint="Comma-separated: React, Node.js, SQL">
