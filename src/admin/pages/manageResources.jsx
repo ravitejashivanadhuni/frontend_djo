@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AdminNavbar from "../components/adminnavbar";
-import VITE_API_BASE_URL  from "../../config/api";
+import API_BASE_URL  from "../../config/api";
 
 /* ── Tokens ── */
 const S = {
@@ -20,7 +20,7 @@ const getToken = () =>
   localStorage.getItem("res.data.token") ||
   JSON.parse(localStorage.getItem("adminInfo"))?.token;
 
-const API = "http://localhost:5000/api";
+const API = `${API_BASE_URL}/api`;
 const authHeaders = () => ({ "Content-Type": "application/json", Authorization: `Bearer ${getToken()}` });
 
 const levelStyle = {
@@ -166,7 +166,7 @@ export default function ManageResources() {
   const fetchResources = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${VITE_API_BASE_URL}/api/resources/get-all-resources`);
+      const res = await fetch(`${API_BASE_URL}/api/resources/get-all-resources`);
       const data = await res.json();
       setResources(Array.isArray(data) ? data : []);
     } catch { setResources([]); }
@@ -178,7 +178,7 @@ export default function ManageResources() {
   const doCreate = async () => {
     if (!form.title.trim() || !form.desc.trim() || !form.category.trim()) return;
     try {
-      const res = await fetch(`${VITE_API_BASE_URL}/api/resources/create-resource`, { method: "POST", headers: authHeaders(), body: JSON.stringify(form) });
+      const res = await fetch(`${API_BASE_URL}/api/resources/create-resource`, { method: "POST", headers: authHeaders(), body: JSON.stringify(form) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
       showToast(`"${form.title}" created successfully`);
@@ -188,7 +188,7 @@ export default function ManageResources() {
 
   const doEdit = async () => {
     try {
-      const res = await fetch(`${VITE_API_BASE_URL}/api/resources/update-resource/${editRes._id}`, { method: "PUT", headers: authHeaders(), body: JSON.stringify(editRes) });
+      const res = await fetch(`${API_BASE_URL}/api/resources/update-resource/${editRes._id}`, { method: "PUT", headers: authHeaders(), body: JSON.stringify(editRes) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
       showToast(`"${editRes.title}" updated successfully`);
@@ -198,7 +198,7 @@ export default function ManageResources() {
 
   const doDelete = async () => {
     try {
-      const res = await fetch(`${VITE_API_BASE_URL}/api/resources/delete-resource/${confirm._id}`, { method: "DELETE", headers: { Authorization: `Bearer ${getToken()}` } });
+      const res = await fetch(`${API_BASE_URL}/api/resources/delete-resource/${confirm._id}`, { method: "DELETE", headers: { Authorization: `Bearer ${getToken()}` } });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
       showToast(`"${confirm.title}" deleted`);

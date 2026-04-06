@@ -137,20 +137,38 @@ export default function Admins() {
     } catch (e) { showToast(e.message, "err"); }
   };
 
-  const doCreate = async () => {
-    if (!form.email.trim()) return;
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/admin/create-admin`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${getToken()}` },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
-      showToast("Admin created successfully");
-      setCreateOpen(false); setForm({ email: "", role: "admin" }); fetchAdmins();
-    } catch (e) { showToast(e.message, "err"); }
-  };
+const doCreate = async () => {
+  if (!form.email.trim()) return;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/admin/create-admin`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`
+      },
+      body: JSON.stringify(form),
+    });
+
+    const data = await res.json();
+
+    console.log("STATUS:", res.status);
+    console.log("RESPONSE:", data);
+
+    if (!res.ok) {
+      throw new Error(data.message || "Something went wrong");
+    }
+
+    showToast("Admin created successfully");
+    setCreateOpen(false);
+    setForm({ email: "", role: "admin" });
+    fetchAdmins();
+
+  } catch (e) {
+    console.error("ERROR:", e);
+    showToast(e.message, "err");
+  }
+};
 
   const initials = email => email ? email.charAt(0).toUpperCase() : "?";
 
