@@ -5,6 +5,7 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import VITE_API_BASE_URL from "../config/api";
 
 const C = {
   primary: "#0a2540",
@@ -274,7 +275,7 @@ useEffect(() => {
   useEffect(() => {
   const fetchSets = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/interview-ques/get-all-interview-ques"); 
+      const res = await axios.get(`${VITE_API_BASE_URL}/api/interview-ques/get-all-interview-ques`); 
       // 👉 change this if your backend URL is different
 
       setSets(res.data);
@@ -514,7 +515,7 @@ if (!loading && sets.length === 0) {
             marginTop: 48, padding: "20px 24px",
             background: "#fff7ed", borderRadius: 12,
             border: "1px solid #fed7aa",
-            display: "flex", alignItems: "flex-start", gap: 12,
+            display: "flex", alignItems: "flex-start", gap: 12,width: "100%",
           }}
         >
           <span style={{ fontSize: 20 }}>💡</span>
@@ -527,6 +528,10 @@ if (!loading && sets.length === 0) {
             </div>
           </div>
         </div>
+
+        <Footer style={{ marginTop: 60, padding: "24px 20px", textAlign: "center", fontSize: 12, color: C.muted, width: "100%" }}>
+          &copy; 2026 Daily Job Openings. All rights reserved.
+        </Footer>
       </div>
 
       {/* ── Modal ── */}
