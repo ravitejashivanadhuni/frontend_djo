@@ -17,6 +17,7 @@ import AdminDashboard from './admin/pages/adminDashboard.jsx'
 import Admins from './admin/pages/manageAdmins.jsx'
 import ProtectedRoute from "./admin/components/ProtectedRoute";
 import ManageJobs from './admin/pages/manageJobs.jsx'
+import WalkInDrivesPage from './user_pages/walk_in_jobs.jsx'
 import ManageResources from './admin/pages/manageResources.jsx'
 import InterviewQues from './admin/pages/manageInterQues.jsx'
 import ResetPassword from './admin/pages/resetPassword.jsx'
@@ -35,6 +36,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/jobs/categories/:category" element={<Jobcategories />} />
         <Route path="/interview-questions" element={<InterviewQuestionsPage />} />
         <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/walk-in-drive" element={<WalkInDrivesPage/>}/>
         <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         <Route path="/admin/manage-jobs" element={<ProtectedRoute><ManageJobs /></ProtectedRoute>} />
         <Route path="/admin/manage-admins" element={<ProtectedRoute><Admins /></ProtectedRoute>} />
