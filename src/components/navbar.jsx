@@ -151,23 +151,35 @@ function NavLink({ item, index, activePage }) {
   </a>
 ) : (
   <Link
-    to={item.page === "home" ? "/" : `/${item.page}`}
-    style={{
-      fontSize: 13,
-      padding: "7px 11px",
-      borderRadius: 7,
-      color: isActive ? C.accent : index === 0 ? C.primary : C.text,
-      background:
-        isActive ? "#fff0f0" : index === 0 ? C.light : "transparent",
-      display: "flex",
-      alignItems: "center",
-      gap: 4,
-      textDecoration: "none",
-      fontWeight: isActive ? 700 : 500,
-    }}
-  >
-    {item.label}
-  </Link>
+  to={item.page ? (item.page === "home" ? "/" : `/${item.page}`) : "#"}
+  style={{
+    fontSize: 13,
+    padding: "7px 11px",
+    borderRadius: 7,
+    color: isActive ? C.accent : index === 0 ? C.primary : C.text,
+    background:
+      isActive ? "#fff0f0" : index === 0 ? C.light : "transparent",
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
+    textDecoration: "none",
+    fontWeight: isActive ? 700 : 500,
+  }}
+>
+  {item.label}
+
+  {hasDropdown && (
+    <span
+      style={{
+        fontSize: 8,
+        color: "#000",
+        marginTop: 1,
+      }}
+    >
+      ▼
+    </span>
+  )}
+</Link>
 )}
           {/* {item.label}
           {hasDropdown && <span style={{ fontSize: 8 }}>▼</span>}
