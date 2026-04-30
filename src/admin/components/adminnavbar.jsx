@@ -2,21 +2,21 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const LINKS = [
-  { to: "/admin/dashboard",                   label: "Dashboard"           },
-  { to: "/admin/manage-jobs",                 label: "Jobs"         },
-  { to: "/admin/manage-admins",               label: "Admins",       superOnly: true },
-  { to: "/admin/manage-resources",            label: "Resources"           },
-  { to: "/admin/manage-interview-questions",  label: "Courses"        },
-  { to: "/admin/manage-walkins",                 label: "Walk-Ins"      },
-  { to: "/admin/manage-exams",                 label: "Exams"      },
+  { to: "/admin/dashboard", label: "Dashboard" },
+  { to: "/admin/manage-jobs", label: "Jobs" },
+  { to: "/admin/manage-walkins", label: "Walk-Ins" },
+  { to: "/admin/manage-exams", label: "Exams" },
+  { to: "/admin/manage-admins", label: "Admins", superOnly: true },
+  { to: "/admin/manage-resources", label: "Resources" },
+  { to: "/admin/manage-interview-questions", label: "Courses" },
 ];
 
 export default function AdminNavbar() {
-  const navigate       = useNavigate();
-  const location       = useLocation();
-  const admin          = JSON.parse(localStorage.getItem("adminInfo") || "{}");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const admin = JSON.parse(localStorage.getItem("adminInfo") || "{}");
   const [open, setOpen] = useState(false);
-  const drawerRef      = useRef(null);
+  const drawerRef = useRef(null);
 
   const logout = () => {
     localStorage.removeItem("adminToken");
@@ -238,7 +238,7 @@ export default function AdminNavbar() {
         <div className="an-drawer" ref={drawerRef}>
           <div className="an-drawer-hdr">
             <span style={{ fontFamily: "'Cormorant Garamond',serif", color: "#EDE2D0", fontWeight: 500, fontSize: 18, letterSpacing: "1px" }}>
-               {isSuperAdmin ? "SUPER ADMIN" : "ADMIN"}
+              {isSuperAdmin ? "SUPER ADMIN" : "ADMIN"}
             </span>
             <button className="an-close-btn" onClick={() => setOpen(false)}>✕</button>
           </div>
