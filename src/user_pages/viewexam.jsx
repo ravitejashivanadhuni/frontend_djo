@@ -6,6 +6,7 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import AlertBar from "../components/alertbar";
 import API_BASE_URL from "../config/api";
+import MainLayout from "../components/common_components/MainLayout";
 
 /* ─────────────────────────────────────────────
    THEME (matches ViewJob)
@@ -479,6 +480,11 @@ export default function ViewExam() {
   const isUrgent = appEndDays !== null && appEndDays >= 0 && appEndDays <= 7;
 
   return (
+    <MainLayout
+      C={C}
+      isMobile={isMobile}
+      isDesktop={isDesktop}
+    >
     <>
      <Helmet>
 
@@ -639,14 +645,7 @@ export default function ViewExam() {
         #root { width: 100% !important; overflow-x: hidden !important; }
       `}</style>
 
-      <AlertBar isMobile={false} C={{ accent: "#ff4d4f" }} />
-      {/* <TopTicker
-        isMobile={isMobile}
-        isDesktop={isDesktop}
-        C={C}
-        gutter="16px"
-      /> */}
-      <Navbar bp={bp} onMenuOpen={() => {}} />
+
 
       {/* BREADCRUMB */}
       <div style={{ maxWidth: "100%", margin: "0 auto", padding: `12px ${gutter} 0` }}>
@@ -1051,5 +1050,6 @@ export default function ViewExam() {
       <Footer bp={{ isMobile: false, isTablet: false, isDesktop: true }} gutter="16px" />
     </div>
     </>
+    </MainLayout>
   );
 }

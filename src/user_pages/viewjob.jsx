@@ -10,6 +10,7 @@ import { Helmet } from "react-helmet-async";
 import QuickCategories from "../components/home_page_components/quick_categories";
 import TopCompanies from "../components/home_page_components/topcompanies";
 import JobsByLocation from "../components/home_page_components/job_by_location";
+import MainLayout from "../components/common_components/MainLayout";
 
 /* ─────────────────────────────────────────────
    THEME
@@ -958,6 +959,7 @@ const S = {
   light: "#f4f7fb", green: "#16a34a", text: "#1a1a2e", muted: "#6b7280", border: "#e2e8f0",
 };
 
+
 function SwipeToApply({ link }) {
   const [position, setPosition] = React.useState(0);
   const [isDragging, setIsDragging] = React.useState(false);
@@ -1312,7 +1314,7 @@ export default function ViewJob() {
   const gutter = isMobile ? "14px" : isTablet ? "20px" : "24px";
   const [showShare, setShowShare] = useState(false);
   const { slug } = useParams();
-
+  const [showStickyNav, setShowStickyNav] = useState(false);
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -1338,149 +1340,164 @@ export default function ViewJob() {
   if (loading) return <ViewJobSkeleton />;
   if (!job) return <JobNotFound />;
 
-function QuickLink({ label, count }) {
-  return (
-    <a href="#" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: `1px solid ${S.border}`, fontSize: 13, color: S.text, textDecoration: "none" }}>
-      {label}
-      <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-        <span style={{ background: S.light, color: S.muted, fontSize: 11, padding: "1px 7px", borderRadius: 10 }}>{count}</span>
-        <span style={{ color: S.muted, fontSize: 12 }}>›</span>
-      </span>
-    </a>
-  );
-}
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     setShowStickyNav(window.scrollY > 120);
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll);
+
+  //   return () =>
+  //     window.removeEventListener("scroll", handleScroll);
+  // }, []);
+  function QuickLink({ label, count }) {
+    return (
+      <a href="#" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: `1px solid ${S.border}`, fontSize: 13, color: S.text, textDecoration: "none" }}>
+        {label}
+        <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <span style={{ background: S.light, color: S.muted, fontSize: 11, padding: "1px 7px", borderRadius: 10 }}>{count}</span>
+          <span style={{ color: S.muted, fontSize: 12 }}>›</span>
+        </span>
+      </a>
+    );
+  }
 
   return (
-    <>
-      <Helmet>
-        <title>
-          {`${job.companyName} ${job.jobTitle} Jobs in ${job.location.split(",")[0]} | Daily Job Openings`}
-        </title>
+    <MainLayout
+      C={C}
+      isMobile={isMobile}
+      isDesktop={isDesktop}
+    >
+      <>
+        <Helmet>
+          <title>
+            {`${job.companyName} ${job.jobTitle} Jobs in ${job.location.split(",")[0]} | Daily Job Openings`}
+          </title>
 
-        <meta
-          name="description"
-          content={`${job.companyName} is hiring ${job.jobTitle} in ${job.location}. Apply now for ${job.experienceLevel} experience candidates.`}
-        />
+          <meta
+            name="description"
+            content={`${job.companyName} is hiring ${job.jobTitle} in ${job.location}. Apply now for ${job.experienceLevel} experience candidates.`}
+          />
 
-        <link
-          rel="canonical"
-          href={`${window.location.origin}/jobs/${job.slug}`}
-        />
+          <link
+            rel="canonical"
+            href={`${window.location.origin}/jobs/${job.slug}`}
+          />
 
-        {/* OpenGraph */}
-        <meta
-          property="og:title"
-          content={`${job.companyName} ${job.jobTitle} Jobs`}
-        />
+          {/* OpenGraph */}
+          <meta
+            property="og:title"
+            content={`${job.companyName} ${job.jobTitle} Jobs`}
+          />
 
-        <meta
-          property="og:description"
-          content={`${job.companyName} is hiring ${job.jobTitle} in ${job.location}. Freshers and candidates with ${job.experienceLevel} experience can apply now.`}
-        />
+          <meta
+            property="og:description"
+            content={`${job.companyName} is hiring ${job.jobTitle} in ${job.location}. Freshers and candidates with ${job.experienceLevel} experience can apply now.`}
+          />
 
-        <meta
-          property="og:image"
-          content={job.companyLogo}
-        />
+          <meta
+            property="og:image"
+            content={job.companyLogo}
+          />
 
-        <meta
-          property="og:url"
-          content={`${window.location.origin}/jobs/${job.slug}`}
-        />
+          <meta
+            property="og:url"
+            content={`${window.location.origin}/jobs/${job.slug}`}
+          />
 
-        {/* Twitter */}
-        <meta
-          name="twitter:card"
-          content="summary_large_image"
-        />
+          {/* Twitter */}
+          <meta
+            name="twitter:card"
+            content="summary_large_image"
+          />
 
-        <meta
-          name="twitter:title"
-          content={`${job.companyName} ${job.jobTitle}`}
-        />
+          <meta
+            name="twitter:title"
+            content={`${job.companyName} ${job.jobTitle}`}
+          />
 
-        <meta
-          name="twitter:description"
-          content={`${job.companyName} is hiring ${job.jobTitle} in ${job.location}. Freshers and candidates with ${job.experienceLevel} experience can apply now.`}
-        />
+          <meta
+            name="twitter:description"
+            content={`${job.companyName} is hiring ${job.jobTitle} in ${job.location}. Freshers and candidates with ${job.experienceLevel} experience can apply now.`}
+          />
 
-        <meta
-          name="twitter:image"
-          content={job.companyLogo}
-        />
+          <meta
+            name="twitter:image"
+            content={job.companyLogo}
+          />
 
-        <meta name="robots" content="index, follow" />
+          <meta name="robots" content="index, follow" />
 
-        <meta
-          name="keywords"
-          content={job.tags?.join(", ")}
-        />
+          <meta
+            name="keywords"
+            content={job.tags?.join(", ")}
+          />
 
-        <meta property="og:type" content="website" />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "JobPosting",
+          <meta property="og:type" content="website" />
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "JobPosting",
 
-            title: job.jobTitle,
+              title: job.jobTitle,
 
-            description: job.jobDescription,
+              description: job.jobDescription,
 
-            identifier: {
-              "@type": "PropertyValue",
-              name: job.companyName,
-              value: job.slug,
-            },
-
-            datePosted: job.postedDate,
-
-            validThrough: job.expiryDate,
-
-            // employmentType: "FULL_TIME",
-
-            hiringOrganization: {
-              "@type": "Organization",
-              name: job.companyName,
-              sameAs: job.companyWebsite,
-              logo: job.companyLogo,
-            },
-
-            jobLocation: {
-              "@type": "Place",
-              address: {
-                "@type": "PostalAddress",
-                addressLocality: job.location,
-                addressCountry: "India",
+              identifier: {
+                "@type": "PropertyValue",
+                name: job.companyName,
+                value: job.slug,
               },
-            },
 
-            baseSalary: {
-              "@type": "MonetaryAmount",
-              currency: "INR",
-              value: {
-                "@type": "QuantitativeValue",
-                value: job.salary,
-                unitText: "YEAR",
+              datePosted: job.postedDate,
+
+              validThrough: job.expiryDate,
+
+              // employmentType: "FULL_TIME",
+
+              hiringOrganization: {
+                "@type": "Organization",
+                name: job.companyName,
+                sameAs: job.companyWebsite,
+                logo: job.companyLogo,
               },
-            },
 
-            applicantLocationRequirements: {
-              "@type": "Country",
-              name: "India",
-            },
+              jobLocation: {
+                "@type": "Place",
+                address: {
+                  "@type": "PostalAddress",
+                  addressLocality: job.location,
+                  addressCountry: "India",
+                },
+              },
 
-            qualifications: job.education,
+              baseSalary: {
+                "@type": "MonetaryAmount",
+                currency: "INR",
+                value: {
+                  "@type": "QuantitativeValue",
+                  value: job.salary,
+                  unitText: "YEAR",
+                },
+              },
 
-            skills: job.skills?.join(", "),
+              applicantLocationRequirements: {
+                "@type": "Country",
+                name: "India",
+              },
 
-            industry: job.jobCategory,
+              qualifications: job.education,
 
-            url: `${window.location.origin}/jobs/${job.slug}`,
-          })}
-        </script>
-      </Helmet>
-      <div style={{ fontFamily: "'DM Sans',sans-serif", background: C.light, color: C.text, minHeight: "100vh", width: "100%", overflowX: "hidden" }}>
-        <style>{`
+              skills: job.skills?.join(", "),
+
+              industry: job.jobCategory,
+
+              url: `${window.location.origin}/jobs/${job.slug}`,
+            })}
+          </script>
+        </Helmet>
+        <div style={{ fontFamily: "'DM Sans',sans-serif", background: C.light, color: C.text, minHeight: "100vh", width: "100%", overflowX: "hidden" }}>
+          <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         a { text-decoration: none; color: inherit; }
@@ -1560,7 +1577,7 @@ function QuickLink({ label, count }) {
       `}</style>
 
 
-        <AlertBar
+          {/* <AlertBar
           isMobile={false}
           C={{ accent: "#ff4d4f" }}
         />
@@ -1570,1077 +1587,1088 @@ function QuickLink({ label, count }) {
           isDesktop={isDesktop}
           C={C}
           gutter="16px"
-        />
-        {/* ────────────── NAVBAR ────────────── */}
-        {/* <Navbar bp={bp} onMenuOpen={() => setDrawerOpen(true)} /> */}
-        <Navbar
-          bp={bp}
-          onMenuOpen={() => console.log("menu open")}
-        />
-        <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+        /> */}
+          {/* ────────────── NAVBAR ────────────── */}
+          {/* <Navbar bp={bp} onMenuOpen={() => setDrawerOpen(true)} /> */}
+          {/* <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            width: "100%",
+            zIndex: 999,
+          }}
+        >
+          <Navbar
+            bp={bp}
+            onMenuOpen={() => console.log("menu open")}
+          />
+        </div> */}
+          <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
 
-        {/* ────────────── BREADCRUMB ────────────── */}
-        <div style={{ maxWidth: "100%", margin: "0 auto", padding: `12px ${gutter} 0` }}>
-          <div style={{ fontSize: 12.5, color: C.muted, display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap" }}>
-            <a href="/" style={{ color: C.primary }}>Home</a>
-            <span>›</span>
-            <a href="#" style={{ color: C.primary }}>Software / IT Jobs</a>
-            <span>›</span>
-            <span style={{ color: C.text }}>{job.jobTitle}</span>
+          {/* ────────────── BREADCRUMB ────────────── */}
+          <div style={{ maxWidth: "100%", margin: "0 auto", padding: `12px ${gutter} 0` }}>
+            <div style={{ fontSize: 12.5, color: C.muted, display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap" }}>
+              <a href="/" style={{ color: C.primary }}>Home</a>
+              <span>›</span>
+              <a href="#" style={{ color: C.primary }}>Software / IT Jobs</a>
+              <span>›</span>
+              <span style={{ color: C.text }}>{job.jobTitle}</span>
+            </div>
           </div>
-        </div>
 
-        {/* ────────────── MAIN CONTENT ────────────── */}
-        <div style={{
-          maxWidth: "100%",
-          margin: "16px auto",
-          padding: `0 ${gutter} 56px`,
-          display: "flex",
-          flexDirection: showSidebar ? "row" : "column",
-          gap: 22,
-          alignItems: "flex-start",
-        }}>
-          {/* ── LEFT SIDEBAR (desktop only) ── */}
-{showSidebar && (
-  <div
-    style={{
-      width: w >= 1280 ? 320 : 280,
-      flexShrink: 0,
-      display: "flex",
-      flexDirection: "column",
-      gap: 14,
-      position: "sticky",
-      top: 90,
-      height: "fit-content",
-    }}
-  >
-    <QuickCategories
-      SidebarWidget={SidebarWidget}
-      QuickLink={QuickLink}
-    />
-       <TopCompanies
-      SidebarWidget={SidebarWidget}
-      S={S} />
-      <JobsByLocation 
-        SidebarWidget={SidebarWidget} 
-        QuickLink={QuickLink} 
-    />
-  </div>
-)}
-          {/* ═════════════════════════════
-            LEFT / FULL COLUMN
-        ═════════════════════════════ */}
-          <div style={{ flex: 1, minWidth: 0 }}>
-
-            {/* ── HERO JOB CARD ── */}
-            <Card style={{ marginBottom: 14, borderLeft: `4px solid ${C.primary}`, padding: isMobile ? 16 : 22 }}>
-
-              {/* Posted */}
-              <div style={{ fontSize: 11.5, color: C.muted, display: "flex", alignItems: "center", gap: 5, marginBottom: 18 }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={C.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-                Posted {job.createdAt ? Math.max(0, Math.floor((Date.now() - new Date(job.createdAt)) / 86400000)) : 0} days ago
-              </div>
-
-              {/* Logo + Title + Salary row */}
+          {/* ────────────── MAIN CONTENT ────────────── */}
+          <div style={{
+            maxWidth: "100%",
+            margin: "16px auto",
+            padding: `0 ${gutter} 56px`,
+            display: "flex",
+            flexDirection: showSidebar ? "row" : "column",
+            gap: 22,
+            alignItems: "flex-start",
+          }}>
+            {/* ── LEFT SIDEBAR (desktop only) ── */}
+            {showSidebar && (
               <div
                 style={{
+                  width: w >= 1280 ? 320 : 280,
+                  flexShrink: 0,
                   display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                  gap: 18,
-                  marginBottom: 18,
-                  flexWrap: isMobile ? "wrap" : "nowrap",
+                  flexDirection: "column",
+                  gap: 14,
+                  position: "sticky",
+                  top: 90,
+                  height: "fit-content",
                 }}
               >
-                {/* Left Section */}
+                <QuickCategories
+                  SidebarWidget={SidebarWidget}
+                  QuickLink={QuickLink}
+                />
+                <TopCompanies
+                  SidebarWidget={SidebarWidget}
+                  S={S} />
+                <JobsByLocation
+                  SidebarWidget={SidebarWidget}
+                  QuickLink={QuickLink}
+                />
+              </div>
+            )}
+            {/* ═════════════════════════════
+            LEFT / FULL COLUMN
+        ═════════════════════════════ */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+
+              {/* ── HERO JOB CARD ── */}
+              <Card style={{ marginBottom: 14, borderLeft: `4px solid ${C.primary}`, padding: isMobile ? 16 : 22 }}>
+
+                {/* Posted */}
+                <div style={{ fontSize: 11.5, color: C.muted, display: "flex", alignItems: "center", gap: 5, marginBottom: 18 }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={C.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                  Posted {job.createdAt ? Math.max(0, Math.floor((Date.now() - new Date(job.createdAt)) / 86400000)) : 0} days ago
+                </div>
+
+                {/* Logo + Title + Salary row */}
                 <div
                   style={{
                     display: "flex",
-                    alignItems: "center",
-                    gap: 16,
-                    flex: 1,
-                    minWidth: 0,
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    gap: 18,
+                    marginBottom: 18,
+                    flexWrap: isMobile ? "wrap" : "nowrap",
                   }}
                 >
-                  {/* Logo */}
+                  {/* Left Section */}
                   <div
                     style={{
-                      width: isMobile ? 64 : 74,
-                      height: isMobile ? 64 : 74,
-                      borderRadius: 14,
-                      background: "#fff",
-                      border: `1.5px solid ${C.border}`,
-                      flexShrink: 0,
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "center",
-                      overflow: "hidden",
-                      boxShadow: "0 2px 10px rgba(0,0,0,0.06)",
-                    }}
-                  >
-                    <img
-                      src={job.companyLogo}
-                      alt={job.companyName}
-                      style={{
-                        width: "78%",
-                        height: "78%",
-                        objectFit: "contain",
-                      }}
-                    />
-                  </div>
-
-                  {/* Job Content */}
-                  {/* Job Content */}
-                  <div
-                    style={{
+                      gap: 16,
                       flex: 1,
                       minWidth: 0,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      transform: "translateY(-16px)",
                     }}
                   >
-                    {/* Badges */}
+                    {/* Logo */}
                     <div
                       style={{
+                        width: isMobile ? 64 : 74,
+                        height: isMobile ? 64 : 74,
+                        borderRadius: 14,
+                        background: "#fff",
+                        border: `1.5px solid ${C.border}`,
+                        flexShrink: 0,
                         display: "flex",
-                        gap: 6,
-                        flexWrap: "wrap",
-                        marginBottom: 5,
-                        transform: "translateY(-3px)",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "hidden",
+                        boxShadow: "0 2px 10px rgba(0,0,0,0.06)",
                       }}
                     >
-                      {job.badge && (
-                        <span
-                          style={{
-                            ...BADGE_STYLE[job.badge],
-                            fontSize: 11,
-                            fontWeight: 700,
-                            padding: "3px 9px",
-                            borderRadius: 5,
-                          }}
-                        >
-                          {job.badgeLabel}
-                        </span>
-                      )}
-
-                      {job.verified && (
-                        <span
-                          style={{
-                            background: "#dcfce7",
-                            color: "#15803d",
-                            fontSize: 11,
-                            fontWeight: 700,
-                            padding: "3px 9px",
-                            borderRadius: 5,
-                          }}
-                        >
-                          ✓ Verified
-                        </span>
-                      )}
-
-                      {job.jobCategory && (
-                        <span
-                          style={{
-                            background: "#fff7ed",
-                            color: "#c2410c",
-                            fontSize: 11,
-                            fontWeight: 700,
-                            padding: "3px 9px",
-                            borderRadius: 5,
-                          }}
-                        >
-                          {job.jobCategory}
-                        </span>
-                      )}
+                      <img
+                        src={job.companyLogo}
+                        alt={job.companyName}
+                        style={{
+                          width: "78%",
+                          height: "78%",
+                          objectFit: "contain",
+                        }}
+                      />
                     </div>
 
-                    {/* Job Title */}
-                    <h1
-                      className="job-title"
-                      style={{
-                        fontFamily: "'Syne',sans-serif",
-                        fontWeight: 800,
-                        color: C.text,
-                        lineHeight: 1.2,
-                        margin: 0,
-                        marginBottom: 5,
-                        fontSize: isMobile ? "1.55rem" : "2rem",
-                        textAlign: "left",
-                        wordBreak: "break-word",
-                      }}
-                    >
-                      {job.jobTitle}
-                    </h1>
-
-                    {/* Company Name */}
+                    {/* Job Content */}
+                    {/* Job Content */}
                     <div
                       style={{
-                        fontSize: 15,
-                        fontWeight: 700,
-                        color: C.primary,
-                        textAlign: "left",
+                        flex: 1,
+                        minWidth: 0,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        transform: "translateY(-16px)",
                       }}
                     >
-                      {job.companyName}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Salary Card */}
-                {!isMobile && (
-                  <div
-                    style={{
-                      background: "linear-gradient(135deg,#f0fff4,#e8f5e9)",
-                      border: "1.5px solid #86efac",
-                      borderRadius: 12,
-                      padding: "14px 20px",
-                      textAlign: "center",
-                      flexShrink: 0,
-                      minWidth: 170,
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: 10,
-                        fontWeight: 700,
-                        color: C.muted,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.5px",
-                        marginBottom: 4,
-                      }}
-                    >
-                      Salary
-                    </div>
-
-                    <div
-                      style={{
-                        fontFamily: "'Syne',sans-serif",
-                        fontSize: 21,
-                        fontWeight: 800,
-                        color: C.green,
-                        lineHeight: 1.2,
-                      }}
-                    >
-                      {job.salary}
-                    </div>
-
-                    {job.salaryNote && (
+                      {/* Badges */}
                       <div
                         style={{
-                          fontSize: 10.5,
-                          color: C.muted,
-                          marginTop: 3,
+                          display: "flex",
+                          gap: 6,
+                          flexWrap: "wrap",
+                          marginBottom: 5,
+                          transform: "translateY(-3px)",
                         }}
                       >
-                        {job.salaryNote}
+                        {job.badge && (
+                          <span
+                            style={{
+                              ...BADGE_STYLE[job.badge],
+                              fontSize: 11,
+                              fontWeight: 700,
+                              padding: "3px 9px",
+                              borderRadius: 5,
+                            }}
+                          >
+                            {job.badgeLabel}
+                          </span>
+                        )}
+
+                        {job.verified && (
+                          <span
+                            style={{
+                              background: "#dcfce7",
+                              color: "#15803d",
+                              fontSize: 11,
+                              fontWeight: 700,
+                              padding: "3px 9px",
+                              borderRadius: 5,
+                            }}
+                          >
+                            ✓ Verified
+                          </span>
+                        )}
+
+                        {job.jobCategory && (
+                          <span
+                            style={{
+                              background: "#fff7ed",
+                              color: "#c2410c",
+                              fontSize: 11,
+                              fontWeight: 700,
+                              padding: "3px 9px",
+                              borderRadius: 5,
+                            }}
+                          >
+                            {job.jobCategory}
+                          </span>
+                        )}
                       </div>
-                    )}
-                  </div>
-                )}
-              </div>
 
-              {/* Salary strip — mobile only */}
-              {isMobile && (
-                <div style={{
-                  background: "linear-gradient(135deg,#f0fff4,#e8f5e9)",
-                  border: "1.5px solid #86efac", borderRadius: 10,
-                  padding: "10px 14px", marginBottom: 14,
-                }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: C.muted, textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: 3 }}>Salary</div>
-                  <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 17, fontWeight: 800, color: C.green }}>{job.salary}</div>
-                  {job.salaryNote && <div style={{ fontSize: 10.5, color: C.muted, marginTop: 2 }}>{job.salaryNote}</div>}
-                </div>
-              )}
+                      {/* Job Title */}
+                      <h1
+                        className="job-title"
+                        style={{
+                          fontFamily: "'Syne',sans-serif",
+                          fontWeight: 800,
+                          color: C.text,
+                          lineHeight: 1.2,
+                          margin: 0,
+                          marginBottom: 5,
+                          fontSize: isMobile ? "1.55rem" : "2rem",
+                          textAlign: "left",
+                          wordBreak: "break-word",
+                        }}
+                      >
+                        {job.jobTitle}
+                      </h1>
 
-              {/* Pill tags */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 18 }}>
-                {[
-                  { d: "M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0zM12 7a3 3 0 100 6 3 3 0 000-6z", label: job.location },
-                  { d: "M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM16 3h-8M8 3v4M16 3v4", label: job.jobType },
-                  { d: "M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2zM9 22V12h6v10", label: job.workMode },
-                  { d: "M22 10v6M2 10l10-5 10 5-10 5zM6 12v5c3 3 9 3 12 0v-5", label: job.eligibleBatches },
-                  { d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z", label: job.experienceLevel },
-                ].filter(({ label }) => label).map(({ d, label }) => (
-                  <span key={label} style={{
-                    display: "inline-flex", alignItems: "center", gap: 6,
-                    background: "#f4f7fb", border: `0.5px solid ${C.border}`,
-                    color: "#374151", fontSize: 12, fontWeight: 500,
-                    padding: "5px 11px", borderRadius: 20,
-                  }}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={C.primary} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d={d} />
-                    </svg>
-                    {label}
-                  </span>
-                ))}
-              </div>
-
-              <Divider />
-
-              {/* Actions */}
-              <div className="action-row" style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center", marginBottom: job.expiryDate ? 14 : 0 }}>
-<button className="btn-save" onClick={() => setSaved(!saved)}>
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    style={{ marginRight: 6 }}
-  >
-    <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
-  </svg>
-
-  {saved ? "Saved" : "Save"}
-</button>
-
-<button className="btn-share" onClick={() => setShowShare(true)}>
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    style={{ marginRight: 6 }}
-  >
-    <circle cx="18" cy="5" r="3" />
-    <circle cx="6" cy="12" r="3" />
-    <circle cx="18" cy="19" r="3" />
-    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-  </svg>
-
-  Share
-</button>
-              </div>
-
-              {/* Share modal */}
-              {showShare && (
-                <div style={overlayStyle}>
-                  <div style={modalStyle}>
-                    <h3 style={{ marginBottom: "10px" }}>Share Job</h3>
-                    <input type="text" value={`${window.location.origin}/jobs/${job.slug}`} readOnly
-                      style={{ width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid #ddd", marginBottom: "12px" }} />
-                    <button onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/jobs/${job.slug}`); alert("Link copied!"); }}
-                      style={{ padding: "8px 14px", borderRadius: "8px", border: "none", background: "#0f4c81", color: "#fff", cursor: "pointer" }}>
-                      Copy Link
-                    </button>
-                    <div style={{ marginTop: "18px", display: "flex", justifyContent: "center", gap: "12px" }}>
-                      <a href={`https://wa.me/?text=${window.location.origin}/jobs/${job.slug}`} target="_blank" style={iconBtn("#25D366")}>
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M20.52 3.48A11.94 11.94 0 0012.02 0C5.39 0 .02 5.37.02 12c0 2.12.55 4.18 1.6 6L0 24l6.17-1.62A11.96 11.96 0 0012.02 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.2-3.5-8.52zM12.02 22c-1.82 0-3.6-.48-5.17-1.38l-.37-.22-3.66.96.98-3.57-.24-.37A9.93 9.93 0 012.02 12c0-5.52 4.48-10 10-10s10 4.48 10 10-4.48 10-10 10zm5.49-7.32c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.8.37-.27.3-1.05 1.02-1.05 2.5 0 1.47 1.08 2.9 1.23 3.1.15.2 2.13 3.25 5.16 4.56.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35z" /></svg>
-                      </a>
-                      <a href={`https://twitter.com/intent/tweet?url=${window.location.origin}/jobs/${job.slug}`} target="_blank" style={iconBtn("#1DA1F2")}>
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.3 4.3 0 001.88-2.37 8.6 8.6 0 01-2.72 1.04 4.28 4.28 0 00-7.3 3.9 12.14 12.14 0 01-8.82-4.47 4.28 4.28 0 001.32 5.7 4.24 4.24 0 01-1.94-.54v.05c0 2.06 1.46 3.78 3.4 4.17-.36.1-.74.15-1.13.15-.28 0-.55-.03-.81-.08.55 1.72 2.14 2.97 4.02 3a8.58 8.58 0 01-5.3 1.83c-.34 0-.68-.02-1.01-.06A12.1 12.1 0 006.56 21c7.88 0 12.2-6.53 12.2-12.2 0-.19 0-.39-.01-.58A8.72 8.72 0 0022.46 6z" /></svg>
-                      </a>
-                      <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${window.location.origin}/jobs/${job.slug}`} target="_blank" style={iconBtn("#0077B5")}>
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M4.98 3.5C4.98 5 3.88 6 2.49 6S0 5 0 3.5 1.1 1 2.49 1 4.98 2 4.98 3.5zM.24 8.98h4.5V24H.24V8.98zM8.98 8.98h4.31v2.05h.06c.6-1.14 2.07-2.34 4.27-2.34 4.56 0 5.4 3 5.4 6.89V24h-4.5v-7.53c0-1.8-.03-4.12-2.51-4.12-2.51 0-2.89 1.96-2.89 3.98V24h-4.5V8.98z" /></svg>
-                      </a>
-                      <div onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/jobs/${job.slug}`); alert("Copied!"); }} style={iconBtn("#6b7280")}>
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M16 1H4C2.9 1 2 1.9 2 3v12h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" /></svg>
+                      {/* Company Name */}
+                      <div
+                        style={{
+                          fontSize: 15,
+                          fontWeight: 700,
+                          color: C.primary,
+                          textAlign: "left",
+                        }}
+                      >
+                        {job.companyName}
                       </div>
                     </div>
-                    <button onClick={() => setShowShare(false)} style={{ marginTop: "20px", background: "transparent", border: "none", color: "#666", cursor: "pointer" }}>Close</button>
                   </div>
+
+                  {/* Salary Card */}
+                  {!isMobile && (
+                    <div
+                      style={{
+                        background: "linear-gradient(135deg,#f0fff4,#e8f5e9)",
+                        border: "1.5px solid #86efac",
+                        borderRadius: 12,
+                        padding: "14px 20px",
+                        textAlign: "center",
+                        flexShrink: 0,
+                        minWidth: 170,
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: 10,
+                          fontWeight: 700,
+                          color: C.muted,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                          marginBottom: 4,
+                        }}
+                      >
+                        Salary
+                      </div>
+
+                      <div
+                        style={{
+                          fontFamily: "'Syne',sans-serif",
+                          fontSize: 21,
+                          fontWeight: 800,
+                          color: C.green,
+                          lineHeight: 1.2,
+                        }}
+                      >
+                        {job.salary}
+                      </div>
+
+                      {job.salaryNote && (
+                        <div
+                          style={{
+                            fontSize: 10.5,
+                            color: C.muted,
+                            marginTop: 3,
+                          }}
+                        >
+                          {job.salaryNote}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Salary strip — mobile only */}
+                {isMobile && (
+                  <div style={{
+                    background: "linear-gradient(135deg,#f0fff4,#e8f5e9)",
+                    border: "1.5px solid #86efac", borderRadius: 10,
+                    padding: "10px 14px", marginBottom: 14,
+                  }}>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: C.muted, textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: 3 }}>Salary</div>
+                    <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 17, fontWeight: 800, color: C.green }}>{job.salary}</div>
+                    {job.salaryNote && <div style={{ fontSize: 10.5, color: C.muted, marginTop: 2 }}>{job.salaryNote}</div>}
+                  </div>
+                )}
+
+                {/* Pill tags */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 18 }}>
+                  {[
+                    { d: "M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0zM12 7a3 3 0 100 6 3 3 0 000-6z", label: job.location },
+                    { d: "M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM16 3h-8M8 3v4M16 3v4", label: job.jobType },
+                    { d: "M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2zM9 22V12h6v10", label: job.workMode },
+                    { d: "M22 10v6M2 10l10-5 10 5-10 5zM6 12v5c3 3 9 3 12 0v-5", label: job.eligibleBatches },
+                    { d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z", label: job.experienceLevel },
+                  ].filter(({ label }) => label).map(({ d, label }) => (
+                    <span key={label} style={{
+                      display: "inline-flex", alignItems: "center", gap: 6,
+                      background: "#f4f7fb", border: `0.5px solid ${C.border}`,
+                      color: "#374151", fontSize: 12, fontWeight: 500,
+                      padding: "5px 11px", borderRadius: 20,
+                    }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={C.primary} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d={d} />
+                      </svg>
+                      {label}
+                    </span>
+                  ))}
+                </div>
+
+                <Divider />
+
+                {/* Actions */}
+                <div className="action-row" style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center", marginBottom: job.expiryDate ? 14 : 0 }}>
+                  <button className="btn-save" onClick={() => setSaved(!saved)}>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{ marginRight: 6 }}
+                    >
+                      <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+                    </svg>
+
+                    {saved ? "Saved" : "Save"}
+                  </button>
+
+                  <button className="btn-share" onClick={() => setShowShare(true)}>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{ marginRight: 6 }}
+                    >
+                      <circle cx="18" cy="5" r="3" />
+                      <circle cx="6" cy="12" r="3" />
+                      <circle cx="18" cy="19" r="3" />
+                      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                    </svg>
+
+                    Share
+                  </button>
+                </div>
+
+                {/* Share modal */}
+                {showShare && (
+                  <div style={overlayStyle}>
+                    <div style={modalStyle}>
+                      <h3 style={{ marginBottom: "10px" }}>Share Job</h3>
+                      <input type="text" value={`${window.location.origin}/jobs/${job.slug}`} readOnly
+                        style={{ width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid #ddd", marginBottom: "12px" }} />
+                      <button onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/jobs/${job.slug}`); alert("Link copied!"); }}
+                        style={{ padding: "8px 14px", borderRadius: "8px", border: "none", background: "#0f4c81", color: "#fff", cursor: "pointer" }}>
+                        Copy Link
+                      </button>
+                      <div style={{ marginTop: "18px", display: "flex", justifyContent: "center", gap: "12px" }}>
+                        <a href={`https://wa.me/?text=${window.location.origin}/jobs/${job.slug}`} target="_blank" style={iconBtn("#25D366")}>
+                          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M20.52 3.48A11.94 11.94 0 0012.02 0C5.39 0 .02 5.37.02 12c0 2.12.55 4.18 1.6 6L0 24l6.17-1.62A11.96 11.96 0 0012.02 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.2-3.5-8.52zM12.02 22c-1.82 0-3.6-.48-5.17-1.38l-.37-.22-3.66.96.98-3.57-.24-.37A9.93 9.93 0 012.02 12c0-5.52 4.48-10 10-10s10 4.48 10 10-4.48 10-10 10zm5.49-7.32c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.8.37-.27.3-1.05 1.02-1.05 2.5 0 1.47 1.08 2.9 1.23 3.1.15.2 2.13 3.25 5.16 4.56.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35z" /></svg>
+                        </a>
+                        <a href={`https://twitter.com/intent/tweet?url=${window.location.origin}/jobs/${job.slug}`} target="_blank" style={iconBtn("#1DA1F2")}>
+                          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.3 4.3 0 001.88-2.37 8.6 8.6 0 01-2.72 1.04 4.28 4.28 0 00-7.3 3.9 12.14 12.14 0 01-8.82-4.47 4.28 4.28 0 001.32 5.7 4.24 4.24 0 01-1.94-.54v.05c0 2.06 1.46 3.78 3.4 4.17-.36.1-.74.15-1.13.15-.28 0-.55-.03-.81-.08.55 1.72 2.14 2.97 4.02 3a8.58 8.58 0 01-5.3 1.83c-.34 0-.68-.02-1.01-.06A12.1 12.1 0 006.56 21c7.88 0 12.2-6.53 12.2-12.2 0-.19 0-.39-.01-.58A8.72 8.72 0 0022.46 6z" /></svg>
+                        </a>
+                        <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${window.location.origin}/jobs/${job.slug}`} target="_blank" style={iconBtn("#0077B5")}>
+                          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M4.98 3.5C4.98 5 3.88 6 2.49 6S0 5 0 3.5 1.1 1 2.49 1 4.98 2 4.98 3.5zM.24 8.98h4.5V24H.24V8.98zM8.98 8.98h4.31v2.05h.06c.6-1.14 2.07-2.34 4.27-2.34 4.56 0 5.4 3 5.4 6.89V24h-4.5v-7.53c0-1.8-.03-4.12-2.51-4.12-2.51 0-2.89 1.96-2.89 3.98V24h-4.5V8.98z" /></svg>
+                        </a>
+                        <div onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/jobs/${job.slug}`); alert("Copied!"); }} style={iconBtn("#6b7280")}>
+                          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M16 1H4C2.9 1 2 1.9 2 3v12h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" /></svg>
+                        </div>
+                      </div>
+                      <button onClick={() => setShowShare(false)} style={{ marginTop: "20px", background: "transparent", border: "none", color: "#666", cursor: "pointer" }}>Close</button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Deadline */}
+                {
+                  job.expiryDate && (() => {
+                    const expiry = new Date(job.expiryDate);
+                    const now = new Date();
+
+                    const diffTime = expiry - now;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                    let displayText = "";
+
+                    if (diffDays <= 0) {
+                      displayText = "Expired";
+                    } else if (diffDays <= 7) {
+                      displayText = `Expires in ${diffDays} day${diffDays > 1 ? "s" : ""}`;
+                    } else {
+                      displayText = expiry.toLocaleDateString("en-IN", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      });
+                    }
+
+                    return (
+                      <div
+                        style={{
+                          fontSize: 11.5,
+                          color: C.muted,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 5,
+                        }}
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke={C.muted}
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <polyline points="12 6 12 12 16 14" />
+                        </svg>
+
+                        Application deadline:
+
+                        <strong
+                          style={{
+                            color:
+                              diffDays <= 7
+                                ? "#dc2626"
+                                : C.accent,
+                            marginLeft: 3,
+                          }}
+                        >
+                          {displayText}
+                        </strong>
+                      </div>
+                    );
+                  })()
+                }
+
+              </Card>
+
+              {/* ── JOB DETAILS GRID ── */}
+              <Card
+                style={{
+                  marginBottom: 18,
+                  padding: 24,
+                  textAlign: "left",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                    color: C.text,
+                    marginBottom: 16,
+                  }}
+                >
+                  Job Details
+                </div>
+
+                <Divider />
+
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: isMobile
+                      ? "1fr"
+                      : "repeat(auto-fit,minmax(240px,1fr))",
+                    gap: 22,
+                    marginTop: 22,
+                  }}
+                >
+                  {[
+                    [
+                      "Job Type",
+                      <Pill bg="#e8f4fd" color={C.primary}>
+                        {job.jobType}
+                      </Pill>,
+                    ],
+
+                    [
+                      "Job Category",
+                      <Pill bg="#fff0f0" color={C.accent}>
+                        {job.jobCategory}
+                      </Pill>,
+                    ],
+
+                    [
+                      "Experience Level",
+                      <Pill bg="#dcfce7" color="#15803d">
+                        {job.experienceLevel}
+                      </Pill>,
+                    ],
+
+                    [
+                      "Work Mode",
+                      <div
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 500,
+                          color: C.text,
+                        }}
+                      >
+                        🏠 {job.workMode}
+                      </div>,
+                    ],
+
+                    [
+                      "Location",
+                      <div
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 500,
+                          color: C.text,
+                        }}
+                      >
+                        📍 {job.location}
+                      </div>,
+                    ],
+
+                    [
+                      "Education",
+                      <div
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 500,
+                          color: C.text,
+                          lineHeight: 1.7,
+                        }}
+                      >
+                        {job.education}
+                      </div>,
+                    ],
+
+                    [
+                      "Eligible Batch",
+                      <div
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 500,
+                          color: C.text,
+                        }}
+                      >
+                        {job.eligibleBatches}
+                      </div>,
+                    ],
+
+                    [
+                      "Department",
+                      <div
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 500,
+                          color: C.text,
+                        }}
+                      >
+                        {job.department}
+                      </div>,
+                    ],
+
+                    [
+                      "Openings",
+                      <div
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: C.text,
+                        }}
+                      >
+                        {job.openings} positions
+                      </div>,
+                    ],
+                  ].map(([label, value]) => (
+                    <div
+                      key={label}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 8,
+                        paddingBottom: 14,
+                        borderBottom: `1px solid ${C.border}`,
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: 13,
+                          fontWeight: 700,
+                          color: C.muted,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        {label}
+                      </div>
+
+                      <div>{value}</div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+
+              {/* ── SKILLS REQUIRED ── */}
+              <Card
+                style={{
+                  marginBottom: 18,
+                  padding: 24,
+                  textAlign: "left",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                    color: C.text,
+                    marginBottom: 16,
+                  }}
+                >
+                  Skills Required
+                </div>
+
+                <Divider />
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: 9,
+                    marginTop: 22,
+                  }}
+                >
+                  {job.skills?.length > 0 ? (
+                    job.skills.map((s) => (
+                      <div
+                        key={s}
+                        style={{
+                          padding: "7px 13px",
+                          borderRadius: 999,
+                          border: `1px solid ${C.border}`,
+                          background: "#f8fafc",
+                          fontSize: 13,
+                          fontWeight: 500,
+                          color: C.text,
+                        }}
+                      >
+                        {s}
+                      </div>
+                    ))
+                  ) : (
+                    <p style={{ color: "#6b7280" }}>
+                      No skills specified
+                    </p>
+                  )}
+                </div>
+              </Card>
+
+              {/* ── JOB DESCRIPTION ── */}
+              {/* JOB DESCRIPTION */}
+              <Card
+                style={{
+                  marginBottom: 18,
+                  textAlign: "left",
+                  padding: 24,
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                    color: C.text,
+                    marginBottom: 16,
+                  }}
+                >
+                  Job Description
+                </div>
+
+                <Divider />
+
+                <p
+                  style={{
+                    fontSize: 15,
+                    color: C.text,
+                    lineHeight: 1.9,
+                    marginTop: 18,
+                    wordBreak: "break-word",
+                  }}
+                >
+                  {job.jobDescription || "No description available."}
+                </p>
+              </Card>
+
+              {/* RESPONSIBILITIES */}
+              <Card
+                style={{
+                  marginBottom: 18,
+                  textAlign: "left",
+                  padding: 24,
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                    color: C.text,
+                    marginBottom: 16,
+                  }}
+                >
+                  Key Responsibilities
+                </div>
+
+                <Divider />
+
+                {Array.isArray(job?.responsibilities) &&
+                  job.responsibilities.length > 0 ? (
+                  <ul
+                    style={{
+                      marginTop: 18,
+                      paddingLeft: 20,
+                    }}
+                  >
+                    {job.responsibilities.map((r, i) => (
+                      <li
+                        key={i}
+                        style={{
+                          fontSize: 15,
+                          lineHeight: 1.9,
+                          marginBottom: 10,
+                          color: C.text,
+                        }}
+                      >
+                        {r}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p style={{ color: "#6b7280", marginTop: 18 }}>
+                    Not specified
+                  </p>
+                )}
+              </Card>
+
+              {/* REQUIREMENTS */}
+              <Card
+                style={{
+                  marginBottom: 18,
+                  textAlign: "left",
+                  padding: 24,
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                    color: C.text,
+                    marginBottom: 16,
+                  }}
+                >
+                  Qualifications / Requirements
+                </div>
+
+                <Divider />
+
+                {Array.isArray(job?.qualifications) &&
+                  job.qualifications.length > 0 ? (
+                  <ul
+                    style={{
+                      marginTop: 18,
+                      paddingLeft: 20,
+                    }}
+                  >
+                    {job.qualifications.map((q, i) => (
+                      <li
+                        key={i}
+                        style={{
+                          fontSize: 15,
+                          lineHeight: 1.9,
+                          marginBottom: 10,
+                          color: C.text,
+                        }}
+                      >
+                        {q}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p style={{ color: "#6b7280", marginTop: 18 }}>
+                    Not specified
+                  </p>
+                )}
+              </Card>
+
+              {/* PERKS */}
+              <Card
+                style={{
+                  marginBottom: 18,
+                  textAlign: "left",
+                  padding: 24,
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                    color: C.text,
+                    marginBottom: 16,
+                  }}
+                >
+                  Perks & Benefits
+                </div>
+
+                <Divider />
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: 9,
+                    marginTop: 18,
+                  }}
+                >
+                  {job.perks?.length > 0 ? (
+                    job.perks.map((p) => (
+                      <div
+                        key={p}
+                        style={{
+                          padding: "7px 13px",
+                          borderRadius: 999,
+                          border: `1px solid ${C.border}`,
+                          background: "#f8fafc",
+                          fontSize: 13,
+                          fontWeight: 500,
+                          color: C.text,
+                        }}
+                      >
+                        {p}
+                      </div>
+                    ))
+                  ) : (
+                    <p style={{ color: "#6b7280" }}>
+                      No perks specified
+                    </p>
+                  )}
+                </div>
+              </Card>
+
+              {/* ── HOW TO APPLY ── */}
+              <Card
+                style={{
+                  marginBottom: 18,
+                  textAlign: "left",
+                  padding: 24,
+                  position: "relative",
+                  overflow: "hidden",
+                  border: `1.5px solid ${C.border}`,
+                }}
+              >
+                {/* subtle glow */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: -70,
+                    right: -70,
+                    width: 180,
+                    height: 180,
+                    borderRadius: "50%",
+                    background: "rgba(37,99,235,0.04)",
+                    filter: "blur(55px)",
+                    pointerEvents: "none",
+                  }}
+                />
+
+                {/* Heading */}
+                <div
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                    color: C.text,
+                    marginBottom: 16,
+                    position: "relative",
+                    zIndex: 2,
+                  }}
+                >
+                  How to Apply
+                </div>
+
+                <Divider />
+
+                {/* Description */}
+                <p
+                  style={{
+                    fontSize: 14,
+                    color: C.muted,
+                    lineHeight: 1.8,
+                    marginTop: 18,
+                    marginBottom: 18,
+                    position: "relative",
+                    zIndex: 2,
+                  }}
+                >
+                  Visit the official{" "}
+                  <span
+                    style={{
+                      fontWeight: 700,
+                      color: C.text,
+                    }}
+                  >
+                    {job.companyName}
+                  </span>{" "}
+                  careers page and complete your application with an updated resume.
+                </p>
+
+                {/* Apply Box */}
+                <div
+                  style={{
+                    background: "linear-gradient(135deg,#f5f9ff,#edf4ff)",
+                    borderRadius: 18,
+                    padding: isMobile ? 16 : 18,
+                    position: "relative",
+                    zIndex: 2,
+                  }}
+                >
+                  {/* Label */}
+                  <div
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 700,
+                      color: C.primary,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.8px",
+                      marginBottom: 10,
+                    }}
+                  >
+                    Official Job Link
+                  </div>
+
+                  {/* Link */}
+                  <div
+                    style={{
+                      fontSize: 13,
+                      color: C.primary,
+                      wordBreak: "break-all",
+                      lineHeight: 1.7,
+                      marginBottom: 18,
+                    }}
+                  >
+                    {job.jobLink}
+                  </div>
+
+                  {/* Button */}
+                  {isMobile ? (
+                    <SwipeToApply link={job.jobLink} />
+                  ) : (
+                    <a
+                      href={job.jobLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 8,
+                        padding: "11px 18px",
+                        borderRadius: 12,
+                        background: "linear-gradient(135deg, #0b3b66 0%, #0f4c81 50%, #2563eb 100%)",
+                        color: "#fff",
+                        textDecoration: "none",
+                        fontSize: 14,
+                        fontWeight: 700,
+                        transition: "0.2s ease",
+                      }}
+                    >
+                      Apply Now
+
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M7 17L17 7" />
+                        <path d="M7 7h10v10" />
+                      </svg>
+                    </a>
+                  )}
+                </div>
+
+                {/* Note */}
+                <div
+                  style={{
+                    marginTop: 14,
+                    fontSize: 12.5,
+                    color: C.muted,
+                    lineHeight: 1.7,
+                    position: "relative",
+                    zIndex: 2,
+                  }}
+                >
+                  CodeTechniques does not charge any fee for applying. This is a free
+                  listing.
+                </div>
+              </Card>
+
+              {/* Sidebar shown BELOW content on mobile/tablet */}
+              {!showSidebar && (
+                <div style={{ marginTop: 8 }}>
+                  <Sidebar job={job} />
                 </div>
               )}
+            </div>
 
-              {/* Deadline */}
-{
-  job.expiryDate && (() => {
-    const expiry = new Date(job.expiryDate);
-    const now = new Date();
-
-    const diffTime = expiry - now;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    let displayText = "";
-
-    if (diffDays <= 0) {
-      displayText = "Expired";
-    } else if (diffDays <= 7) {
-      displayText = `Expires in ${diffDays} day${diffDays > 1 ? "s" : ""}`;
-    } else {
-      displayText = expiry.toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      });
-    }
-
-    return (
-      <div
-        style={{
-          fontSize: 11.5,
-          color: C.muted,
-          display: "flex",
-          alignItems: "center",
-          gap: 5,
-        }}
-      >
-        <svg
-          width="12"
-          height="12"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke={C.muted}
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <polyline points="12 6 12 12 16 14" />
-        </svg>
-
-        Application deadline:
-
-        <strong
-          style={{
-            color:
-              diffDays <= 7
-                ? "#dc2626"
-                : C.accent,
-            marginLeft: 3,
-          }}
-        >
-          {displayText}
-        </strong>
-      </div>
-    );
-  })()
-}
-
-            </Card>
-
-            {/* ── JOB DETAILS GRID ── */}
-<Card
-  style={{
-    marginBottom: 18,
-    padding: 24,
-    textAlign: "left",
-  }}
->
-  <div
-    style={{
-      fontSize: 20,
-      fontWeight: 700,
-      color: C.text,
-      marginBottom: 16,
-    }}
-  >
-    Job Details
-  </div>
-
-  <Divider />
-
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: isMobile
-        ? "1fr"
-        : "repeat(auto-fit,minmax(240px,1fr))",
-      gap: 22,
-      marginTop: 22,
-    }}
-  >
-    {[
-      [
-        "Job Type",
-        <Pill bg="#e8f4fd" color={C.primary}>
-          {job.jobType}
-        </Pill>,
-      ],
-
-      [
-        "Job Category",
-        <Pill bg="#fff0f0" color={C.accent}>
-          {job.jobCategory}
-        </Pill>,
-      ],
-
-      [
-        "Experience Level",
-        <Pill bg="#dcfce7" color="#15803d">
-          {job.experienceLevel}
-        </Pill>,
-      ],
-
-      [
-        "Work Mode",
-        <div
-          style={{
-            fontSize: 14,
-            fontWeight: 500,
-            color: C.text,
-          }}
-        >
-          🏠 {job.workMode}
-        </div>,
-      ],
-
-      [
-        "Location",
-        <div
-          style={{
-            fontSize: 14,
-            fontWeight: 500,
-            color: C.text,
-          }}
-        >
-          📍 {job.location}
-        </div>,
-      ],
-
-      [
-        "Education",
-        <div
-          style={{
-            fontSize: 14,
-            fontWeight: 500,
-            color: C.text,
-            lineHeight: 1.7,
-          }}
-        >
-          {job.education}
-        </div>,
-      ],
-
-      [
-        "Eligible Batch",
-        <div
-          style={{
-            fontSize: 14,
-            fontWeight: 500,
-            color: C.text,
-          }}
-        >
-          {job.eligibleBatches}
-        </div>,
-      ],
-
-      [
-        "Department",
-        <div
-          style={{
-            fontSize: 14,
-            fontWeight: 500,
-            color: C.text,
-          }}
-        >
-          {job.department}
-        </div>,
-      ],
-
-      [
-        "Openings",
-        <div
-          style={{
-            fontSize: 14,
-            fontWeight: 600,
-            color: C.text,
-          }}
-        >
-          {job.openings} positions
-        </div>,
-      ],
-    ].map(([label, value]) => (
-      <div
-        key={label}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 8,
-          paddingBottom: 14,
-          borderBottom: `1px solid ${C.border}`,
-        }}
-      >
-        <div
-          style={{
-            fontSize: 13,
-            fontWeight: 700,
-            color: C.muted,
-            textTransform: "uppercase",
-            letterSpacing: "0.5px",
-          }}
-        >
-          {label}
-        </div>
-
-        <div>{value}</div>
-      </div>
-    ))}
-  </div>
-</Card>
-
-{/* ── SKILLS REQUIRED ── */}
-<Card
-  style={{
-    marginBottom: 18,
-    padding: 24,
-    textAlign: "left",
-  }}
->
-  <div
-    style={{
-      fontSize: 20,
-      fontWeight: 700,
-      color: C.text,
-      marginBottom: 16,
-    }}
-  >
-    Skills Required
-  </div>
-
-  <Divider />
-
-  <div
-    style={{
-      display: "flex",
-      flexWrap: "wrap",
-      gap: 9,
-      marginTop: 22,
-    }}
-  >
-    {job.skills?.length > 0 ? (
-      job.skills.map((s) => (
-        <div
-          key={s}
-          style={{
-            padding: "7px 13px",
-            borderRadius: 999,
-            border: `1px solid ${C.border}`,
-            background: "#f8fafc",
-            fontSize: 13,
-            fontWeight: 500,
-            color: C.text,
-          }}
-        >
-          {s}
-        </div>
-      ))
-    ) : (
-      <p style={{ color: "#6b7280" }}>
-        No skills specified
-      </p>
-    )}
-  </div>
-</Card>
-
-            {/* ── JOB DESCRIPTION ── */}
-{/* JOB DESCRIPTION */}
-<Card
-  style={{
-    marginBottom: 18,
-    textAlign: "left",
-    padding: 24,
-  }}
->
-  <div
-    style={{
-      fontSize: 20,
-      fontWeight: 700,
-      color: C.text,
-      marginBottom: 16,
-    }}
-  >
-    Job Description
-  </div>
-
-  <Divider />
-
-  <p
-    style={{
-      fontSize: 15,
-      color: C.text,
-      lineHeight: 1.9,
-      marginTop: 18,
-      wordBreak: "break-word",
-    }}
-  >
-    {job.jobDescription || "No description available."}
-  </p>
-</Card>
-
-{/* RESPONSIBILITIES */}
-<Card
-  style={{
-    marginBottom: 18,
-    textAlign: "left",
-    padding: 24,
-  }}
->
-  <div
-    style={{
-      fontSize: 20,
-      fontWeight: 700,
-      color: C.text,
-      marginBottom: 16,
-    }}
-  >
-    Key Responsibilities
-  </div>
-
-  <Divider />
-
-  {Array.isArray(job?.responsibilities) &&
-  job.responsibilities.length > 0 ? (
-    <ul
-      style={{
-        marginTop: 18,
-        paddingLeft: 20,
-      }}
-    >
-      {job.responsibilities.map((r, i) => (
-        <li
-          key={i}
-          style={{
-            fontSize: 15,
-            lineHeight: 1.9,
-            marginBottom: 10,
-            color: C.text,
-          }}
-        >
-          {r}
-        </li>
-      ))}
-    </ul>
-  ) : (
-    <p style={{ color: "#6b7280", marginTop: 18 }}>
-      Not specified
-    </p>
-  )}
-</Card>
-
-{/* REQUIREMENTS */}
-<Card
-  style={{
-    marginBottom: 18,
-    textAlign: "left",
-    padding: 24,
-  }}
->
-  <div
-    style={{
-      fontSize: 20,
-      fontWeight: 700,
-      color: C.text,
-      marginBottom: 16,
-    }}
-  >
-    Qualifications / Requirements
-  </div>
-
-  <Divider />
-
-  {Array.isArray(job?.qualifications) &&
-  job.qualifications.length > 0 ? (
-    <ul
-      style={{
-        marginTop: 18,
-        paddingLeft: 20,
-      }}
-    >
-      {job.qualifications.map((q, i) => (
-        <li
-          key={i}
-          style={{
-            fontSize: 15,
-            lineHeight: 1.9,
-            marginBottom: 10,
-            color: C.text,
-          }}
-        >
-          {q}
-        </li>
-      ))}
-    </ul>
-  ) : (
-    <p style={{ color: "#6b7280", marginTop: 18 }}>
-      Not specified
-    </p>
-  )}
-</Card>
-
-{/* PERKS */}
-<Card
-  style={{
-    marginBottom: 18,
-    textAlign: "left",
-    padding: 24,
-  }}
->
-  <div
-    style={{
-      fontSize: 20,
-      fontWeight: 700,
-      color: C.text,
-      marginBottom: 16,
-    }}
-  >
-    Perks & Benefits
-  </div>
-
-  <Divider />
-
-  <div
-    style={{
-      display: "flex",
-      flexWrap: "wrap",
-      gap: 9,
-      marginTop: 18,
-    }}
-  >
-    {job.perks?.length > 0 ? (
-      job.perks.map((p) => (
-        <div
-          key={p}
-          style={{
-            padding: "7px 13px",
-            borderRadius: 999,
-            border: `1px solid ${C.border}`,
-            background: "#f8fafc",
-            fontSize: 13,
-            fontWeight: 500,
-            color: C.text,
-          }}
-        >
-          {p}
-        </div>
-      ))
-    ) : (
-      <p style={{ color: "#6b7280" }}>
-        No perks specified
-      </p>
-    )}
-  </div>
-</Card>
-
-            {/* ── HOW TO APPLY ── */}
-<Card
-  style={{
-    marginBottom: 18,
-    textAlign: "left",
-    padding: 24,
-    position: "relative",
-    overflow: "hidden",
-    border: `1.5px solid ${C.border}`,
-  }}
->
-  {/* subtle glow */}
-  <div
-    style={{
-      position: "absolute",
-      top: -70,
-      right: -70,
-      width: 180,
-      height: 180,
-      borderRadius: "50%",
-      background: "rgba(37,99,235,0.04)",
-      filter: "blur(55px)",
-      pointerEvents: "none",
-    }}
-  />
-
-  {/* Heading */}
-  <div
-    style={{
-      fontSize: 20,
-      fontWeight: 700,
-      color: C.text,
-      marginBottom: 16,
-      position: "relative",
-      zIndex: 2,
-    }}
-  >
-    How to Apply
-  </div>
-
-  <Divider />
-
-  {/* Description */}
-  <p
-    style={{
-      fontSize: 14,
-      color: C.muted,
-      lineHeight: 1.8,
-      marginTop: 18,
-      marginBottom: 18,
-      position: "relative",
-      zIndex: 2,
-    }}
-  >
-    Visit the official{" "}
-    <span
-      style={{
-        fontWeight: 700,
-        color: C.text,
-      }}
-    >
-      {job.companyName}
-    </span>{" "}
-    careers page and complete your application with an updated resume.
-  </p>
-
-  {/* Apply Box */}
-  <div
-    style={{
-      background: "linear-gradient(135deg,#f5f9ff,#edf4ff)",
-      borderRadius: 18,
-      padding: isMobile ? 16 : 18,
-      position: "relative",
-      zIndex: 2,
-    }}
-  >
-    {/* Label */}
-    <div
-      style={{
-        fontSize: 11,
-        fontWeight: 700,
-        color: C.primary,
-        textTransform: "uppercase",
-        letterSpacing: "0.8px",
-        marginBottom: 10,
-      }}
-    >
-      Official Job Link
-    </div>
-
-    {/* Link */}
-    <div
-      style={{
-        fontSize: 13,
-        color: C.primary,
-        wordBreak: "break-all",
-        lineHeight: 1.7,
-        marginBottom: 18,
-      }}
-    >
-      {job.jobLink}
-    </div>
-
-    {/* Button */}
-    {isMobile ? (
-      <SwipeToApply link={job.jobLink} />
-    ) : (
-      <a
-        href={job.jobLink}
-        target="_blank"
-        rel="noreferrer"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 8,
-          padding: "11px 18px",
-          borderRadius: 12,
-background: "linear-gradient(135deg, #0b3b66 0%, #0f4c81 50%, #2563eb 100%)",
-          color: "#fff",
-          textDecoration: "none",
-          fontSize: 14,
-          fontWeight: 700,
-          transition: "0.2s ease",
-        }}
-      >
-        Apply Now
-
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M7 17L17 7" />
-          <path d="M7 7h10v10" />
-        </svg>
-      </a>
-    )}
-  </div>
-
-  {/* Note */}
-  <div
-    style={{
-      marginTop: 14,
-      fontSize: 12.5,
-      color: C.muted,
-      lineHeight: 1.7,
-      position: "relative",
-      zIndex: 2,
-    }}
-  >
-    CodeTechniques does not charge any fee for applying. This is a free
-    listing.
-  </div>
-</Card>
-
-            {/* Sidebar shown BELOW content on mobile/tablet */}
-            {!showSidebar && (
-              <div style={{ marginTop: 8 }}>
+            {/* ═════════════════════════════
+            RIGHT SIDEBAR (desktop ≥1024)
+        ═════════════════════════════ */}
+            {showSidebar && (
+              <div style={{
+                width: isMobile ? "100%" : (w >= 1280 ? 320 : 280),
+                flexShrink: 0
+              }}>
                 <Sidebar job={job} />
               </div>
             )}
           </div>
 
-          {/* ═════════════════════════════
-            RIGHT SIDEBAR (desktop ≥1024)
-        ═════════════════════════════ */}
-          {showSidebar && (
+          {/* ────────────── BOTTOM AD STRIP ────────────── */}
+          <div style={{ maxWidth: "100%", margin: "0 auto", padding: `0 ${gutter} 20px` }}>
             <div style={{
-              width: isMobile ? "100%" : (w >= 1280 ? 320 : 280),
-              flexShrink: 0
+              background: "linear-gradient(90deg,#f0fff4,#e8f5e9)",
+              border: "1.5px dashed #86efac", borderRadius: 10,
+              padding: "12px 16px", display: "flex",
+              flexWrap: "wrap", alignItems: "center", gap: 10,
             }}>
-              <Sidebar job={job} />
+              <span style={{ fontSize: 9.5, color: "#999", border: "1px solid #ddd", padding: "1px 5px", borderRadius: 3 }}>AD</span>
+              <div style={{
+                width: 40, height: 40, borderRadius: 8,
+                background: `linear-gradient(135deg,${C.gold},${C.accent})`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                color: "#fff", fontSize: 18, flexShrink: 0,
+              }}>💰</div>
+              <div style={{ flex: 1, minWidth: 120 }}>
+                <strong style={{ fontSize: isMobile ? 12.5 : 13.5, display: "block" }}>
+                  Earn While You Learn — Referral Bonus up to ₹5,000
+                </strong>
+                <span style={{ fontSize: isMobile ? 11 : 12, color: C.muted }}>
+                  Refer a friend to CodeTechniques Premium &amp; earn per referral
+                </span>
+              </div>
+              <a
+                href="#"
+                style={{
+                  background: C.green, color: "#fff", padding: "8px 16px",
+                  borderRadius: 7, fontWeight: 600, fontSize: 12.5, whiteSpace: "nowrap",
+                }}
+              >
+                Learn More →
+              </a>
             </div>
-          )}
-        </div>
-
-        {/* ────────────── BOTTOM AD STRIP ────────────── */}
-        <div style={{ maxWidth: "100%", margin: "0 auto", padding: `0 ${gutter} 20px` }}>
-          <div style={{
-            background: "linear-gradient(90deg,#f0fff4,#e8f5e9)",
-            border: "1.5px dashed #86efac", borderRadius: 10,
-            padding: "12px 16px", display: "flex",
-            flexWrap: "wrap", alignItems: "center", gap: 10,
-          }}>
-            <span style={{ fontSize: 9.5, color: "#999", border: "1px solid #ddd", padding: "1px 5px", borderRadius: 3 }}>AD</span>
-            <div style={{
-              width: 40, height: 40, borderRadius: 8,
-              background: `linear-gradient(135deg,${C.gold},${C.accent})`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              color: "#fff", fontSize: 18, flexShrink: 0,
-            }}>💰</div>
-            <div style={{ flex: 1, minWidth: 120 }}>
-              <strong style={{ fontSize: isMobile ? 12.5 : 13.5, display: "block" }}>
-                Earn While You Learn — Referral Bonus up to ₹5,000
-              </strong>
-              <span style={{ fontSize: isMobile ? 11 : 12, color: C.muted }}>
-                Refer a friend to CodeTechniques Premium &amp; earn per referral
-              </span>
-            </div>
-            <a
-              href="#"
-              style={{
-                background: C.green, color: "#fff", padding: "8px 16px",
-                borderRadius: 7, fontWeight: 600, fontSize: 12.5, whiteSpace: "nowrap",
-              }}
-            >
-              Learn More →
-            </a>
           </div>
+          <Footer
+            bp={{ isMobile: false, isTablet: false, isDesktop: true }}
+            gutter="16px"
+          />
         </div>
-        <Footer
-          bp={{ isMobile: false, isTablet: false, isDesktop: true }}
-          gutter="16px"
-        />
-      </div>
-    </>
-
+      </>
+    </MainLayout>
   );
 }
