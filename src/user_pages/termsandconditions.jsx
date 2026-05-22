@@ -4,6 +4,7 @@ import TopTicker from "../components/topticker";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import { Helmet } from "react-helmet-async";
+import MainLayout from "../components/common_components/MainLayout";
 
 const C = {
   primary: "#0a2540",
@@ -295,6 +296,7 @@ export default function TermsAndConditionsPage() {
   const gutter = isMobile ? "14px" : "24px";
 
   return (
+    <MainLayout isMobile={isMobile} isDesktop={isDesktop} C={C} bp={bp}>
     <>
       <Helmet>
 
@@ -466,15 +468,7 @@ export default function TermsAndConditionsPage() {
         .toc-link.active .toc-num { color: ${C.purple}; }
       `}</style>
 
-      {/* ── SHARED COMPONENTS ── */}
-      <AlertBar isMobile={isMobile} C={{ accent: C.accent }} />
-      {/* <TopTicker isMobile={isMobile} isDesktop={isDesktop} C={C} gutter={gutter} /> */}
-      <Navbar
-        bp={bp}
-        onMenuOpen={() => {}}
-        onNavigate={(page) => navigate(`/${page}`)}
-        activePage={location.pathname.replace("/", "")}
-      />
+
 
       {/* ── HERO ── */}
       <section
@@ -1039,5 +1033,6 @@ export default function TermsAndConditionsPage() {
       <Footer bp={bp} gutter={gutter} />
     </div>
     </>
+    </MainLayout>
   );
 }

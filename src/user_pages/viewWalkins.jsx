@@ -7,6 +7,7 @@ import AlertBar from "../components/alertbar";
 import Navbar from "../components/navbar";
 // import TopTicker from "../components/topticker";
 import Footer from "../components/footer";
+import MainLayout from "../components/common_components/MainLayout";
 
 /* ─────────────────────────────────────────────
    THEME
@@ -320,6 +321,7 @@ export default function WalkInJobDetail() {
   );
 
   return (
+    <MainLayout isMobile={isMobile} isDesktop={isDesktop} C={C} bp={bp}>
     <>
   <Helmet>
 
@@ -535,11 +537,7 @@ export default function WalkInJobDetail() {
         }
       `}</style>
 
-      {/* ── GLOBAL BARS ── */}
-      <AlertBar isMobile={false} C={{ accent: "#ff4d4f" }} />
-      {/* <TopTicker isMobile={isMobile} isDesktop={isDesktop} C={C} gutter="16px" /> */}
-      <Navbar bp={bp} onMenuOpen={() => {}} />
-
+     
       {/* ── HERO ── */}
       <div className="wi-hero">
         <div style={{ maxWidth: 1400, margin: "0 auto" }}>
@@ -908,5 +906,6 @@ export default function WalkInJobDetail() {
       <Footer bp={bp} gutter="16px" />
     </div>
     </>
+    </MainLayout>
   );
 }

@@ -5,6 +5,7 @@ import TopTicker from "../components/topticker";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import WalkInJobCard from "../components/walkin_page_components/walkin_job_card";
+import MainLayout from "../components/common_components/MainLayout";
 
 const C = {
   primary: "#0a2540",
@@ -568,6 +569,7 @@ export default function WalkInDrivesPage() {
   if (sort === "Salary") jobs = [...jobs].sort((a, b) => b.salary.localeCompare(a.salary));
 
   return (
+    <MainLayout isMobile={isMobile} isDesktop={isDesktop} C={C} bp={bp}>
     <>
       <Helmet>
 
@@ -664,19 +666,7 @@ export default function WalkInDrivesPage() {
         input::placeholder { color: #9ca3af; }
       `}</style>
 
-      {/* ── ALERT BAR ── */}
-      <AlertBar isMobile={isMobile} C={{ accent: "#ff4d4f" }} />
-
-      {/* ── TOP TICKER ── */}
-      <TopTicker isMobile={isMobile} isDesktop={isDesktop} C={C} gutter={gutter} />
-
-      {/* ── NAVBAR ── */}
-      <Navbar
-        bp={bp}
-        onMenuOpen={() => {}}
-        onNavigate={(page) => navigate(`/${page}`)}
-        activePage={location.pathname.replace("/", "")}
-      />
+      
 
       {/* ── HERO ── */}
       <section
@@ -1422,5 +1412,6 @@ export default function WalkInDrivesPage() {
       <Footer bp={bp} gutter={gutter} />
     </div>
     </>
+    </MainLayout>
   );
 }
