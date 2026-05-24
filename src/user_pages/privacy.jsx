@@ -4,6 +4,7 @@ import AlertBar from "../components/alertbar";
 import TopTicker from "../components/topticker";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
+import MainLayout from "../components/common_components/MainLayout";
 import { Helmet } from "react-helmet-async";
 
 /* ── Theme ── */
@@ -152,6 +153,11 @@ useLayoutEffect(() => {
   };
 
   return (
+    <MainLayout
+      C={C}
+      isMobile={isMobile}
+      isDesktop={isDesktop}
+    >
     <>
       <Helmet>
 
@@ -256,10 +262,6 @@ useLayoutEffect(() => {
         }
       `}</style>
 
-      {/* ── Top components ── */}
-      <AlertBar C={{ accent: "#ff4d4f" }} />
-      {/* <TopTicker C={C} gutter={gutter} isMobile={isMobile} isDesktop={isDesktop} /> */}
-      <Navbar bp={bp} onMenuOpen={() => {}} />
 
       {/* ════════════════════════════════════
           HERO
@@ -953,5 +955,6 @@ useLayoutEffect(() => {
       <Footer bp={bp} gutter={gutter} />
     </div>
     </>
+    </MainLayout>
   );
 }

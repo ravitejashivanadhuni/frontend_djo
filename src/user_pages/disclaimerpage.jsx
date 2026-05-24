@@ -4,6 +4,7 @@ import TopTicker from "../components/topticker";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import { Helmet } from "react-helmet-async";
+import MainLayout from "../components/common_components/MainLayout";
 
 const C = {
   primary: "#0a2540",
@@ -266,6 +267,12 @@ export default function DisclaimerPage() {
   };
 
   return (
+    <MainLayout
+      C={C}
+      isMobile={isMobile}
+      isDesktop={isDesktop}
+    >
+
     <>
     <Helmet>
 
@@ -365,7 +372,7 @@ export default function DisclaimerPage() {
       }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap');
+       @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         a { text-decoration: none; color: inherit; }
         input, select, button { font-family: inherit; }
@@ -441,14 +448,7 @@ export default function DisclaimerPage() {
       `}</style>
 
       {/* ── SHARED COMPONENTS ── */}
-      <AlertBar isMobile={isMobile} C={{ accent: C.accent }} />
-      {/* <TopTicker isMobile={isMobile} isDesktop={isDesktop} C={C} gutter={gutter} /> */}
-      <Navbar
-        bp={bp}
-        onMenuOpen={() => {}}
-        onNavigate={(page) => navigate(`/${page}`)}
-        activePage={location.pathname.replace("/", "")}
-      />
+
 
       {/* ── HERO ── */}
      <section
@@ -1030,5 +1030,6 @@ export default function DisclaimerPage() {
       <Footer bp={bp} gutter={gutter} />
     </div>
     </>
+    </MainLayout>
   );
 }

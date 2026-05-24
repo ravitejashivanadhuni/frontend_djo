@@ -5,6 +5,7 @@ import TopTicker from "../components/topticker";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import VITE_API_BASE_URL  from "../config/api";
+import MainLayout from "../components/common_components/MainLayout";
 
 const C = {
   primary:"#0f4c81", accent:"#e8472a", gold:"#f5a623",
@@ -150,6 +151,11 @@ useEffect(() => {
   const title      = category ? category.replace(/-/g," ").replace(/\b\w/g, c => c.toUpperCase()) : "All Jobs";
 
   return (
+    <MainLayout
+      C={C}
+      isMobile={isMobile}
+      isDesktop={isDesktop}
+    >
     <div style={{ width:"100%", overflowX:"hidden", fontFamily:"'DM Sans',Arial,sans-serif", background:C.light, color:C.text, minHeight:"100vh" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
@@ -166,13 +172,6 @@ useEffect(() => {
         .page-btn:disabled { opacity:.4; cursor:not-allowed; }
         @keyframes shimmer { 0%,100%{opacity:1} 50%{opacity:.4} }
       `}</style>
-
-      <AlertBar C={{ accent:"#ff4d4f" }} />
-      {/* <TopTicker C={C} gutter={g} isMobile={isMobile} isDesktop={isDesktop} /> */}
-            <div className="section-full">
-        {/* <TopTicker isMobile={isMobile} isDesktop={isDesktop} C={C} gutter="16px" /> */}
-      </div>
-      <Navbar bp={bp} onMenuOpen={() => {}} />
 
       {/* Hero strip */}
       <div
@@ -646,5 +645,6 @@ useEffect(() => {
 
       <Footer bp={bp} gutter={g} />
     </div>
+    </MainLayout>
   );
 }

@@ -10,7 +10,18 @@ import TopCompanies from "../components/home_page_components/topcompanies";
 import JobsByLocation from "../components/home_page_components/job_by_location";
 import ExamCard from "../components/Exam_page_components/Exam_card";
 import ViewExam from "./viewexam";
+import MainLayout from "../components/common_components/MainLayout";
 
+const C = {
+  primary: "#0f4c81",
+  accent:  "#e8472a",
+  gold:    "#f5a623",
+  light:   "#f4f7fb",
+  green:   "#16a34a",
+  text:    "#1a1a2e",
+  muted:   "#6b7280",
+  border:  "#e2e8f0",
+};
 const S = {
   primary: "#0f4c81",
   accent: "#e8472a",
@@ -416,6 +427,11 @@ export default function ExamsPage() {
   };
 
   return (
+    <MainLayout
+      C={C}
+      isMobile={isMobile}
+      isDesktop={isDesktop}
+    >
     <>
     <Helmet>
 
@@ -534,23 +550,7 @@ export default function ExamsPage() {
         @media (max-width: 639px) { .section-inner { padding: 0 16px; } .filter-row { flex-direction: column; } }
       `}</style>
 
-      {/* AlertBar */}
-      <div className="section-full">
-        <AlertBar isMobile={isMobile} C={{ accent: "#ff4d4f" }} />
-      </div>
-
-      {/* TopTicker */}
-      <div className="section-full">
-        {/* <TopTicker isMobile={isMobile} isDesktop={isDesktop} C={{ primary: S.primary, accent: S.accent, gold: S.gold, light: S.light, text: S.text }} gutter="16px" /> */}
-      </div>
-
-      {/* Navbar */}
-      <Navbar
-        bp={bp}
-        onMenuOpen={() => {}}
-        onNavigate={(page) => navigate(`/${page}`)}
-        activePage={location.pathname.split("/")[1]}
-      />
+      
 
       {/* Hero Banner */}
 <div
@@ -959,5 +959,6 @@ export default function ExamsPage() {
       </div>
     </div>
     </>
+    </MainLayout>
   );
 }
