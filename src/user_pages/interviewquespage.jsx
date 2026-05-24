@@ -6,6 +6,7 @@ import Footer from "../components/footer";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import VITE_API_BASE_URL from "../config/api";
+import MainLayout from "../components/common_components/MainLayout";
 
 const C = {
   primary: "#0a2540",
@@ -319,6 +320,11 @@ if (!loading && sets.length === 0) {
   );
 }
   return (
+    <MainLayout
+      C={C}
+      isMobile={isMobile}
+      isDesktop={isDesktop}
+    >
     <div style={{ fontFamily: "'DM Sans',sans-serif", background: C.light, color: C.text, minHeight: "100vh" , width: "100%" , overflowX: "hidden"}}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
@@ -384,19 +390,6 @@ if (!loading && sets.length === 0) {
           html, body { width: 100% !important; margin: 0 !important; padding: 0 !important; overflow-x: hidden !important; }
 #root { width: 100% !important; overflow-x: hidden !important; }
       `}</style>
-    {/* ── AlertBar: full width ── */}
-      <div className="section-full">
-        <AlertBar isMobile={isMobile} C={{ accent: "#ff4d4f" }} />
-      </div>
-      {/* ── TopTicker: full width ── */}
-      <div className="section-full">
-        <TopTicker isMobile={isMobile} isDesktop={isDesktop} C={C} gutter="16px" />
-      </div>
-      {/* ── Navbar: full width ── */}
-      <Navbar
-        onNavigate={(page) => navigate(`/${page}`)}
-        activePage={location.pathname.replace("/", "")}
-      />
 
       {/* ── Hero Banner ── */}
       <div
@@ -847,5 +840,6 @@ if (!loading && sets.length === 0) {
         <Modal set={activeModal} onClose={() => setActiveModal(null)} />
       )}
     </div>
+    </MainLayout>
   );
 }

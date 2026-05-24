@@ -252,7 +252,9 @@ function MobileNavItem({ item, closeMenu }) {
           }}>▼</span>
         </div>
       ) : item.external ? (
-        <a href={item.external} target="_blank" rel="noopener noreferrer" onClick={closeMenu} style={rowStyle}>
+        <a href={item.external} target="_blank" rel="noopener noreferrer" onClick={() => {
+  closeMenu();
+}} style={rowStyle}>
           {item.label}
         </a>
       ) : (
@@ -289,11 +291,15 @@ function MobileNavItem({ item, closeMenu }) {
                 onMouseEnter={e => e.currentTarget.style.background = "rgba(0,0,0,0.04)"}
                 onMouseLeave={e => e.currentTarget.style.background = "transparent"}
               >
-                <span style={{ fontSize: 18 }}>{sub.icon}</span>
-                <div>
-                  <div style={{ fontWeight: 600, color: C.primary, fontSize: 13 }}>{sub.label}</div>
-                  <div style={{ fontSize: 11, color: "#9ca3af" }}>{sub.desc}</div>
-                </div>
+                <div
+  style={{
+    fontWeight: 600,
+    color: C.primary,
+    fontSize: 13,
+  }}
+>
+  {sub.label}
+</div>
               </div>
             </Link>
           ))}
@@ -357,12 +363,12 @@ function Navbar({
           position: fixed;
           inset: 0;
           background: rgba(0, 0, 0, 0.15);
-          z-index: 198;
+          z-index: 90;
         }
         /* Mobile drawer — same frosted glass as the navbar */
         .ct-drawer {
-          position: absolute;
-          top: 100%;
+          position: fixed;
+          top: 64px;
           left: 0;
           right: 0;
 background: rgba(255,255,255,0.40);
@@ -370,7 +376,7 @@ backdrop-filter: blur(28px);
 -webkit-backdrop-filter: blur(28px);
           border-top: ${GLASS_BORDER};
           box-shadow: ${GLASS_SHADOW};
-          z-index: 199;
+          z-index: 999;
           max-height: calc(100vh - 64px);
           overflow-y: auto;
           animation: slideDown .22s ease;
@@ -394,7 +400,7 @@ backdrop-filter: blur(28px);
     top: sticky ? 0 : 90, // AlertBar + Ticker height
     left: 0,
     right: 0,
-    zIndex: 100,
+    zIndex: 1000,
 transition: "top 60ms linear"
         }}
       >
@@ -436,7 +442,7 @@ transition: "top 60ms linear"
 
           {/* Hamburger */}
           {!isDesktop && (
-            <button
+            <button className="hamburger-btn"
               onClick={() => setMenuOpen((v) => !v)}
               aria-label="Toggle menu"
               style={{

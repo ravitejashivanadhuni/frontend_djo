@@ -2,6 +2,7 @@ import React, { useState ,useEffect} from "react";
 import AlertBar from "../components/alertbar";
 import TopTicker from "../components/topticker";
 import Navbar from "../components/navbar";
+import MainLayout from "../components/common_components/MainLayout";
 import Footer from "../components/footer";
 import axios from "axios";
 import API_BASE_URL from "../config/api";
@@ -261,9 +262,14 @@ if (error) {
 }
 
   return (
+    <MainLayout
+      C={C}
+      isMobile={isMobile}
+      isDesktop={isDesktop}
+    >
         <div style={{ fontFamily: "'DM Sans',sans-serif", background: C.light, color: C.text, minHeight: "100vh" , width: "100%" , overflowX: "hidden"}}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         a { text-decoration: none; color: inherit; }
         ul { list-style: disc; padding-left: 20px; }
@@ -326,21 +332,7 @@ if (error) {
           html, body { width: 100% !important; margin: 0 !important; padding: 0 !important; overflow-x: hidden !important; }
 #root { width: 100% !important; overflow-x: hidden !important; }
       `}</style>
-      {/* ── AlertBar: full width ── */}
-      <div className="section-full">
-        <AlertBar isMobile={isMobile} C={{ accent: "#ff4d4f" }} />
-      </div>
-      {/* ── TopTicker: full width ── */}
-      <div className="section-full">
-        <TopTicker isMobile={isMobile} isDesktop={isDesktop} C={C} gutter="16px" />
-      </div>
-      {/* ── Navbar: full width ── */}
-      <Navbar
-        bp={bp}
-        onMenuOpen={() => {}}
-        onNavigate={(page) => navigate(`/${page}`)}
-        activePage={location.pathname.replace("/", "")}
-      />
+
       {/* ── Hero Banner ── */}
       <div
   style={{
@@ -782,5 +774,6 @@ if (error) {
         <Footer bp={bp} gutter="16px" />
       </div>
     </div>
+  </MainLayout>
   );
 }

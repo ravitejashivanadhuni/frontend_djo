@@ -2,6 +2,7 @@ import { useState, useEffect, useRef,useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 import AlertBar from "../components/alertbar";
 import TopTicker from "../components/topticker";
+import MainLayout from "../components/common_components/MainLayout";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import { Helmet } from "react-helmet-async";
@@ -125,6 +126,11 @@ useLayoutEffect(() => {
 }, [location.pathname]);
 
   return (
+    <MainLayout
+      C={C}
+      isMobile={isMobile}
+      isDesktop={isDesktop}
+    >
     <>
       <Helmet>
 
@@ -214,7 +220,7 @@ useLayoutEffect(() => {
 
     <div style={{ width: "100%", overflowX: "hidden", fontFamily: "'DM Sans', sans-serif", background: C.light, color: C.text, minHeight: "100vh" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+       @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { width: 100% !important; margin: 0 !important; overflow-x: hidden !important; background: ${C.light} !important; }
         #root { width: 100% !important; overflow-x: hidden !important; }
@@ -259,16 +265,6 @@ useLayoutEffect(() => {
           .two-col      { grid-template-columns: 1fr 1fr !important; }
         }
       `}</style>
-
-      {/* ── AlertBar ── */}
-      <AlertBar C={{ accent: "#ff4d4f" }} />
-
-      {/* ── TopTicker ── */}
-      {/* <TopTicker C={C} gutter={gutter} isMobile={isMobile} isDesktop={isDesktop} /> */}
-
-      {/* ── Navbar ── */}
-      <Navbar bp={bp} onMenuOpen={() => {}} />
-
       {/* ════════════════════════════════════
           HERO
       ════════════════════════════════════ */}
@@ -996,5 +992,6 @@ useLayoutEffect(() => {
       <Footer bp={bp} gutter={gutter} />
     </div>
     </>
+    </MainLayout>
   );
 }
