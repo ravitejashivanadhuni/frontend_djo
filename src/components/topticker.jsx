@@ -151,35 +151,36 @@ function TopTicker({ isMobile, isDesktop, C, gutter }) {
             🔥 HOT
           </span>
 
-          <div className="ticker-outer">
-            <div className="ticker-inner">
-              {loading ? (
-                <span>Loading latest jobs...</span>
-              ) : tickerJobs.length > 0 ? (
-                tickerJobs.map((job, index) => (
-                  <React.Fragment key={job.slug}>
-                    <Link
-                      to={`/jobs/${job.slug}`}
-                      style={{
-                        color: "#fff",
-                        textDecoration: "none",
-                        marginRight: "20px",
-                        whiteSpace: "nowrap",
-                        fontWeight: 500,
-                      }}
-                    >
-                      {job.title}
-                    </Link>
-                    {index < tickerJobs.length - 1 && (
-                      <span style={{ marginRight: "20px" }}>|</span>
-                    )}
-                  </React.Fragment>
-                ))
-              ) : (
-                <span>No live hiring updates available</span>
-              )}
-            </div>
-          </div>
+<div className="ticker-outer">
+  <div className="ticker-inner">
+    {loading ? (
+      <span>Loading latest jobs...</span>
+    ) : tickerJobs.length > 0 ? (
+      <>
+        {[...tickerJobs, ...tickerJobs].map((job, index) => (
+          <React.Fragment key={`${job.slug}-${index}`}>
+            <Link
+              to={`/jobs/${job.slug}`}
+              style={{
+                color: "#fff",
+                textDecoration: "none",
+                marginRight: "20px",
+                whiteSpace: "nowrap",
+                fontWeight: 500,
+              }}
+            >
+              {job.title}
+            </Link>
+
+            <span style={{ marginRight: "5px" }}>|</span>
+          </React.Fragment>
+        ))}
+      </>
+    ) : (
+      <span>No live hiring updates available</span>
+    )}
+  </div>
+</div>
         </div>
 
         {/* Right Section */}
