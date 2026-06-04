@@ -71,41 +71,41 @@ function DropdownMenu({ items, position }) {
       }}
     >
       {items.map((item) => (
-<Link
-  key={item.key}
-  to={`/jobs/categories/${item.key}`}
-  style={{
-    display: "flex",
-    alignItems: "center",
-    gap: 10,
-    padding: "8px 12px",
-    borderRadius: 12,
-    textDecoration: "none",
-    color: C.primary,
-    fontWeight: 500,
-    fontSize: 13,
+        <Link
+          key={item.key}
+          to={`/jobs/categories/${item.key}`}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            padding: "8px 12px",
+            borderRadius: 12,
+            textDecoration: "none",
+            color: C.primary,
+            fontWeight: 500,
+            fontSize: 13,
 
-    transition:
-      "all 0.28s cubic-bezier(0.16, 1, 0.3, 1)",
-    transform: "translateY(0px)",
-  }}
-  onMouseEnter={(e) => {
-    e.currentTarget.style.background =
-      "rgba(255,255,255,0.12)";
-    e.currentTarget.style.transform =
-      "translateX(4px)";
-    e.currentTarget.style.backdropFilter =
-      "blur(10px)";
-  }}
-  onMouseLeave={(e) => {
-    e.currentTarget.style.background =
-      "transparent";
-    e.currentTarget.style.transform =
-      "translateX(0px)";
-  }}
->
-  {item.label}
-</Link>
+            transition:
+              "all 0.28s cubic-bezier(0.16, 1, 0.3, 1)",
+            transform: "translateY(0px)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background =
+              "rgba(255,255,255,0.12)";
+            e.currentTarget.style.transform =
+              "translateX(4px)";
+            e.currentTarget.style.backdropFilter =
+              "blur(10px)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background =
+              "transparent";
+            e.currentTarget.style.transform =
+              "translateX(0px)";
+          }}
+        >
+          {item.label}
+        </Link>
       ))}
     </div>,
     document.body
@@ -121,17 +121,17 @@ function NavLink({ item, index, activePage }) {
   const [position, setPosition] = useState(null);
 
   const show = () => {
-  clearTimeout(timerRef.current);
+    clearTimeout(timerRef.current);
 
-  const rect = triggerRef.current.getBoundingClientRect();
+    const rect = triggerRef.current.getBoundingClientRect();
 
-  setPosition({
-    left: rect.left + rect.width / 2,
-    top: rect.bottom + 15,
-  });
+    setPosition({
+      left: rect.left + rect.width / 2,
+      top: rect.bottom + 15,
+    });
 
-  setOpen(true);
-};
+    setOpen(true);
+  };
   const hide = () => { timerRef.current = setTimeout(() => setOpen(false), 150); };
 
   const linkStyle = {
@@ -152,13 +152,13 @@ function NavLink({ item, index, activePage }) {
     transition: "background 0.15s ease",
   };
 
-return (
-  <div
-    ref={triggerRef}
-    style={{ position: "relative" }}
-    onMouseEnter={show}
-    onMouseLeave={hide}
-  >
+  return (
+    <div
+      ref={triggerRef}
+      style={{ position: "relative" }}
+      onMouseEnter={show}
+      onMouseLeave={hide}
+    >
       {item.external ? (
         <a href={item.external} target="_blank" rel="noopener noreferrer" style={linkStyle}>
           {item.label}
@@ -225,17 +225,16 @@ function MobileNavItem({ item, closeMenu }) {
   const hasDropdown = !!item.dropdown;
 
   // Each mobile row also gets glass so the whole drawer is frosted
-  const rowStyle = {
-    display: "flex",
-    padding: "13px 20px",
-    color: C.primary,
-    borderBottom: "1px solid rgba(255,255,255,0.14)",
-    background: "rgba(255,255,255,0.22)",
-    backdropFilter: "blur(24px)",
-    WebkitBackdropFilter: "blur(24px)",
-    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
-    textDecoration: "none",
-  };
+const rowStyle = {
+  display: "flex",
+  padding: "13px 20px",
+  color: C.primary,
+  borderBottom: "1px solid rgba(0,0,0,0.07)",
+  background: "transparent",
+  textDecoration: "none",
+  fontSize: 15,
+  fontWeight: 500,
+};
 
   return (
     <div>
@@ -253,8 +252,8 @@ function MobileNavItem({ item, closeMenu }) {
         </div>
       ) : item.external ? (
         <a href={item.external} target="_blank" rel="noopener noreferrer" onClick={() => {
-  closeMenu();
-}} style={rowStyle}>
+          closeMenu();
+        }} style={rowStyle}>
           {item.label}
         </a>
       ) : (
@@ -265,12 +264,10 @@ function MobileNavItem({ item, closeMenu }) {
 
       {hasDropdown && expanded && (
         // Sub-items: slightly darker frosted layer for depth
-        <div style={{
-          background: "rgba(255,255,255,0.94)",
-          backdropFilter: GLASS_BLUR,
-          WebkitBackdropFilter: GLASS_BLUR,
-          borderBottom: "1px solid rgba(229,231,235,0.45)",
-        }}>
+<div style={{
+  background: "rgba(255,255,255,0.12)",
+  borderBottom: "1px solid rgba(0,0,0,0.06)",
+}}>
           {item.dropdown.map((sub) => (
             <Link
               key={sub.key}
@@ -292,14 +289,14 @@ function MobileNavItem({ item, closeMenu }) {
                 onMouseLeave={e => e.currentTarget.style.background = "transparent"}
               >
                 <div
-  style={{
-    fontWeight: 600,
-    color: C.primary,
-    fontSize: 13,
-  }}
->
-  {sub.label}
-</div>
+                  style={{
+                    fontWeight: 600,
+                    color: C.primary,
+                    fontSize: 13,
+                  }}
+                >
+                  {sub.label}
+                </div>
               </div>
             </Link>
           ))}
@@ -312,9 +309,10 @@ function MobileNavItem({ item, closeMenu }) {
 /* ── Navbar ───────────────────────────────────────────────── */
 function Navbar({
   bp,
-  onNavigate = () => {},
+  onNavigate = () => { },
   activePage = "",
-  sticky = false,
+  sticky: isSticky = false,
+  navOffset = 0
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -366,21 +364,24 @@ function Navbar({
           z-index: 90;
         }
         /* Mobile drawer — same frosted glass as the navbar */
-        .ct-drawer {
-          position: fixed;
-          top: 64px;
-          left: 0;
-          right: 0;
-background: rgba(255,255,255,0.40);
-backdrop-filter: blur(28px);
--webkit-backdrop-filter: blur(28px);
-          border-top: ${GLASS_BORDER};
-          box-shadow: ${GLASS_SHADOW};
-          z-index: 999;
-          max-height: calc(100vh - 64px);
-          overflow-y: auto;
-          animation: slideDown .22s ease;
-        }
+       // REPLACE WITH:
+.ct-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-top: ${GLASS_BORDER};
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  z-index: 998;
+  max-height: 100vh;
+  overflow-y: auto;
+  animation: slideDown .22s ease;
+  padding-top: 64px;
+}
       `}</style>
 
       {menuOpen && (
@@ -390,18 +391,17 @@ backdrop-filter: blur(28px);
       <nav
         style={{
           // ── Devin.ai frosted glass — semi-transparent + heavy blur ──
-          background: "rgba(255, 255, 255, 0.16)",                    // 0.72 opacity at top
-          backdropFilter: GLASS_BLUR,
-          WebkitBackdropFilter: GLASS_BLUR,
-           border: "1px solid rgba(255,255,255,0.18)",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)",
+background: menuOpen ? "rgba(255,255,255,0.18)" : isSticky ? "rgba(255, 255, 255, 0.16)" : "rgba(255, 255, 255, 0.95)",
+backdropFilter: GLASS_BLUR,
+WebkitBackdropFilter: GLASS_BLUR,
+          border: "1px solid rgba(255,255,255,0.18)",
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)",
           // ─────────────────────────────────────────────────────────────
-     position: "fixed",
-    top: sticky ? 0 : 90, // AlertBar + Ticker height
-    left: 0,
-    right: 0,
-    zIndex: 1000,
-transition: "top 60ms linear"
+position: isSticky ? "fixed" : "relative",
+top: isSticky ? 0 : "auto",
+left: 0,
+right: 0,
+zIndex: menuOpen ? 999 : 1000,
         }}
       >
         <div
