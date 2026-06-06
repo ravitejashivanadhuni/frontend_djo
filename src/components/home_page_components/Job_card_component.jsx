@@ -78,7 +78,7 @@ const detailsUrl =
     type === "job"
         ? `/jobs/${slug}`
         : type === "walkin"
-            ? `/walkins/${slug}`
+            ? `user/walkins/view-walkin/${slug}`
             : `/exams/${slug}`;
 
 const buttonText =
