@@ -210,6 +210,85 @@ function StatsBar({resources}) {
     </div>
   );
 }
+function ResourcesSkeleton() {
+  return (
+    <div style={{ padding: "40px" }}>
+      {/* Hero */}
+      <div
+        style={{
+          height: 300,
+          borderRadius: 20,
+          background: "#e5e7eb",
+          marginBottom: 30,
+        }}
+      />
+
+      {/* Stats */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns:
+            "repeat(auto-fit,minmax(180px,1fr))",
+          gap: 16,
+          marginBottom: 30,
+        }}
+      >
+        {[1,2,3,4].map((i) => (
+          <div
+            key={i}
+            style={{
+              height: 100,
+              borderRadius: 12,
+              background: "#e5e7eb",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Filters */}
+      <div
+        style={{
+          display: "flex",
+          gap: 10,
+          marginBottom: 30,
+        }}
+      >
+        {[1,2,3,4,5,6].map((i) => (
+          <div
+            key={i}
+            style={{
+              width: 90,
+              height: 35,
+              borderRadius: 999,
+              background: "#e5e7eb",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Resource Cards */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns:
+            "repeat(auto-fit,minmax(260px,1fr))",
+          gap: 20,
+        }}
+      >
+        {[1,2,3,4,5,6,7,8].map((i) => (
+          <div
+            key={i}
+            style={{
+              height: 260,
+              borderRadius: 14,
+              background: "#e5e7eb",
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 /* ── Resources Page ───────────────────────────────────────── */
 export default function ResourcesPage() {
@@ -254,11 +333,14 @@ export default function ResourcesPage() {
     return matchCat && matchType && matchSearch;
   });
 if (loading) {
-  return <div style={{ padding: 40 }}>⏳ Loading resources...</div>;
+  return <ResourcesSkeleton />;
 }
-
 if (error) {
-  return <div style={{ padding: 40, color: "red" }}>❌ {error}</div>;
+  return (
+    <div style={{ padding: 40, color: "red" }}>
+      ❌ {error}
+    </div>
+  );
 }
 
   return (
@@ -668,7 +750,7 @@ if (error) {
 </div>
 
       {/* ── Content ── */}
-      <div style={{ Width: "100%", padding: "36px 40px" }}>
+      <div style={{ width: "100%", padding: "36px 40px" }}>
         <StatsBar resources={resources} />
 
         {/* Filters Row */}
