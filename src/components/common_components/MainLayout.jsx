@@ -5,7 +5,7 @@ import Navbar from "../navbar";
 
 function MainLayout({ children, isMobile, isDesktop, C, bp }) {
   const [isSticky, setIsSticky] = useState(false);
-  const [navOffset, setNavOffset] = useState(null); // null = not measured yet
+  const [navOffset, setNavOffset] = useState(0); // null = not measured yet
   const alertBarRef = useRef(null);
   const topTickerRef = useRef(null);
   const thresholdRef = useRef(0);
