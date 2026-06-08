@@ -496,10 +496,10 @@ const handleSearch = ({
                 <h1
                   className="syne"
                   style={{
-                    fontSize: isMobile ? "2.8rem" : "5rem",
+                    fontSize: isMobile ? "2.8rem" : "3.8rem",
                     fontWeight: 800,
                     lineHeight: 0.98,
-                    marginBottom: 24,
+                    marginBottom: 10,
                     color: "#111827",
                     letterSpacing: "-0.05em",
                     textAlign: "left",
@@ -565,7 +565,7 @@ const handleSearch = ({
                       background: "#fff",
                       border: "1px solid #d1d5db",
                       color: "#111827",
-                      padding: isMobile ? "12px 24px" : "15px 34px",
+                      padding: isMobile ? "12px 24px" : "10px 30px",
                       borderRadius: 14,
                       fontWeight: 600,
                       fontSize: 14,
