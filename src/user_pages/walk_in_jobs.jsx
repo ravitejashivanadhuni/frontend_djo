@@ -675,8 +675,8 @@ export default function WalkInDrivesPage() {
     position: "relative",
     overflow: "hidden",
     background: "#f7f8fc",
-    padding: isMobile ? "60px 16px 50px" : "90px 24px 80px",
-    marginBottom: 40,
+    padding: isMobile ? "60px 16px 50px" : "20px 24px 80px",
+    marginBottom: 10,
   }}
 >
   {/* Background Shapes */}
@@ -731,7 +731,7 @@ export default function WalkInDrivesPage() {
           style={{
             fontSize: 12,
             color: "#6b7280",
-            marginBottom: 22,
+            marginBottom: 12,
             display: "flex",
             alignItems: "center",
             gap: 6,
@@ -769,7 +769,7 @@ export default function WalkInDrivesPage() {
             border: "1px solid #e5e7eb",
             padding: "8px 16px",
             borderRadius: 999,
-            marginBottom: 28,
+            // marginBottom: 8,
             boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
           }}
         >
@@ -799,10 +799,10 @@ export default function WalkInDrivesPage() {
           style={{
             fontFamily: "'Syne', sans-serif",
             fontWeight: 800,
-            fontSize: isMobile ? "2.7rem" : "5rem",
+            fontSize: isMobile ? "2.7rem" : "4rem",
             lineHeight: 0.98,
             color: "#111827",
-            marginBottom: 24,
+            marginBottom: 10,
             letterSpacing: "-0.05em",
             maxWidth: 700,
           }}
@@ -825,7 +825,7 @@ export default function WalkInDrivesPage() {
             lineHeight: 1.9,
             color: "#4b5563",
             maxWidth: 620,
-            marginBottom: 38,
+            marginBottom: 18,
           }}
         >
           {PAGE.subtitle}
@@ -837,7 +837,7 @@ export default function WalkInDrivesPage() {
             display: "flex",
             flexWrap: "wrap",
             gap: 16,
-            marginBottom: 46,
+            marginBottom: 26,
           }}
         >
           <a
@@ -848,7 +848,7 @@ export default function WalkInDrivesPage() {
               padding: isMobile ? "12px 24px" : "15px 34px",
               borderRadius: 14,
               fontWeight: 700,
-              fontSize: 14,
+              fontSize: 13,
               textDecoration: "none",
               boxShadow: "0 10px 30px rgba(17,24,39,0.18)",
             }}
@@ -865,7 +865,7 @@ export default function WalkInDrivesPage() {
               padding: isMobile ? "12px 24px" : "15px 34px",
               borderRadius: 14,
               fontWeight: 600,
-              fontSize: 14,
+              fontSize: 13,
               textDecoration: "none",
             }}
           >
