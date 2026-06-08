@@ -6,6 +6,7 @@ import TopTicker from "../components/topticker.jsx";
 import Navbar from "../components/navbar.jsx";
 import Footer from "../components/footer.jsx";
 import MainLayout from "../components/common_components/MainLayout.jsx";
+import ReusableJobGrid from "../components/common_components/ReusableJobGrid.jsx";
 
 const JOBS_PER_PAGE = 12;
 
@@ -175,7 +176,9 @@ export default function SearchResults() {
       setPage(1);
       try {
         const res  = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/job-search-using-fields?${searchParams.toString()}`);
+        console.log("Search Params:", searchParams.toString());
         const data = await res.json();
+        console.log("API Response:", data);
         setJobs(data.data || []);
       } catch (err) {
         console.error(err);
@@ -379,7 +382,9 @@ export default function SearchResults() {
           ) : jobs.length === 0 ? (
             <div className="sr-grid"><EmptyState query={q} /></div>
           ) : (
-            <JobCardList jobs={paginatedJobs} />
+<ReusableJobGrid
+  jobs={paginatedJobs}
+/>
           )}
 
           {/* Pagination */}
