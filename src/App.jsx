@@ -794,6 +794,7 @@ const handleSearch = ({
                 <QuickCategories
                   SidebarWidget={SidebarWidget}
                   QuickLink={QuickLink}
+                  C={C}
                 />
 
                 <TopCompanies SidebarWidget={SidebarWidget} S={S} />
