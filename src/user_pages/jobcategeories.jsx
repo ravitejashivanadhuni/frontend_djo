@@ -6,7 +6,6 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import VITE_API_BASE_URL  from "../config/api";
 import MainLayout from "../components/common_components/MainLayout";
-import QuickCategories from "../components/home_page_components/quick_categories";
 
 const C = {
   primary:"#0f4c81", accent:"#e8472a", gold:"#f5a623",
@@ -652,10 +651,10 @@ const params = new URLSearchParams(
           </div>
 
           {/* Quick cats */}
-        <QuickCategories
-            QuickLink={QuickLink}
-            C={C}
-          />
+          <div style={{ background:"#fff", borderRadius:12, border:`1px solid ${C.border}`, padding:18, marginBottom:16 }}>
+            <div style={{ fontWeight:700, fontSize:13.5, marginBottom:14 }}>⚡ Quick Categories</div>
+            {QUICK.map(([l,c]) => <QuickLink key={l} label={l} count={c} />)}
+          </div>
 
           {/* Top companies */}
           <div style={{ background:"#fff", borderRadius:12, border:`1px solid ${C.border}`, padding:18, marginBottom:16 }}>

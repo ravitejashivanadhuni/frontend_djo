@@ -1646,6 +1646,7 @@ export default function ViewJob() {
                 <QuickCategories
                   SidebarWidget={SidebarWidget}
                   QuickLink={QuickLink}
+                  S="S"
                 />
                 <TopCompanies
                   SidebarWidget={SidebarWidget}
