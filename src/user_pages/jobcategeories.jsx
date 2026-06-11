@@ -6,7 +6,6 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import VITE_API_BASE_URL  from "../config/api";
 import MainLayout from "../components/common_components/MainLayout";
-import QuickCategories from "../components/home_page_components/quick_categories";
 
 const C = {
   primary:"#0f4c81", accent:"#e8472a", gold:"#f5a623",
@@ -120,7 +119,43 @@ const COMPANIES = [
   { name:"Infosys", bg:"#fff0f0", color:"#e8472a", l:"I" },{ name:"Wipro", bg:"#ede9fe", color:"#7c3aed", l:"W" },
   { name:"Deloitte", bg:"#fff7ed", color:"#c2410c", l:"D" },
 ];
+const categoryFilters = {
+  "it-jobs": {
+    jobCategory: "IT"
+  },
 
+  "non-it-jobs": {
+    jobCategory: "NON_IT"
+  },
+
+  "fresher-jobs": {
+    experienceMax: 0
+  },
+
+  "experienced-jobs": {
+    experienceMin: 1
+  },
+
+  "work-from-home": {
+    workMode: "REMOTE"
+  },
+
+  "part-time-jobs": {
+    employmentType: "PART_TIME"
+  },
+
+  "urgent-hiring": {
+    badge: "URGENT"
+  },
+
+  "internships": {
+    employmentType: "INTERNSHIP"
+  },
+
+  "apprenticeships": {
+    employmentType: "APPRENTICESHIP"
+  }
+};
 export default function Jobcategories() {
   const { category } = useParams();
   const bp = useBreakpoint();
@@ -135,8 +170,10 @@ export default function Jobcategories() {
 useEffect(() => {
   setLoading(true);
   setPage(1);
-
-  fetch(`${VITE_API_BASE_URL}/api/jobs-by-categories?category=${category}`)
+const params = new URLSearchParams(
+  categoryFilters[category] || {}
+);
+  fetch(`${VITE_API_BASE_URL}/api/get-jobs?${params.toString()}`)
     .then((r) => r.json())
     .then((d) => {
       const all = Array.isArray(d) ? d : d.jobs || d.data || [];
@@ -181,7 +218,7 @@ useEffect(() => {
     overflow: "hidden",
     background:
       "linear-gradient(135deg,#f8fbff 0%,#eef4ff 45%,#f5f9ff 100%)",
-    padding: isMobile ? "52px 18px 48px" : "82px 24px 72px",
+    padding: isMobile ? "52px 18px 48px" : "18px 24px 72px",
     borderBottom: "1px solid #e5e7eb",
   }}
 >
@@ -302,7 +339,7 @@ useEffect(() => {
             border: "1px solid #dbeafe",
             borderRadius: 999,
             padding: "8px 18px",
-            marginBottom: 26,
+            // marginBottom: 6,
             boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
           }}
         >
@@ -336,7 +373,7 @@ useEffect(() => {
             lineHeight: 0.95,
             letterSpacing: "-0.05em",
             color: "#111827",
-            marginBottom: 22,
+            marginBottom: 12,
             maxWidth: 760,
           }}
         >
@@ -354,7 +391,7 @@ useEffect(() => {
             lineHeight: 1.9,
             color: "#4b5563",
             maxWidth: 620,
-            marginBottom: 34,
+            marginBottom: 14,
           }}
         >
           Browse verified fresher and experienced jobs from top companies
@@ -614,10 +651,10 @@ useEffect(() => {
           </div>
 
           {/* Quick cats */}
-        <QuickCategories
-            QuickLink={QuickLink}
-            C={C}
-          />
+          <div style={{ background:"#fff", borderRadius:12, border:`1px solid ${C.border}`, padding:18, marginBottom:16 }}>
+            <div style={{ fontWeight:700, fontSize:13.5, marginBottom:14 }}>⚡ Quick Categories</div>
+            {QUICK.map(([l,c]) => <QuickLink key={l} label={l} count={c} />)}
+          </div>
 
           {/* Top companies */}
           <div style={{ background:"#fff", borderRadius:12, border:`1px solid ${C.border}`, padding:18, marginBottom:16 }}>
