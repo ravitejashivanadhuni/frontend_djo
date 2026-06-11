@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import API_BASE_URL from "../../config/api";
+import QuickCategoriesSkeleton from "../skeletons/QuickCategoriesSkeleton";
 
 export default function TopCompanies({ SidebarWidget, S }) {
   const [companies, setCompanies] = useState(null);
@@ -62,7 +63,7 @@ export default function TopCompanies({ SidebarWidget, S }) {
             </div>
           ))
         ) : (
-          <span>Loading companies...</span>
+          <QuickCategoriesSkeleton />
         )}
       </div>
     </SidebarWidget>
