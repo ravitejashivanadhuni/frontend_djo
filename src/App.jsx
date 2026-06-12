@@ -14,6 +14,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import WalkInDrivesPage from "./user_pages/walk_in_jobs";
 import CategorySection from "./components/home_page_components/browse_by_categories";
 import MainLayout from "./components/common_components/MainLayout";
+import JobSearchCard from "./components/home_page_components/quick_job_search";
 
 
 const C = {
@@ -157,10 +158,35 @@ export default function App() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const handleSearch = () => {
-    setSearchTriggered(true);
-    setTimeout(() => setSearchTriggered(false), 1400);
-  };
+const handleSearch = ({
+  query,
+  category,
+  role,
+  location
+}) => {
+
+  const params = new URLSearchParams();
+
+  if (query)
+    params.append("query", query);
+
+  if (category)
+    params.append("category", category);
+
+  if (role)
+    params.append("role", role);
+
+  if (
+    location &&
+    location !== "All Locations"
+  ) {
+    params.append("location", location);
+  }
+
+  navigate(
+    `/jobs/search?${params.toString()}`
+  );
+};
   const [stats, setStats] = useState(null);
   useEffect(() => {
     const fetchStats = async () => {
@@ -470,10 +496,10 @@ export default function App() {
                 <h1
                   className="syne"
                   style={{
-                    fontSize: isMobile ? "2.8rem" : "5rem",
+                    fontSize: isMobile ? "2.8rem" : "3.8rem",
                     fontWeight: 800,
                     lineHeight: 0.98,
-                    marginBottom: 24,
+                    marginBottom: 10,
                     color: "#111827",
                     letterSpacing: "-0.05em",
                     textAlign: "left",
@@ -539,7 +565,7 @@ export default function App() {
                       background: "#fff",
                       border: "1px solid #d1d5db",
                       color: "#111827",
-                      padding: isMobile ? "12px 24px" : "15px 34px",
+                      padding: isMobile ? "12px 24px" : "10px 30px",
                       borderRadius: 14,
                       fontWeight: 600,
                       fontSize: 14,
@@ -652,173 +678,11 @@ export default function App() {
               </div>
 
               {/* RIGHT SEARCH CARD */}
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <div
-                  className="hero-card"
-                  style={{
-                    width: "100%",
-                    maxWidth: 430,
-                    background: "#ffffff",
-                    borderRadius: 30,
-                    padding: isMobile ? 24 : 34,
-                    boxShadow: "0 25px 60px rgba(0,0,0,0.08)",
-                  }}
-                >
-                  {/* Top Header */}
-                  <div
-                    style={{
-                      background: "#f9fafb",
-                      borderRadius: 20,
-                      padding: 22,
-                      marginBottom: 24,
-                      border: "1px solid #f1f5f9",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: 58,
-                        height: 58,
-                        borderRadius: 18,
-                        background: "#ede9fe",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 24,
-                        marginBottom: 18,
-                      }}
-                    >
-                      🔍
-                    </div>
-
-                    <h3
-                      style={{
-                        margin: 0,
-                        fontSize: 24,
-                        color: "#111827",
-                        fontWeight: 800,
-                        marginBottom: 10,
-                      }}
-                    >
-                      Quick Job Search
-                    </h3>
-
-                    <p
-                      style={{
-                        margin: 0,
-                        color: "#6b7280",
-                        lineHeight: 1.7,
-                        fontSize: 14,
-                      }}
-                    >
-                      Search jobs instantly by title, company, location, or category.
-                    </p>
-                  </div>
-
-                  {/* Search Input */}
-                  <input
-                    value={searchVal}
-                    onChange={(e) => setSearchVal(e.target.value)}
-                    placeholder="Job title or company name"
-                    style={{
-                      width: "100%",
-                      padding: "14px 16px",
-                      borderRadius: 14,
-                      border: "1px solid #e5e7eb",
-                      background: "#f9fafb",
-                      fontSize: 14,
-                      fontFamily: "'DM Sans',sans-serif",
-                      color: "#111827",
-                      marginBottom: 14,
-                      outline: "none",
-                      boxSizing: "border-box",
-                    }}
-                  />
-
-                  {/* Location Select */}
-                  <select
-                    style={{
-                      width: "100%",
-                      padding: "14px 16px",
-                      borderRadius: 14,
-                      border: "1px solid #e5e7eb",
-                      background: "#f9fafb",
-                      fontSize: 14,
-                      fontFamily: "'DM Sans',sans-serif",
-                      color: "#111827",
-                      marginBottom: 14,
-                      outline: "none",
-                      boxSizing: "border-box",
-                    }}
-                  >
-                    <option>All Locations</option>
-
-                    {[
-                      "Bangalore",
-                      "Hyderabad",
-                      "Pune",
-                      "Mumbai",
-                      "Chennai",
-                      "Work From Home",
-                    ].map((l) => (
-                      <option key={l}>{l}</option>
-                    ))}
-                  </select>
-
-                  {/* Category Select */}
-                  <select
-                    style={{
-                      width: "100%",
-                      padding: "14px 16px",
-                      borderRadius: 14,
-                      border: "1px solid #e5e7eb",
-                      background: "#f9fafb",
-                      fontSize: 14,
-                      fontFamily: "'DM Sans',sans-serif",
-                      color: "#111827",
-                      marginBottom: 18,
-                      outline: "none",
-                      boxSizing: "border-box",
-                    }}
-                  >
-                    <option>All Categories</option>
-
-                    {[
-                      "Software / IT",
-                      "Government Jobs",
-                      "MBA Jobs",
-                      "Internships",
-                      "Data Analyst",
-                    ].map((c) => (
-                      <option key={c}>{c}</option>
-                    ))}
-                  </select>
-
-                  {/* Search Button */}
-                  <button
-                    onClick={handleSearch}
-                    style={{
-                      width: "100%",
-                      background: "#7c3aed",
-                      color: "#fff",
-                      border: "none",
-                      padding: "15px",
-                      borderRadius: 14,
-                      fontWeight: 700,
-                      fontSize: 14,
-                      fontFamily: "'Syne',sans-serif",
-                      cursor: "pointer",
-                      boxShadow: "0 12px 30px rgba(124,58,237,0.25)",
-                    }}
-                  >
-                    {searchTriggered ? "Searching..." : "Search Jobs →"}
-                  </button>
-                </div>
-              </div>
+<div style={{ display: "flex", justifyContent: "center" }}>
+<JobSearchCard
+  onSearch={handleSearch}
+/>
+</div>
             </div>
           </div>
         </section>
@@ -930,6 +794,7 @@ export default function App() {
                 <QuickCategories
                   SidebarWidget={SidebarWidget}
                   QuickLink={QuickLink}
+                  C={C}
                 />
 
                 <TopCompanies SidebarWidget={SidebarWidget} S={S} />

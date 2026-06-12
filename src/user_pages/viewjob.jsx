@@ -11,6 +11,7 @@ import QuickCategories from "../components/home_page_components/quick_categories
 import TopCompanies from "../components/home_page_components/topcompanies";
 import JobsByLocation from "../components/home_page_components/job_by_location";
 import MainLayout from "../components/common_components/MainLayout";
+import StudyMaterials from "../components/common_components/Study_material";
 
 /* ─────────────────────────────────────────────
    THEME
@@ -898,7 +899,7 @@ function Sidebar({ job }) {
         <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
           {[
             ["📌", "JOB ROLE", job.jobRole],
-            ["💼", "JOB TYPE", job.jobType],
+            ["💼", "JOB TYPE", job.employmentType],
             ["🎯", "EXPERIENCE", job.experienceLevel],
             ["🏠", "WORK MODE", job.workMode],
             ["📍", "LOCATION", job.location],
@@ -1645,6 +1646,7 @@ export default function ViewJob() {
                 <QuickCategories
                   SidebarWidget={SidebarWidget}
                   QuickLink={QuickLink}
+                  S="S"
                 />
                 <TopCompanies
                   SidebarWidget={SidebarWidget}
@@ -1888,7 +1890,7 @@ export default function ViewJob() {
                     { d: "M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0zM12 7a3 3 0 100 6 3 3 0 000-6z", label: job.location },
                     { d: "M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM16 3h-8M8 3v4M16 3v4", label: job.jobType },
                     { d: "M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2zM9 22V12h6v10", label: job.workMode },
-                    { d: "M22 10v6M2 10l10-5 10 5-10 5zM6 12v5c3 3 9 3 12 0v-5", label: job.eligibleBatches },
+                    { d: "M22 10v6M2 10l10-5 10 5-10 5zM6 12v5c3 3 9 3 12 0v-5", label: job.eligibleBatches.join(", ") },
                     { d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z", label: job.experienceLevel },
                   ].filter(({ label }) => label).map(({ d, label }) => (
                     <span key={label} style={{
@@ -2046,7 +2048,37 @@ export default function ViewJob() {
                 }
 
               </Card>
-
+              
+              <Card 
+                style={{
+                  marginBottom: 18,
+                  padding: 24,
+                  textAlign: "left",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                    color: C.text,
+                    marginBottom: 16,
+                  }}
+                >
+                  Job Summary
+                </div>
+                <Divider />
+                <div
+                  style={{
+                    fontSize: 14,
+                    fontWeight: 500,
+                    color: C.text,
+                    lineHeight: 1.7,
+                    marginTop: 22,
+                  }}
+                >
+                  {job.jobSummary || "No summary provided."}
+                </div>
+              </Card>
               {/* ── JOB DETAILS GRID ── */}
               <Card
                 style={{
@@ -2080,9 +2112,9 @@ export default function ViewJob() {
                 >
                   {[
                     [
-                      "Job Type",
+                      "Employment Type",
                       <Pill bg="#e8f4fd" color={C.primary}>
-                        {job.jobType}
+                        {job.employmentType}
                       </Pill>,
                     ],
 
@@ -2136,7 +2168,7 @@ export default function ViewJob() {
                           lineHeight: 1.7,
                         }}
                       >
-                        {job.education}
+                        {job.eligibleDegrees?.join(", ")}
                       </div>,
                     ],
 
@@ -2149,12 +2181,12 @@ export default function ViewJob() {
                           color: C.text,
                         }}
                       >
-                        {job.eligibleBatches}
+                        {job.eligibleBatches?.join(", ")}
                       </div>,
                     ],
 
                     [
-                      "Department",
+                      "Eligible Branches",
                       <div
                         style={{
                           fontSize: 14,
@@ -2162,10 +2194,22 @@ export default function ViewJob() {
                           color: C.text,
                         }}
                       >
-                        {job.department}
+                        {job.eligibleBranches?.join(", ")}
                       </div>,
                     ],
 
+                    [
+                      "Hiring Type",
+                      <div
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 500,
+                          color: C.text,
+                        }}
+                      >
+                        {job.hiringType}
+                      </div>,
+                    ],
                     [
                       "Openings",
                       <div
@@ -2175,7 +2219,7 @@ export default function ViewJob() {
                           color: C.text,
                         }}
                       >
-                        {job.openings} positions
+                        {job.openings ? `${job.openings} positions` : "not specified"}
                       </div>,
                     ],
                   ].map(([label, value]) => (
@@ -2396,6 +2440,224 @@ export default function ViewJob() {
                 )}
               </Card>
 
+              {/* SELECTION PROCESS */}
+              <Card
+                style={{
+                  marginBottom: 18,
+                  textAlign: "left",
+                  padding: 24,
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                    color: C.text,
+                    marginBottom: 16,
+                  }}
+                >
+                  Selection Process
+                </div>
+
+                <Divider />
+
+                {Array.isArray(job?.selectionProcess) &&
+                  job.selectionProcess.length > 0 ? (
+                  <ul
+                    style={{
+                      marginTop: 18,
+                      paddingLeft: 20,
+                    }}
+                  >
+                    {job.selectionProcess.map((s, i) => (
+                      <li
+                        key={i}
+                        style={{
+                          fontSize: 15,
+                          lineHeight: 1.9,
+                          marginBottom: 10,
+                          color: C.text,
+                        }}
+                      >
+                        {s}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p style={{ color: "#6b7280", marginTop: 18 }}>
+                    Not specified
+                  </p>
+                )}
+              </Card>
+
+              {/* APPLICATION STEPS */}
+              <Card
+                style={{
+                  marginBottom: 18,
+                  textAlign: "left",
+                  padding: 24,
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                    color: C.text,
+                    marginBottom: 16,
+                  }}
+                >
+                  Application Steps
+                </div>
+                
+                <Divider />
+
+                {Array.isArray(job?.applicationSteps) &&
+                  job.applicationSteps.length > 0 ? (
+                  <ul
+                    style={{
+                      marginTop: 18,
+                      paddingLeft: 20,
+                    }}
+                  >
+                    {job.applicationSteps.map((s, i) => (
+                      <li
+                        key={i}
+                        style={{
+                          fontSize: 15,
+                          lineHeight: 1.9,
+                          marginBottom: 10,
+                          color: C.text,
+                        }}
+                      >
+                        {s}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p style={{ color: "#6b7280", marginTop: 18 }}>
+                    Not specified
+                  </p>
+                )}
+              </Card>
+
+              {/* highlights */}
+              {job.highlights && job.highlights.length > 0 && (
+                <Card
+                  style={{
+                    marginBottom: 18,
+                    textAlign: "left",
+                    padding: 24,
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 20,
+                      fontWeight: 700,
+                      color: C.text,
+                      marginBottom: 16,
+                    }}
+                  >
+                    Job Highlights
+                  </div>
+                  <Divider />
+                  <ul
+                    style={{
+                      marginTop: 18,
+                      paddingLeft: 20,
+                    }}
+                  >
+                    {job.highlights.map((h, i) => (
+                      <li
+                        key={i}
+                        style={{
+                          fontSize: 15,
+                          lineHeight: 1.9,
+                          marginBottom: 10,
+                          color: C.text,
+                        }}
+                      >
+                        {h}
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+              )}
+
+              {/* CAREER GROWTH */}
+              {job.careerGrowth && job.careerGrowth.length > 0 && (
+                <Card
+                  style={{
+                    marginBottom: 18,
+                    textAlign: "left",
+                    padding: 24,
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 20,
+                      fontWeight: 700,
+                      color: C.text,
+                      marginBottom: 16,
+                    }}
+                  >
+                    Career Growth Opportunities
+                  </div>
+
+                  <Divider />
+                  <ul
+                    style={{
+                      marginTop: 18,
+                      paddingLeft: 20,
+                    }}
+                  >
+                    {job.careerGrowth}
+                  </ul>
+                </Card>
+              )}
+
+            {/*IMPORTANT INSTRUCTIONS*/}
+              {job.importantInstructions && job.importantInstructions.length > 0 && (
+                <Card
+                  style={{
+                    marginBottom: 18,
+                    textAlign: "left",
+                    padding: 24,
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 20,
+                      fontWeight: 700,
+                      color: C.text,
+                      marginBottom: 16,
+                    }}
+                  >
+                    Important Instructions
+                  </div>
+                  <Divider />
+                  <ul
+                    style={{
+                      marginTop: 18,
+                      paddingLeft: 20,
+                    }}
+                  >
+                    {job.importantInstructions.map((inst, i) => (
+                      <li
+                        key={i}
+                        style={{
+                          fontSize: 15,
+                          lineHeight: 1.9,
+                          marginBottom: 10,
+                          color: C.text,
+                        }}
+                      >
+                        {inst}
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+              )}
+
               {/* PERKS */}
               <Card
                 style={{
@@ -2607,6 +2869,8 @@ export default function ViewJob() {
                   listing.
                 </div>
               </Card>
+
+                  <StudyMaterials />
 
               {/* Sidebar shown BELOW content on mobile/tablet */}
               {!showSidebar && (

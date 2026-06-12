@@ -933,8 +933,11 @@ export default function ExamsPage() {
                 <p style={{ fontSize: 12, opacity: .85, marginBottom: 14 }}>Mock Tests & PYQs by Testbook — Trusted by 2 Crore+ Students</p>
                 <a href="#" style={{ background: S.gold, color: "#000", padding: "8px 18px", borderRadius: 7, fontWeight: 700, fontSize: 12.5, display: "inline-block" }}>Try Free →</a>
               </div>
-
-              <QuickCategories SidebarWidget={SidebarWidget} QuickLink={QuickLink} />
+              {/* Quick cats */}
+                      <QuickCategories
+                          QuickLink={QuickLink}
+                          C={C}
+                        />
               <TopCompanies SidebarWidget={SidebarWidget} S={S} />
 
               {/* WhatsApp Ad */}

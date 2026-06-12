@@ -32,6 +32,7 @@ import EditJobAlert from './components/common_components/edit_job_alert.jsx';
 import TopTicker from './components/topticker.jsx'
 import TermsAndConditionsPage from './user_pages/termsandconditions.jsx';
 import DisclaimerPage from './user_pages/disclaimerpage.jsx';
+import SearchResults from './user_pages/search_results.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -64,6 +65,10 @@ createRoot(document.getElementById('root')).render(
         <Route path="/admin/manage-exams" element={<ProtectedRoute><ManageExams /></ProtectedRoute>} />
         <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
         <Route path="/disclaimer-page" element={<DisclaimerPage/>}/>
+        <Route
+  path="/jobs/search"
+  element={<SearchResults />}
+/>
       </Routes>
     </BrowserRouter>
     </HelmetProvider>
