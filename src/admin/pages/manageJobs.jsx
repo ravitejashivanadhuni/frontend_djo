@@ -51,8 +51,8 @@ const JOB_ROLES = {
   NON_IT: ["Finance", "Healthcare", "Education", "Marketing", "Legal", "Engineering", "HR", "Sales", "Operations"],
   GOVT: ["Civil Services", "Defence", "Police", "Banking", "Railways", "Teaching", "Healthcare", "Judiciary"],
 };
-const WORK_MODES = ["Remote", "Hybrid", "Onsite"];
-const EMPLOYMENT_TYPES = ["Full-Time", "Part-Time", "Internship", "Contract", "Temporary", "Apprenticeship", "Freelance","Temporary"];
+const WORK_MODES = ["REMOTE", "HYBRID", "ONSITE"];
+const EMPLOYMENT_TYPES = ["FULL-TIME", "PART-TIME", "INTERNSHIP", "CONTRACT", "TEMPORARY", "APPRENTICESHIP", "FREELANCE","TEMPORARY"];
 const EXPERIENCE = [
   "0–1 yr", "0-2 yrs", "1–3 yrs", "3–5 yrs",
   "5–8 yrs", "8–12 yrs", "5+ yrs", "Director / VP", "C-Level",
@@ -65,9 +65,9 @@ const SALARY = [
   "0–2 LPA", "2–4 LPA", "4–6 LPA", "6–8 LPA", "8–12 LPA",
   "12–18 LPA", "18–25 LPA", "25–40 LPA", "40–60 LPA", "60+ LPA", "Unpaid / Stipend", "Not Disclosed"
 ];
-const BATCHES = ["2026", "2025", "2024", "2023", "2022", "Any Batch"];
+const BATCHES = ["2029","2028","2027","2026", "2025", "2024", "2023", "2022","2021", "Any Batch"];
 const EDUCATION = ["B.Tech / B.E", "BCA", "B.Sc", "MCA", "M.Tech", "MBA", "Any Graduate", "Any Post Graduate"];
-const BADGES = ["featured", "hot", "new", "remote"];
+const BADGES = ["FEATURED", "HOT", "NEW", "REMOTE"];
 
 // ─── Reusable Field Components ────────────────────────────────────────────────
 const inputCls = `
@@ -158,9 +158,9 @@ function PostJobForm() {
   const blank = {
     companyLogo: "", companyName: "", companyWebsite: "", companyCareersLink: "",
     aboutCompany: "", jobTitle: "", jobRole: "", jobDescription: "", jobType: "IT",
-    jobCategory: "", experienceLevel: "",experienceMin: "",experienceMax: "",hiringType: "", eligibleBatches: "", salary: "",salaryMin: "", salaryMax: "",salaryUnit: "",
+    jobCategory: "", experienceLevel: "",experienceMin: "",experienceMax: "",hiringType: "", salary: "",salaryMin: "", salaryMax: "",salaryUnit: "",
     location: "",city: "",state: "",country: "",employmentType: "",jobFunction: "", workMode: [], jobLink: "", expiryDate: "", eligibleBatches: "",eligibleBranches: "",eligibleDegrees: "",
-    openings: "", skills: "", tags: "", perks: "",jobSummary: "",selectionProcess: "",highlights: "",careerGrowth: "",importantInsructions: "",
+    openings: "", skills: "", tags: "", perks: "",jobSummary: "",jobFunction: "",selectionProcess: "",applicationSteps: "",highlights: "",careerGrowth: "",importantInstructions: "",
     responsibilities: "", qualifications: "", badge: "", badgeLabel: "",
   };
   const [f, setF] = useState(blank);
@@ -265,10 +265,10 @@ https://t.me/codetechniques
 
     const v = val.toLowerCase();
 
-    if (v.includes("remote") && v.includes("hybrid")) return "Hybrid";
-    if (v.includes("remote")) return "Remote";
-    if (v.includes("hybrid")) return "Hybrid";
-    if (v.includes("office")) return "Onsite";
+    if (v.includes("remote") && v.includes("hybrid")) return "HYBRID";
+    if (v.includes("remote")) return "REMOTE";
+    if (v.includes("hybrid")) return "HYBRID";
+    if (v.includes("office")) return "ONSITE";
 
     return val;
   };
@@ -292,9 +292,9 @@ https://t.me/codetechniques
     const v = val.toLowerCase();
     const modes = [];
 
-    if (v.includes("remote")) modes.push("Remote");
-    if (v.includes("hybrid")) modes.push("Hybrid");
-    if (v.includes("office") || v.includes("onsite")) modes.push("Onsite");
+    if (v.includes("remote")) modes.push("REMOTE");
+    if (v.includes("hybrid")) modes.push("HYBRID");
+    if (v.includes("office") || v.includes("ONSITE")) modes.push("ONSITE");
 
     return modes;
   };
@@ -344,8 +344,10 @@ https://t.me/codetechniques
     eligibleBranches: d["eligible branches"] || "",
     eligibleDegrees: d["eligible degrees"] || "",
     hiringType: d["hiring type"] || "",
-    jobsummary: d["job summary"] || "",
+    jobSummary: d["job summary"] || "",
+    jobFunction: d["job function"] || "",
     selectionProcess: d["selection process"] || "",
+    applicationSteps: d["application steps"] || "",
     highlights: d["highlights"] || "",
     careerGrowth: d["career growth"] || "",
     importantInstructions: d["important instructions"] || "",
@@ -531,6 +533,16 @@ const DEGREES = [
         openings: f.openings ? Number(f.openings) : undefined,
         badge: f.badge || null,
         badgeLabel: f.badgeLabel || null,
+        experienceMin: f.experienceMin ? Number(f.experienceMin) : undefined,
+        experienceMax: f.experienceMax ? Number(f.experienceMax) : undefined,
+        salaryMin: f.salaryMin ? Number(f.salaryMin) : undefined,
+        salaryMax: f.salaryMax ? Number(f.salaryMax) : undefined,
+        eligibleBatches: f.eligibleBatches
+  ? f.eligibleBatches
+      .split(",")
+      .map(b => Number(b.trim()))
+      .filter(Boolean)
+  : [],
       };
       const res = await fetch(`${API_BASE_URL}/api/post-job`, {
         method: "POST",
@@ -542,6 +554,10 @@ const DEGREES = [
       });
       // console.log("token", JSON.parse(localStorage.getItem("adminInfo"))?.token);
       const data = await res.json();
+
+
+console.log("STATUS:", res.status);
+console.log("RESPONSE:", data);
 
       // if (data.success) { 
       //   const job = data.data;
@@ -1047,6 +1063,14 @@ const DEGREES = [
           />
           <ErrMsg msg={errors.jobRole} />
         </Field>
+        <Field label="Job Function">
+          <input value={f.jobFunction} onChange={e => set("jobFunction", e.target.value)}
+            placeholder="Enter job function"
+            style={{
+              width: "100%", padding: "10px 14px", fontSize: 13.5, border: "1.5px solid #e2e8f0",
+              borderRadius: 9, outline: "none", background: "#fafafa", color: S.text, fontFamily: "inherit", boxSizing: "border-box"
+            }} />
+        </Field>
         <Field label="Experience Level" required>
           <CreatableSelect
             styles={selectStyles}
@@ -1057,6 +1081,22 @@ const DEGREES = [
             placeholder="Select or type Experience..."
           />
           <ErrMsg msg={errors.experienceLevel} />
+        </Field>
+        <Field label="Experience Min">
+          <input value={f.experienceMin} onChange={e => set("experienceMin", e.target.value)}
+            placeholder="Minimum experience in years"
+            style={{
+              width: "100%", padding: "10px 14px", fontSize: 13.5, border: "1.5px solid #e2e8f0",
+              borderRadius: 9, outline: "none", background: "#fafafa", color: S.text, fontFamily: "inherit", boxSizing: "border-box"
+            }} />
+        </Field>
+        <Field label="Experience Max">
+          <input value={f.experienceMax} onChange={e => set("experienceMax", e.target.value)}
+            placeholder="Maximum experience in years"
+            style={{
+              width: "100%", padding: "10px 14px", fontSize: 13.5, border: "1.5px solid #e2e8f0",
+              borderRadius: 9, outline: "none", background: "#fafafa", color: S.text, fontFamily: "inherit", boxSizing: "border-box"
+            }} />
         </Field>
         <Field label="Eligible Batches" required>
           <CreatableSelect
@@ -1079,12 +1119,74 @@ const DEGREES = [
             placeholder="Select or type Degree..."
           />
         </Field>
-        <Field label="Department">
+        {/* <Field label="Department">
           <input value={f.department} onChange={e => set("department", e.target.value)}
             placeholder="e.g. Engineering, Finance"
             style={{
               width: "100%", padding: "10px 14px", fontSize: 13.5, border: "1.5px solid #e2e8f0",
               borderRadius: 9, outline: "none", background: "#fafafa", color: S.text, fontFamily: "inherit", boxSizing: "border-box"
+            }} />
+        </Field> */}
+        <Field label="Eligible Branches">
+          <input value={f.eligibleBranches} onChange={e => set("eligibleBranches", e.target.value)}
+            placeholder="e.g. CSE, ECE, ME"
+            style={{
+              width: "100%", padding: "10px 14px", fontSize: 13.5, border: "1.5px solid #e2e8f0",
+              borderRadius: 9, outline: "none", background: "#fafafa", color: S.text, fontFamily: "inherit", boxSizing: "border-box"
+            }} />
+        </Field>
+        <Field label="Job Summary">
+          <textarea value={f.jobSummary} onChange={e => set("jobSummary", e.target.value)}
+            rows={3} placeholder="Brief one-paragraph summary of the job..."
+            style={{
+              width: "100%", padding: "10px 14px", fontSize: 13.5, border: "1.5px solid #e2e8f0",
+              borderRadius: 9, outline: "none", background: "#fafafa", color: S.text, fontFamily: "inherit",
+              boxSizing: "border-box", resize: "vertical"
+            }} />
+        </Field>
+        <Field label="Selection Process">
+          <textarea value={f.selectionProcess} onChange={e => set("selectionProcess", e.target.value)}
+            rows={3} placeholder="Describe the selection process stages..."
+            style={{
+              width: "100%", padding: "10px 14px", fontSize: 13.5, border: "1.5px solid #e2e8f0",
+              borderRadius: 9, outline: "none", background: "#fafafa", color: S.text, fontFamily: "inherit",
+              boxSizing: "border-box", resize: "vertical"
+            }} />
+        </Field>
+        <Field label="Application Steps">
+          <textarea value={f.importantInstructions} onChange={e => set("importantInstructions", e.target.value)}
+            rows={3} placeholder="Important instructions for applicants..."
+            style={{
+              width: "100%", padding: "10px 14px", fontSize: 13.5, border: "1.5px solid #e2e8f0",
+              borderRadius: 9, outline: "none", background: "#fafafa", color: S.text, fontFamily: "inherit",
+              boxSizing: "border-box", resize: "vertical"
+            }} />
+        </Field>
+        <Field label="Job Highlights">
+          <textarea value={f.highlights} onChange={e => set("highlights", e.target.value)}
+            rows={3} placeholder="Key highlights or perks of the job..."
+            style={{
+              width: "100%", padding: "10px 14px", fontSize: 13.5, border: "1.5px solid #e2e8f0",
+              borderRadius: 9, outline: "none", background: "#fafafa", color: S.text, fontFamily: "inherit",
+              boxSizing: "border-box", resize: "vertical"
+            }} />
+        </Field>
+        <Field label="Career Growth Opportunities">
+          <textarea value={f.careerGrowth} onChange={e => set("careerGrowth", e.target.value)}
+            rows={3} placeholder="Describe potential career growth opportunities..."
+            style={{
+              width: "100%", padding: "10px 14px", fontSize: 13.5, border: "1.5px solid #e2e8f0",
+              borderRadius: 9, outline: "none", background: "#fafafa", color: S.text, fontFamily: "inherit",
+              boxSizing: "border-box", resize: "vertical"
+            }} />
+        </Field>
+        <Field label="Important Instructions for Applicants">
+          <textarea value={f.importantInstructions} onChange={e => set("importantInstructions", e.target.value)}
+            rows={3} placeholder="Important instructions for applicants..."
+            style={{
+              width: "100%", padding: "10px 14px", fontSize: 13.5, border: "1.5px solid #e2e8f0",
+              borderRadius: 9, outline: "none", background: "#fafafa", color: S.text, fontFamily: "inherit",
+              boxSizing: "border-box", resize: "vertical"
             }} />
         </Field>
       </div>
