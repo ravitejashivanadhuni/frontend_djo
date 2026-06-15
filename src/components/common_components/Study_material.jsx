@@ -242,13 +242,15 @@ export default function StudyMaterials() {
 const styles = {
   wrapper: {
     fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
+    width: "100%",           // ✅ was maxWidth: 720px
     maxWidth: "720px",
     margin: "0 auto",
-    padding: "28px",
+    padding: "16px",         // ✅ was 28px
     backgroundColor: "#ffffff",
     borderRadius: "16px",
     boxShadow: "0 2px 16px rgba(0,0,0,0.07)",
     border: "1px solid #e5e7eb",
+    boxSizing: "border-box", // ✅ ADD
   },
   header: {
     display: "flex",
@@ -258,9 +260,7 @@ const styles = {
     paddingBottom: "16px",
     borderBottom: "1.5px dashed #e5e7eb",
   },
-  headerIcon: {
-    fontSize: "18px",
-  },
+  headerIcon: { fontSize: "18px" },
   headerText: {
     fontSize: "12px",
     fontWeight: "700",
@@ -276,55 +276,66 @@ const styles = {
   card: {
     display: "flex",
     alignItems: "flex-start",
-    gap: "16px",
-    padding: "18px 20px",
+    gap: "12px",             // ✅ was 16px
+    padding: "14px",         // ✅ was "18px 20px"
     borderRadius: "12px",
     border: "1px solid #e5e7eb",
     backgroundColor: "#fafafa",
     cursor: "default",
     transition: "box-shadow 0.2s, transform 0.2s",
+    boxSizing: "border-box", // ✅ ADD
+    minWidth: 0,             // ✅ ADD - prevents flex overflow
   },
   iconBox: {
-    minWidth: "44px",
-    height: "44px",
+    minWidth: "40px",        // ✅ was 44px
+    width: "40px",           // ✅ ADD explicit width
+    height: "40px",          // ✅ was 44px
     borderRadius: "10px",
     background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     boxShadow: "0 2px 8px rgba(37,99,235,0.3)",
-    marginTop: "2px",
+    flexShrink: 0,           // ✅ ADD - icon never shrinks
   },
   content: {
     flex: 1,
+    minWidth: 0,             // ✅ ADD - critical for text truncation
+    overflow: "hidden",      // ✅ ADD
   },
   titleRow: {
     display: "flex",
     alignItems: "flex-start",
-    justifyContent: "space-between",
-    gap: "12px",
+    flexWrap: "wrap",        // ✅ was missing - tag drops below on mobile
+    gap: "8px",              // ✅ was 12px
     marginBottom: "6px",
   },
   title: {
     margin: 0,
-    fontSize: "15px",
+    fontSize: "14px",        // ✅ was 15px
     fontWeight: "700",
     color: "#111827",
     lineHeight: "1.4",
+    wordBreak: "break-word", // ✅ ADD
+    flex: 1,                 // ✅ ADD - takes remaining space
+    minWidth: 0,             // ✅ ADD
   },
   tag: {
     fontSize: "11px",
     fontWeight: "600",
     padding: "3px 9px",
     borderRadius: "20px",
-    whiteSpace: "nowrap",
+    whiteSpace: "normal",    // ✅ was "nowrap" — the main culprit
+    wordBreak: "break-word", // ✅ ADD
     flexShrink: 0,
+    maxWidth: "140px",       // ✅ ADD - cap tag width on mobile
   },
   description: {
     margin: "0 0 10px",
-    fontSize: "13.5px",
+    fontSize: "13px",        // ✅ was 13.5px
     color: "#6b7280",
     lineHeight: "1.6",
+    wordBreak: "break-word", // ✅ ADD
   },
   link: {
     background: "none",
@@ -347,7 +358,7 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     gap: "6px",
-    fontSize: "13.5px",
+    fontSize: "13px",        // ✅ was 13.5px
     fontWeight: "600",
     color: "#6b7280",
     backgroundColor: "transparent",
@@ -355,6 +366,7 @@ const styles = {
     borderRadius: "10px",
     cursor: "pointer",
     transition: "all 0.2s ease",
+    boxSizing: "border-box", // ✅ ADD
   },
   cta: {
     marginTop: "20px",
